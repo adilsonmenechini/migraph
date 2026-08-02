@@ -213,20 +213,20 @@ def render_html(payload: dict[str, object]) -> str:
   <style>
     :root {{
       color-scheme: light dark;
-      --bg: #0b1020;
-      --panel: #121935;
-      --panel-soft: #182142;
-      --text: #edf2ff;
-      --muted: #a8b3cf;
-      --accent: #8ab4ff;
-      --border: rgba(255,255,255,0.1);
-      --chip: rgba(138,180,255,0.14);
+      --bg: #0a0a12;
+      --panel: #161b26;
+      --panel-soft: #1c233a;
+      --text: #e6e8f0;
+      --muted: #7b84a6;
+      --accent: #5c7cfa;
+      --border: rgba(118, 138, 215, 0.12);
+      --chip: rgba(92, 124, 250, 0.14);
     }}
     * {{ box-sizing: border-box; }}
     body {{
       margin: 0;
       font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #0b1020 0%, #10172f 100%);
+      background: linear-gradient(180deg, #0a0a12 0%, #111522 100%);
       color: var(--text);
     }}
     .layout {{
@@ -239,7 +239,7 @@ def render_html(payload: dict[str, object]) -> str:
     }}
     .sidebar {{
       border-right: 1px solid var(--border);
-      background: rgba(9, 13, 28, 0.78);
+      background: rgba(10, 10, 18, 0.78);
       position: sticky;
       top: 0;
       height: 100vh;
@@ -352,8 +352,8 @@ def render_html(payload: dict[str, object]) -> str:
       scroll-margin-top: 24px;
     }}
     .section-card.active-section {{
-      border-color: rgba(138,180,255,0.75);
-      box-shadow: 0 0 0 1px rgba(138,180,255,0.25);
+      border-color: rgba(92,124,250,0.75);
+      box-shadow: 0 0 0 1px rgba(92,124,250,0.25);
     }}
     .section-content {{
       white-space: pre-wrap;
@@ -382,7 +382,7 @@ def render_html(payload: dict[str, object]) -> str:
       cursor: pointer;
     }}
     .ref-button:hover {{
-      border-color: rgba(138,180,255,0.45);
+      border-color: rgba(92,124,250,0.45);
       color: var(--accent);
     }}
     .list {{

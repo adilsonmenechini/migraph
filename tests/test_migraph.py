@@ -2663,7 +2663,7 @@ class TestDedupeBugFix(unittest.TestCase):
 
 class TestMigrationMapping(unittest.TestCase):
     def test_type_resolution(self) -> None:
-        import migrate_skill_kwonledge as msk
+        import migrate_skill_knowledge as msk
         self.assertEqual(msk._resolve_type("concept"), "concept")
         self.assertEqual(msk._resolve_type("guide"), "source")
         self.assertEqual(msk._resolve_type("reference"), "source")
@@ -2674,7 +2674,7 @@ class TestMigrationMapping(unittest.TestCase):
         self.assertEqual(msk._resolve_type("unknown"), "topic")
 
     def test_type_to_dir(self) -> None:
-        import migrate_skill_kwonledge as msk
+        import migrate_skill_knowledge as msk
         self.assertEqual(msk._type_to_dir("pattern"), "patterns")
         self.assertEqual(msk._type_to_dir("runbook"), "runbooks")
         self.assertEqual(msk._type_to_dir("architecture"), "architectures")

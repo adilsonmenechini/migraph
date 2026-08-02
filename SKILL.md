@@ -112,7 +112,7 @@ Platform note:
 - Check a compact workspace snapshot -> `status`
 - Validate environment capabilities -> `doctor`
 - Detect duplicate or similar pages -> `dedupe-pages`
-- Import skill-kwonledge content into a MiGraph vault -> `migrate-skill-kwonledge`
+- Import skill-kwonledge content into a MiGraph vault -> `migrate-skill-knowledge`
 
 ## Gotchas
 

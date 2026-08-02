@@ -631,26 +631,33 @@ def render_report_html(report: dict[str, object]) -> str:
   <title>MiGraph Graph Report</title>
   <style>
     :root {{
-      --bg: #0b1020;
-      --panel: #121935;
-      --text: #edf2ff;
-      --muted: #a8b3cf;
-      --border: rgba(255,255,255,0.1);
-      --accent: #8ab4ff;
+      --bg: #0a0a12;
+      --panel: #161b26;
+      --panel-soft: #1c233a;
+      --text: #e6e8f0;
+      --muted: #7b84a6;
+      --border: rgba(118, 138, 215, 0.12);
+      --accent: #5c7cfa;
+      --accent-light: #8aa5ff;
+      --accent-dark: #3a5ce5;
+      --success: #10b981;
+      --warning: #fbbf24;
+      --error: #f87171;
+      --info: #60a5fa;
     }}
     * {{ box-sizing: border-box; }}
     body {{
       margin: 0;
       min-height: 100vh;
       font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #0b1020 0%, #10172f 100%);
+      background: linear-gradient(180deg, #0a0a12 0%, #111522 100%);
       color: var(--text);
       padding: 24px;
     }}
     .shell {{
       width: min(1180px, 100%);
       margin: 0 auto;
-      background: rgba(9, 13, 28, 0.86);
+      background: rgba(10, 10, 18, 0.86);
       border: 1px solid var(--border);
       border-radius: 24px;
       padding: 28px;

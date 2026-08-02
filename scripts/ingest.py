@@ -22,7 +22,7 @@ import re
 import shutil
 import time
 import zlib
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib import error as urllib_error
 from urllib import request as urllib_request
@@ -517,7 +517,9 @@ def parse_publish_date_from_timestamp(raw: str) -> str:
     if not raw:
         return ""
     try:
-        return datetime.fromtimestamp(int(raw)).strftime("%Y-%m-%d %H:%M:%S")
+        # WeChat `ct` values are UTC epoch seconds; use UTC to keep parsing
+        # deterministic across host timezones.
+        return datetime.fromtimestamp(int(raw), tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     except Exception:
         return raw
 

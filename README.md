@@ -328,7 +328,7 @@ python3 scripts/migraph <command> [args]
 | `lint` | Validate wiki structure |
 | `rebuild-index` | Rebuild the workspace index |
 | `dedupe-pages` | Detect duplicate or similar pages |
-| `migrate-skill-kwonledge` | Migrate skill-kwonledge content into a vault |
+| `migrate-skill-knowledge` | Migrate skill-kwonledge content into a vault (alias `migrate-skill-kwonledge` retained for compatibility) |
 
 ### Intent Mapping
 

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-MiGraph Script: migrate_skill_kwonledge
+MiGraph Script: migrate_skill_knowledge
 
 Purpose:
 - One-shot migration of skill-kwonledge content into a MiGraph vault.
 - Maps: category -> tags, types -> MiGraph types, related -> text + review note.
 
 Usage:
-- python scripts/migrate_skill_kwonledge.py \\
+- python scripts/migrate_skill_knowledge.py \\
     --source /path/to/skill-kwonledge/examples/knowledge \\
     --target /path/to/migraph-vault
 """
@@ -55,13 +55,6 @@ def _map_related(related: list[str]) -> str:
         clean = item.strip().strip("[").strip("]").strip()
         lines.append(f"- {clean}")
     return "\n".join(lines)
-
-
-def _extract_category(content: str) -> str:
-    """Try to infer category from file path (e.g., .../IaC/terraform/... -> IaC)."""
-    if not isinstance(content, str):
-        return ""
-    return ""
 
 
 def migrate(source_dir: Path, target_dir: Path, dry_run: bool = False) -> dict:

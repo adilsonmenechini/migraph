@@ -72,24 +72,24 @@ TYPE_LANE_OFFSET = {
 TYPE_COLORS = {
     "raw": "#94a3b8",
     "file": "#94a3b8",
-    "source": "#60a5fa",
-    "topic": "#34d399",
+    "source": "#3b82f6",
+    "topic": "#22c55e",
     "concept": "#a78bfa",
     "entity": "#f472b6",
     "decision": "#fb923c",
-    "synthesis": "#22d3ee",
-    "query": "#cbd5e1",
+    "synthesis": "#06b6d4",
+    "query": "#94a3b8",
     "claim": "#facc15",
     "page": "#60a5fa",
     "pattern": "#f59e0b",
-    "runbook": "#10b981",
+    "runbook": "#4ade80",
     "architecture": "#8b5cf6",
 }
 
 EDGE_STYLES = {
     "references": {
-        "stroke": "rgba(138,180,255,0.38)",
-        "highlight": "rgba(138,180,255,0.98)",
+        "stroke": "rgba(92,124,250,0.38)",
+        "highlight": "rgba(92,124,250,0.98)",
         "dash": "",
     },
     "links_to": {
@@ -143,8 +143,8 @@ EDGE_STYLES = {
         "dash": "10 5",
     },
     "suggests_related_to": {
-        "stroke": "rgba(138,180,255,0.38)",
-        "highlight": "rgba(138,180,255,0.96)",
+        "stroke": "rgba(92,124,250,0.38)",
+        "highlight": "rgba(92,124,250,0.96)",
         "dash": "10 6",
     },
 }
@@ -958,7 +958,7 @@ def _render_view_payload(
             "maturity": str(node.get("maturity") or ""),
             "x": pos["x"],
             "y": pos["y"],
-            "color": TYPE_COLORS.get(node_type, "#60a5fa"),
+            "color": TYPE_COLORS.get(node_type, "#3b82f6"),
         })
 
     return {
@@ -1033,19 +1033,25 @@ def render_graph_html(payload: dict[str, object]) -> str:
   <title>MiGraph Graph</title>
   <style>
     :root {{
-      --bg: #0b1020;
-      --panel: #121935;
-      --panel-soft: #182142;
-      --text: #edf2ff;
-      --muted: #a8b3cf;
-      --border: rgba(255, 255, 255, 0.1);
-      --accent: #8ab4ff;
+      --bg: #0a0a12;
+      --panel: #161b26;
+      --panel-soft: #1c233a;
+      --text: #e6e8f0;
+      --muted: #7b84a6;
+      --border: rgba(118, 138, 215, 0.12);
+      --accent: #5c7cfa;
+      --accent-light: #8aa5ff;
+      --accent-dark: #3a5ce5;
+      --success: #10b981;
+      --warning: #fbbf24;
+      --error: #f87171;
+      --info: #60a5fa;
     }}
     * {{ box-sizing: border-box; }}
     body {{
       margin: 0;
       font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #0b1020 0%, #10172f 100%);
+      background: linear-gradient(180deg, #0a0a12 0%, #111522 100%);
       color: var(--text);
     }}
     .layout {{
@@ -1056,7 +1062,7 @@ def render_graph_html(payload: dict[str, object]) -> str:
     .panel {{
       padding: 20px;
       overflow: auto;
-      background: rgba(9, 13, 28, 0.82);
+      background: rgba(10, 10, 18, 0.82);
     }}
     .panel.left {{
       border-right: 1px solid var(--border);
@@ -1152,9 +1158,9 @@ def render_graph_html(payload: dict[str, object]) -> str:
       text-align: center;
     }}
     .focus-chip.active {{
-      border-color: rgba(138,180,255,0.55);
+      border-color: rgba(92,124,250,0.55);
       color: var(--text);
-      background: rgba(138,180,255,0.12);
+      background: rgba(92,124,250,0.12);
     }}
     .mode-row {{
       display: grid;
@@ -1172,7 +1178,7 @@ def render_graph_html(payload: dict[str, object]) -> str:
     .toggle-item input {{
       width: auto;
       margin: 0;
-      accent-color: #8ab4ff;
+      accent-color: #5c7cfa;
     }}
     .chip {{
       display: inline-block;
@@ -1247,8 +1253,8 @@ def render_graph_html(payload: dict[str, object]) -> str:
       margin: 0;
     }}
     .insight-item.active {{
-      border-color: rgba(138,180,255,0.52);
-      background: rgba(138,180,255,0.12);
+      border-color: rgba(92,124,250,0.52);
+      background: rgba(92,124,250,0.12);
     }}
     .insight-item strong {{
       display: block;
@@ -1388,7 +1394,7 @@ def render_graph_html(payload: dict[str, object]) -> str:
       </div>
       <div class="card">
         <h2 class="title">Edge Legend</h2>
-        <div class="legend-item"><span class="edge-swatch" style="border-top-color:rgba(138,180,255,0.85)"></span>references</div>
+        <div class="legend-item"><span class="edge-swatch" style="border-top-color:rgba(92,124,250,0.85)"></span>references</div>
         <div class="legend-item"><span class="edge-swatch" style="border-top-color:rgba(255,255,255,0.65)"></span>links_to</div>
         <div class="legend-item"><span class="edge-swatch" style="border-top-color:rgba(52,211,153,0.9); border-top-style:dashed;"></span>includes</div>
         <div class="legend-item"><span class="edge-swatch" style="border-top-color:rgba(251,146,60,0.9); border-top-style:dashed;"></span>cites</div>
@@ -1399,7 +1405,7 @@ def render_graph_html(payload: dict[str, object]) -> str:
         <div class="legend-item"><span class="edge-swatch" style="border-top-color:rgba(250,204,21,0.95)"></span>asserts</div>
         <div class="legend-item"><span class="edge-swatch" style="border-top-color:rgba(34,211,238,0.95)"></span>supports</div>
         <div class="legend-item"><span class="edge-swatch" style="border-top-color:rgba(244,114,182,0.95); border-top-style:dashed;"></span>contradicts</div>
-        <div class="legend-item"><span class="edge-swatch" style="border-top-color:rgba(138,180,255,0.95); border-top-style:dashed;"></span>suggests_related_to</div>
+        <div class="legend-item"><span class="edge-swatch" style="border-top-color:rgba(92,124,250,0.95); border-top-style:dashed;"></span>suggests_related_to</div>
       </div>
       <div class="card">
         <h2 class="title">Edge Filters</h2>
@@ -1845,7 +1851,7 @@ def render_graph_html(payload: dict[str, object]) -> str:
               y1: sourceNode.y,
               x2: targetNode.x,
               y2: targetNode.y,
-              stroke: "rgba(138,180,255,0.96)",
+              stroke: "rgba(92,124,250,0.96)",
               "stroke-width": 2.6,
               opacity: 0.96,
             }});
@@ -1870,14 +1876,14 @@ def render_graph_html(payload: dict[str, object]) -> str:
         const circle = createSvgEl("circle", {{
           r: isActive ? 16 : isSuggested ? 14 : 12,
           fill: node.color || "#60a5fa",
-          stroke: isActive ? "#ffffff" : isSuggested ? "#8ab4ff" : "rgba(255,255,255,0.25)",
+          stroke: isActive ? "#ffffff" : isSuggested ? "#5c7cfa" : "rgba(255,255,255,0.25)",
           "stroke-width": isActive ? 2.4 : isSuggested ? 2 : 1.2,
           opacity: faded ? 0.62 : 1,
         }});
         const label = createSvgEl("text", {{
           x: 18,
           y: 5,
-          fill: "#edf2ff",
+          fill: "#e6e8f0",
           "font-size": 12,
           opacity: faded ? 0.7 : 0.94,
         }});

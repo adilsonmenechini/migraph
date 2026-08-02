@@ -1284,19 +1284,26 @@ def write_output_home(root: Path) -> Path:
   <title>MiGraph Outputs</title>
   <style>
     :root {{
-      --bg: #0b1020;
-      --panel: #121935;
-      --text: #edf2ff;
-      --muted: #a8b3cf;
-      --border: rgba(255,255,255,0.1);
-      --accent: #8ab4ff;
+      --bg: #0a0a12;
+      --panel: #161b26;
+      --panel-soft: #1c233a;
+      --text: #e6e8f0;
+      --muted: #7b84a6;
+      --border: rgba(118, 138, 215, 0.12);
+      --accent: #5c7cfa;
+      --accent-light: #8aa5ff;
+      --accent-dark: #3a5ce5;
+      --success: #10b981;
+      --warning: #fbbf24;
+      --error: #f87171;
+      --info: #60a5fa;
     }}
     * {{ box-sizing: border-box; }}
     body {{
       margin: 0;
       min-height: 100vh;
       font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #0b1020 0%, #10172f 100%);
+      background: linear-gradient(180deg, #0a0a12 0%, #111522 100%);
       color: var(--text);
       display: grid;
       place-items: center;
@@ -1304,7 +1311,7 @@ def write_output_home(root: Path) -> Path:
     }}
     .shell {{
       width: min(880px, 100%);
-      background: rgba(9, 13, 28, 0.86);
+      background: rgba(10, 10, 18, 0.86);
       border: 1px solid var(--border);
       border-radius: 24px;
       padding: 28px;
@@ -1410,8 +1417,8 @@ def write_output_home(root: Path) -> Path:
       padding: 18px;
     }}
     .card:hover {{
-      border-color: rgba(138,180,255,0.55);
-      box-shadow: 0 0 0 1px rgba(138,180,255,0.18);
+      border-color: rgba(92,124,250,0.55);
+      box-shadow: 0 0 0 1px rgba(92,124,250,0.18);
     }}
     .card strong {{
       display: block;
@@ -1443,7 +1450,7 @@ def write_output_home(root: Path) -> Path:
       text-decoration: none;
       color: inherit;
       border: 1px solid var(--border);
-      background: rgba(18, 25, 53, 0.85);
+      background: rgba(22, 27, 38, 0.85);
       border-radius: 16px;
       padding: 14px;
       margin-bottom: 10px;
@@ -1452,7 +1459,7 @@ def write_output_home(root: Path) -> Path:
       margin-bottom: 0;
     }}
     .mini-card:hover {{
-      border-color: rgba(138,180,255,0.55);
+      border-color: rgba(92,124,250,0.55);
     }}
     .mini-card strong {{
       display: block;
@@ -1468,20 +1475,20 @@ def write_output_home(root: Path) -> Path:
       letter-spacing: 0.04em;
     }}
     .quality-ready {{
-      background: rgba(47, 163, 91, 0.16);
-      color: #8de2a7;
+      background: rgba(16, 185, 129, 0.16);
+      color: #51cf76;
     }}
     .quality-review {{
-      background: rgba(242, 166, 43, 0.16);
-      color: #ffd08a;
+      background: rgba(251, 191, 36, 0.16);
+      color: #ffd43b;
     }}
     .quality-weak {{
-      background: rgba(214, 77, 77, 0.16);
-      color: #ff9f9f;
+      background: rgba(248, 113, 113, 0.16);
+      color: #ff7b7b;
     }}
     .quality-media {{
-      background: rgba(104, 114, 255, 0.16);
-      color: #b9c0ff;
+      background: rgba(96, 165, 250, 0.16);
+      color: #74c0fc;
     }}
     .mini-card span {{
       display: block;
@@ -1503,8 +1510,8 @@ def write_output_home(root: Path) -> Path:
     }}
     .guide {{
       margin-top: 18px;
-      border: 1px solid rgba(138,180,255,0.22);
-      background: rgba(138,180,255,0.08);
+      border: 1px solid rgba(92,124,250,0.22);
+      background: rgba(92,124,250,0.08);
       border-radius: 18px;
       padding: 16px 18px;
     }}
@@ -1536,12 +1543,12 @@ def write_output_home(root: Path) -> Path:
       text-decoration: none;
       color: inherit;
       border: 1px solid var(--border);
-      background: rgba(18, 25, 53, 0.85);
+      background: rgba(22, 27, 38, 0.85);
       border-radius: 16px;
       padding: 14px;
     }}
     .action-card:hover {{
-      border-color: rgba(138,180,255,0.55);
+      border-color: rgba(92,124,250,0.55);
     }}
     .action-card strong {{
       display: block;
@@ -1727,19 +1734,26 @@ def write_inbox_review(root: Path) -> Path:
   <title>MiGraph Inbox Review</title>
   <style>
     :root {{
-      --bg: #0b1020;
-      --panel: #121935;
-      --text: #edf2ff;
-      --muted: #a8b3cf;
-      --border: rgba(255,255,255,0.1);
-      --accent: #8ab4ff;
+      --bg: #0a0a12;
+      --panel: #161b26;
+      --panel-soft: #1c233a;
+      --text: #e6e8f0;
+      --muted: #7b84a6;
+      --border: rgba(118, 138, 215, 0.12);
+      --accent: #5c7cfa;
+      --accent-light: #8aa5ff;
+      --accent-dark: #3a5ce5;
+      --success: #10b981;
+      --warning: #fbbf24;
+      --error: #f87171;
+      --info: #60a5fa;
     }}
     * {{ box-sizing: border-box; }}
     body {{
       margin: 0;
       min-height: 100vh;
       font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #0b1020 0%, #10172f 100%);
+      background: linear-gradient(180deg, #0a0a12 0%, #111522 100%);
       color: var(--text);
       padding: 24px;
     }}
@@ -1750,7 +1764,7 @@ def write_inbox_review(root: Path) -> Path:
     .hero {{
       margin-bottom: 22px;
       border: 1px solid var(--border);
-      background: rgba(9, 13, 28, 0.86);
+      background: rgba(10, 10, 18, 0.86);
       border-radius: 24px;
       padding: 28px;
     }}
@@ -1820,7 +1834,7 @@ def write_inbox_review(root: Path) -> Path:
     .group {{
       margin-top: 18px;
       border: 1px solid var(--border);
-      background: rgba(9, 13, 28, 0.78);
+      background: rgba(10, 10, 18, 0.78);
       border-radius: 22px;
       padding: 20px;
     }}
