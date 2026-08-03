@@ -83,7 +83,7 @@ Enabled when `MIGRAPH_EMBED_API_KEY` is set. Defaults to SiliconFlow BGE-M3.
 When you need to invoke MiGraph, use the unified entry:
 
 ```bash
-<python-command> scripts/migraph <command> ...
+<python-command> skills/migraph/scripts/migraph <command> ...
 ```
 
 Platform note:
@@ -140,7 +140,7 @@ MiGraph HTML pages are static files under `<wiki-root>/output/`. Agent chat UIs 
 Default workflow:
 
 ```bash
-<python-command> scripts/migraph serve --root <wiki-root>
+<python-command> skills/migraph/scripts/migraph serve --root <wiki-root>
 ```
 
 This serves `<wiki-root>/output/` at `http://127.0.0.1:8765/` by default.

@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m venv .venv
-          .venv/bin/python -m pip install -r requirements.txt
+          python -m venv skills/migraph/.venv
+          skills/migraph/.venv/bin/python -m pip install -r skills/migraph/requirements.txt
       - name: Run tests
-        run: .venv/bin/python -m unittest tests.test_migraph -v
+        run: skills/migraph/.venv/bin/python -m unittest tests.test_migraph -v

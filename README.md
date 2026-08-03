@@ -34,7 +34,7 @@
 
 Transform loose documents, webpages, notes, and conversations into a durable Markdown workspace. Talk to your agent to create, organize, and research knowledge — with inbox review, local browsing, and an interactive knowledge graph you open in the browser.
 
-[![Click to view workspace](docs/assets/output-hub-preview.png)](docs/assets/output-hub-preview.png)
+[![Click to view workspace](skills/migraph/docs/assets/output-hub-preview.png)](skills/migraph/docs/assets/output-hub-preview.png)
 
 ### What's Inside
 
@@ -112,7 +112,7 @@ Transform loose documents, webpages, notes, and conversations into a durable Mar
 │  (Markdown)  │  (captures)  │   (viewer, graph,     │
 │              │              │    inbox, report)      │
 ├──────────────┴──────────────┴───────────────────────┤
-│            scripts/migraph (unified CLI)           │
+│    skills/migraph/scripts/migraph (unified CLI)    │
 │   init · clip · ingest · ask · graph · serve      │
 ├─────────────────────────────────────────────────────┤
 │  AI (optional, disabled by default)               │
@@ -147,41 +147,43 @@ clip --url <URL>
 
 | Component | File | Function |
 |-----------|------|----------|
-| **CLI Entry** | `scripts/migraph` | Single entry point — dispatches to scripts |
-| **Runtime** | `scripts/bootstrap_runtime.py` | Creates `.venv`, installs dependencies |
-| **Wiki Init** | `scripts/init_wiki.py` | Initializes workspace with directory structure |
-| **Conversion** | `scripts/convert_source.py` | Converts PDF, DOCX, XLSX, PPTX → Markdown |
-| **Web Capture** | `scripts/clip.py` | Captures URLs with WeChat adapter + wait mode |
-| **Ingestion** | `scripts/ingest.py` | Creates wiki pages with structured frontmatter |
-| **Inbox** | `scripts/build_inbox.py` | Generates `output/inbox/index.html` review page |
-| **Q&A** | `scripts/ask.py` | Answers against existing wiki |
-| **Viewer** | `scripts/build_viewer.py` | Generates `output/viewer/index.html` |
-| **Graph** | `scripts/build_graph.py` | Generates interactive graph with 3 views |
-| **Report** | `scripts/graph_report.py` | Graph governance report in HTML |
-| **Entity Review** | `scripts/entity_merge_review.py` | Detects ambiguous aliases |
-| **Entity Merge** | `scripts/entity_merge_apply.py` | Merges entities deterministically |
-| **Server** | `scripts/serve_outputs.py` | Loopback HTTP for browsing outputs |
-| **Health** | `scripts/health.py` | Checks workspace integrity |
-| **Status** | `scripts/status.py` | Compact workspace summary |
-| **AI Clients** | `scripts/llm_client.py`, `scripts/embed_client.py` | LLM + embeddings, OpenAI-compatible |
-| **AI Config** | `scripts/ai_config.py` | Resolves `MIGRAPH_*` environment variables |
+| **CLI Entry** | `skills/migraph/scripts/migraph` | Single entry point — dispatches to scripts |
+| **Runtime** | `skills/migraph/scripts/bootstrap_runtime.py` | Creates `.venv`, installs dependencies |
+| **Wiki Init** | `skills/migraph/scripts/init_wiki.py` | Initializes workspace with directory structure |
+| **Conversion** | `skills/migraph/scripts/convert_source.py` | Converts PDF, DOCX, XLSX, PPTX → Markdown |
+| **Web Capture** | `skills/migraph/scripts/clip.py` | Captures URLs with WeChat adapter + wait mode |
+| **Ingestion** | `skills/migraph/scripts/ingest.py` | Creates wiki pages with structured frontmatter |
+| **Inbox** | `skills/migraph/scripts/build_inbox.py` | Generates `output/inbox/index.html` review page |
+| **Q&A** | `skills/migraph/scripts/ask.py` | Answers against existing wiki |
+| **Viewer** | `skills/migraph/scripts/build_viewer.py` | Generates `output/viewer/index.html` |
+| **Graph** | `skills/migraph/scripts/build_graph.py` | Generates interactive graph with 3 views |
+| **Report** | `skills/migraph/scripts/graph_report.py` | Graph governance report in HTML |
+| **Entity Review** | `skills/migraph/scripts/entity_merge_review.py` | Detects ambiguous aliases |
+| **Entity Merge** | `skills/migraph/scripts/entity_merge_apply.py` | Merges entities deterministically |
+| **Server** | `skills/migraph/scripts/serve_outputs.py` | Loopback HTTP for browsing outputs |
+| **Health** | `skills/migraph/scripts/health.py` | Checks workspace integrity |
+| **Status** | `skills/migraph/scripts/status.py` | Compact workspace summary |
+| **AI Clients** | `skills/migraph/scripts/llm_client.py`, `skills/migraph/scripts/embed_client.py` | LLM + embeddings, OpenAI-compatible |
+| **AI Config** | `skills/migraph/scripts/ai_config.py` | Resolves `MIGRAPH_*` environment variables |
 
 ### Repository Structure
 
 ```
 MiGraph/
-├── scripts/                  # Unified CLI + all command scripts
 ├── skills/
-│   └── knowledge/            # Unified knowledge lifecycle (7 note types, create, dedupe, organize)
-├── templates/
-│   ├── pages/                # Page templates (concept, pattern, runbook, ...)
-│   └── root/                 # Workspace scaffolding (index, log, AGENTS)
+│   ├── migraph/               # MiGraph skill: unified CLI + scripts + templates + docs
+│   │   ├── scripts/           # Unified CLI + all command scripts
+│   │   ├── templates/
+│   │   │   ├── pages/         # Page templates (concept, pattern, runbook, ...)
+│   │   │   └── root/          # Workspace scaffolding (index, log, AGENTS)
+│   │   ├── docs/              # Documentation and previews
+│   │   ├── requirements.txt   # Runtime dependencies
+│   │   ├── pyproject.toml     # Ruff + mypy configuration
+│   │   └── SKILL.md           # Installed as the "migraph" skill
+│   └── knowledge/             # Unified knowledge lifecycle (7 note types, create, dedupe, organize)
 ├── examples/
-│   └── knowledge/            # Example knowledge base (IaC, DevOps, AI, patterns)
-├── tests/                    # Test suite
-├── docs/                     # Documentation and previews
-├── SKILL.md                  # Installed as the "migraph" skill
-└── pyproject.toml            # Ruff + mypy configuration
+│   └── knowledge/             # Example knowledge base (IaC, DevOps, AI, patterns)
+└── tests/                     # Test suite
 ```
 
 ### Workspace Structure
@@ -230,8 +232,8 @@ MiGraph/
 ```bash
 git clone https://github.com/adilsonmenechini/migraph MiGraph
 cd MiGraph
-python3 scripts/migraph bootstrap
-python3 scripts/migraph doctor --repo-root .
+python3 skills/migraph/scripts/migraph bootstrap
+python3 skills/migraph/scripts/migraph doctor --repo-root .
 ```
 
 Then install the folder in your agent's skill directory per the host's docs.
@@ -248,7 +250,7 @@ Then install the folder in your agent's skill directory per the host's docs.
 | [Cursor](https://cursor.com) | Agent mode with project skills |
 | [Gemini CLI](https://github.com/google-gemini/gemini-cli) | Skill-compatible CLI agent |
 | [GitHub Copilot](https://github.com/features/copilot) | Agent/coding flows in VS Code with skill support |
-| Other skill hosts | Any product that loads `SKILL.md` and runs `python3 scripts/migraph …` locally |
+| Other skill hosts | Any product that loads `SKILL.md` and runs `python3 skills/migraph/scripts/migraph …` locally |
 
 ### Example Prompt
 
@@ -311,7 +313,7 @@ Enabled when `MIGRAPH_EMBED_API_KEY` is set. Defaults to SiliconFlow BGE-M3.
 One stable entry point:
 
 ```bash
-python3 scripts/migraph <command> [args]
+python3 skills/migraph/scripts/migraph <command> [args]
 ```
 
 ### Core Commands
@@ -365,26 +367,26 @@ python3 scripts/migraph <command> [args]
 
 ## HTML Output
 
-[![Inbox review](docs/assets/inbox-preview.png)](docs/assets/inbox-preview.png)
+[![Inbox review](skills/migraph/docs/assets/inbox-preview.png)](skills/migraph/docs/assets/inbox-preview.png)
 
 **Inbox review** — review webpages, files, and notes before importing.
 
-[![Local viewer](docs/assets/viewer-preview.png)](docs/assets/viewer-preview.png)
+[![Local viewer](skills/migraph/docs/assets/viewer-preview.png)](skills/migraph/docs/assets/viewer-preview.png)
 
 **Viewer** — browse by page type, confidence, and status.
 
-[![Knowledge graph](docs/assets/graph-preview.png)](docs/assets/graph-preview.png)
+[![Knowledge graph](skills/migraph/docs/assets/graph-preview.png)](skills/migraph/docs/assets/graph-preview.png)
 
 **Knowledge graph** — explore semantic relationships between topics, concepts, entities, and claims. Three views: `knowledge`, `document`, and `suggested`.
 
-[![Governance report](docs/assets/graph-report-preview.png)](docs/assets/graph-report-preview.png)
+[![Governance report](skills/migraph/docs/assets/graph-report-preview.png)](skills/migraph/docs/assets/graph-report-preview.png)
 
 **Governance report** — graph health signals: isolated pages, fragile hubs, suggested links, and merge candidates.
 
 ### Browsing via HTTP
 
 ```bash
-python3 scripts/migraph serve --root <wiki-root>
+python3 skills/migraph/scripts/migraph serve --root <wiki-root>
 ```
 
 | URL | Page |
@@ -397,7 +399,7 @@ python3 scripts/migraph serve --root <wiki-root>
 
 ### Example Outputs
 
-Real, captured command outputs for the full workflow — `init`, `clip`, `batch-ingest`, `viewer`, `graph`, `graph-report`, `entity-merge-review`, `status`, `health`, `ask`, `lint`, `correct`, `query`, `crystallize`, `digest`, `serve`, and `doctor` — are in [docs/example-outputs.md](docs/example-outputs.md).
+Real, captured command outputs for the full workflow — `init`, `clip`, `batch-ingest`, `viewer`, `graph`, `graph-report`, `entity-merge-review`, `status`, `health`, `ask`, `lint`, `correct`, `query`, `crystallize`, `digest`, `serve`, and `doctor` — are in [skills/migraph/docs/example-outputs.md](skills/migraph/docs/example-outputs.md).
 
 ---
 
@@ -414,21 +416,21 @@ Current status: **52 tests passing**.
 ### Lint & Type Checking
 
 ```bash
+cd skills/migraph
 python3 -m ruff check scripts/
 python3 -m ruff format --check scripts/
 python3 -m mypy scripts/
 ```
 
-Configuration lives in `pyproject.toml` (`[tool.ruff]`, `[tool.mypy]`). CI runs the test suite on Python 3.11, 3.12, and 3.13 (`.github/workflows/ci.yml`).
+Configuration lives in `skills/migraph/pyproject.toml` (`[tool.ruff]`, `[tool.mypy]`). CI runs the test suite on Python 3.11, 3.12, and 3.13 (`.github/workflows/ci.yml`).
 
 ---
 
 ## Documentation
 
 - **README.md** — this page
-- **SKILL.md** — agent behavior contract
-- **docs/example-outputs.md** — real captured command outputs
-- **CHANGELOG.md** — version history
+- **skills/migraph/SKILL.md** — agent behavior contract
+- **skills/migraph/docs/example-outputs.md** — real captured command outputs
 
 ---
 

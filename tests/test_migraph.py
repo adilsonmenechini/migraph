@@ -17,13 +17,18 @@ import urllib.request
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-SCRIPTS_DIR = REPO_ROOT / "scripts"
+MIGRAPH_DIR = REPO_ROOT / "skills" / "migraph"
+SCRIPTS_DIR = MIGRAPH_DIR / "scripts"
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 
 def runtime_python() -> str:
     candidates = [
+        MIGRAPH_DIR / ".venv" / "bin" / "python3",
+        MIGRAPH_DIR / ".venv" / "bin" / "python",
+        MIGRAPH_DIR / ".venv" / "Scripts" / "python.exe",
+        MIGRAPH_DIR / ".venv" / "Scripts" / "python",
         REPO_ROOT / ".venv" / "bin" / "python3",
         REPO_ROOT / ".venv" / "bin" / "python",
         REPO_ROOT / ".venv" / "Scripts" / "python.exe",
@@ -39,7 +44,7 @@ def runtime_python() -> str:
 
 def run_script(script_name: str, *args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [runtime_python(), str(REPO_ROOT / "scripts" / script_name), *args],
+        [runtime_python(), str(SCRIPTS_DIR / script_name), *args],
         cwd=REPO_ROOT,
         check=True,
         capture_output=True,
@@ -49,7 +54,7 @@ def run_script(script_name: str, *args: str) -> subprocess.CompletedProcess[str]
 
 def run_migraph(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [runtime_python(), str(REPO_ROOT / "scripts" / "migraph"), *args],
+        [runtime_python(), str(SCRIPTS_DIR / "migraph"), *args],
         cwd=REPO_ROOT,
         check=check,
         capture_output=True,
@@ -2251,7 +2256,7 @@ class MiGraphRegressionTest(unittest.TestCase):
             proc = subprocess.Popen(
                 [
                     runtime_python(),
-                    str(REPO_ROOT / "scripts" / "serve_outputs.py"),
+                    str(SCRIPTS_DIR / "serve_outputs.py"),
                     "--root",
                     str(root),
                     "--port",
@@ -2633,7 +2638,7 @@ class MiGraphSecurityTest(unittest.TestCase):
             result = subprocess.run(
                 [
                     runtime_python(),
-                    str(REPO_ROOT / "scripts" / "serve_outputs.py"),
+                    str(SCRIPTS_DIR / "serve_outputs.py"),
                     "--root",
                     str(root),
                     "--host",

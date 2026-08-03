@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 /.venv/
+/skills/migraph/.venv/
 .DS_Store
 /.tmp/
 /raw/
@@ -16,3 +17,6 @@ __pycache__/
 /.audit_runtime.log
 .ruff_cache
 .mypy_cache
+/task_plan.md
+/findings.md
+/progress.md
