@@ -79,11 +79,11 @@ print(result["messages"][-1].content_blocks)
 - **Runnable composition**: `prompt | model | parser` (LCEL) — pipeline composável e streamable.
 - **with_structured_output**: modelo retorna Pydantic/Zod schema validado.
 
-## 🔗 Related
+## Connections
 
-- [[LangGraph]]
-- [[AI Agents]]
-- [[GraphRAG]]
+- [LangGraph](langgraph.md)
+- [AI Agents](../topics/ai-agents.md)
+- [GraphRAG](graphrag.md)
 
 ## 🧩 Key Insights
 

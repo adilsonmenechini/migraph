@@ -90,13 +90,10 @@ Em vez de map-reduce estático em nível fixo: **rater LLM** (GPT-4o-mini) class
 | GraphRAG (high-level) | 2-3% | Competitive |
 | GraphRAG (source text summarization) | 100%+ | Lower |
 
-## 🔗 Related
+## Connections
 
-- [[RAG]]
-- [[Knowledge Graph]]
-- [[Leiden Algorithm]]
-- [[Loop Engineering]]
-- [[System Driver]]
+- [Loop Engineering](../concepts/loop-engineering.md)
+- [System Driver](../concepts/system-driver.md)
 
 ## 🧩 Key Insights
 

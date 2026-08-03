@@ -1,8 +1,8 @@
 # Knowledge Graph
 
 - Nodes: 21
-- Edges: 41
-- Summary: The current key page is AI Native Team. There are 8 isolated pages that need links first. You can review 8 suggested links next.
+- Edges: 65
+- Summary: The current key page is AI Native Team. The main pages already have a basic connection structure. You can review 8 suggested links next.
 
 ## Key Pages
 - AI Native Team (concept) | score=70 | Degree 14, inbound 7, spanning 6 neighbor types.
@@ -53,11 +53,21 @@
 - wiki/concepts/ai-native-team.md --related_to--> wiki/decisions/execution-policy.md
 - wiki/concepts/ai-native-team.md --related_to--> wiki/topics/eval-loops.md
 - wiki/concepts/ai-native-team.md --related_to--> wiki/topics/model-platform.md
+- wiki/concepts/domain-driven-design.md --related_to--> wiki/references/argocd.md
+- wiki/concepts/domain-driven-design.md --related_to--> wiki/references/kubernetes.md
 - wiki/concepts/execution-spec.md --about--> wiki/sources/platform-spec.md
 - wiki/concepts/execution-spec.md --about--> wiki/sources/review-checklist.md
 - wiki/concepts/execution-spec.md --related_to--> wiki/concepts/ai-native-team.md
 - wiki/concepts/execution-spec.md --related_to--> wiki/decisions/context-budget.md
 - wiki/concepts/execution-spec.md --related_to--> wiki/decisions/execution-policy.md
+- wiki/concepts/gitops.md --related_to--> wiki/references/argocd.md
+- wiki/concepts/gitops.md --related_to--> wiki/references/kubernetes.md
+- wiki/concepts/loop-engineering.md --related_to--> wiki/concepts/system-driver.md
+- wiki/concepts/loop-engineering.md --related_to--> wiki/references/graphrag.md
+- wiki/concepts/loop-engineering.md --related_to--> wiki/topics/ai-agents.md
+- wiki/concepts/system-driver.md --related_to--> wiki/concepts/loop-engineering.md
+- wiki/concepts/system-driver.md --related_to--> wiki/references/argocd.md
+- wiki/concepts/system-driver.md --related_to--> wiki/references/graphrag.md
 - wiki/decisions/context-budget.md --about--> wiki/concepts/execution-spec.md
 - wiki/decisions/context-budget.md --about--> wiki/sources/eval-loops.md
 - wiki/decisions/execution-policy.md --about--> wiki/concepts/ai-native-team.md
@@ -66,6 +76,17 @@
 - wiki/queries/what-makes-ai-native-team.md --about--> wiki/decisions/execution-policy.md
 - wiki/queries/what-makes-ai-native-team.md --related_to--> wiki/concepts/ai-native-team.md
 - wiki/queries/what-makes-ai-native-team.md --related_to--> wiki/decisions/execution-policy.md
+- wiki/references/argocd.md --related_to--> wiki/concepts/gitops.md
+- wiki/references/argocd.md --related_to--> wiki/references/kubernetes.md
+- wiki/references/graphrag.md --related_to--> wiki/concepts/loop-engineering.md
+- wiki/references/graphrag.md --related_to--> wiki/concepts/system-driver.md
+- wiki/references/kubernetes.md --related_to--> wiki/concepts/gitops.md
+- wiki/references/kubernetes.md --related_to--> wiki/references/argocd.md
+- wiki/references/langchain.md --related_to--> wiki/references/graphrag.md
+- wiki/references/langchain.md --related_to--> wiki/references/langgraph.md
+- wiki/references/langchain.md --related_to--> wiki/topics/ai-agents.md
+- wiki/references/langgraph.md --related_to--> wiki/references/langchain.md
+- wiki/references/langgraph.md --related_to--> wiki/topics/ai-agents.md
 - wiki/sources/eval-loops.md --related_to--> wiki/decisions/context-budget.md
 - wiki/sources/eval-loops.md --related_to--> wiki/topics/eval-loops.md
 - wiki/sources/platform-spec.md --related_to--> wiki/concepts/ai-native-team.md
@@ -77,6 +98,9 @@
 - wiki/syntheses/delivery-system.md --about--> wiki/decisions/execution-policy.md
 - wiki/syntheses/delivery-system.md --about--> wiki/sources/eval-loops.md
 - wiki/syntheses/delivery-system.md --about--> wiki/sources/platform-spec.md
+- wiki/topics/ai-agents.md --related_to--> wiki/concepts/loop-engineering.md
+- wiki/topics/ai-agents.md --related_to--> wiki/concepts/system-driver.md
+- wiki/topics/ai-agents.md --related_to--> wiki/references/graphrag.md
 - wiki/topics/eval-loops.md --about--> wiki/sources/eval-loops.md
 - wiki/topics/eval-loops.md --about--> wiki/sources/review-checklist.md
 - wiki/topics/eval-loops.md --related_to--> wiki/decisions/context-budget.md

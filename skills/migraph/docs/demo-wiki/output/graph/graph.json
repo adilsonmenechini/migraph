@@ -6,7 +6,7 @@
     "pageCount": 21,
     "claimCount": 0,
     "nodeCount": 21,
-    "edgeCount": 41
+    "edgeCount": 65
   },
   "nodes": [
     {
@@ -502,6 +502,18 @@
       "relation": "related_to"
     },
     {
+      "source": "wiki/concepts/domain-driven-design.md",
+      "target": "wiki/references/argocd.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/concepts/domain-driven-design.md",
+      "target": "wiki/references/kubernetes.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
       "source": "wiki/concepts/execution-spec.md",
       "target": "wiki/sources/platform-spec.md",
       "type": "about",
@@ -528,6 +540,54 @@
     {
       "source": "wiki/concepts/execution-spec.md",
       "target": "wiki/decisions/execution-policy.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/concepts/gitops.md",
+      "target": "wiki/references/argocd.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/concepts/gitops.md",
+      "target": "wiki/references/kubernetes.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/concepts/loop-engineering.md",
+      "target": "wiki/concepts/system-driver.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/concepts/loop-engineering.md",
+      "target": "wiki/references/graphrag.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/concepts/loop-engineering.md",
+      "target": "wiki/topics/ai-agents.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/concepts/system-driver.md",
+      "target": "wiki/concepts/loop-engineering.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/concepts/system-driver.md",
+      "target": "wiki/references/argocd.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/concepts/system-driver.md",
+      "target": "wiki/references/graphrag.md",
       "type": "related_to",
       "relation": "related_to"
     },
@@ -576,6 +636,72 @@
     {
       "source": "wiki/queries/what-makes-ai-native-team.md",
       "target": "wiki/decisions/execution-policy.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/argocd.md",
+      "target": "wiki/concepts/gitops.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/argocd.md",
+      "target": "wiki/references/kubernetes.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/graphrag.md",
+      "target": "wiki/concepts/loop-engineering.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/graphrag.md",
+      "target": "wiki/concepts/system-driver.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/kubernetes.md",
+      "target": "wiki/concepts/gitops.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/kubernetes.md",
+      "target": "wiki/references/argocd.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/langchain.md",
+      "target": "wiki/references/graphrag.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/langchain.md",
+      "target": "wiki/references/langgraph.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/langchain.md",
+      "target": "wiki/topics/ai-agents.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/langgraph.md",
+      "target": "wiki/references/langchain.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/langgraph.md",
+      "target": "wiki/topics/ai-agents.md",
       "type": "related_to",
       "relation": "related_to"
     },
@@ -646,6 +772,24 @@
       "relation": "about"
     },
     {
+      "source": "wiki/topics/ai-agents.md",
+      "target": "wiki/concepts/loop-engineering.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/topics/ai-agents.md",
+      "target": "wiki/concepts/system-driver.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/topics/ai-agents.md",
+      "target": "wiki/references/graphrag.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
       "source": "wiki/topics/eval-loops.md",
       "target": "wiki/sources/eval-loops.md",
       "type": "about",
@@ -709,10 +853,10 @@
   "insights": {
     "stats": {
       "nodeCount": 21,
-      "edgeCount": 41,
-      "isolatedCount": 8,
+      "edgeCount": 65,
+      "isolatedCount": 0,
       "weakCount": 0,
-      "averageDegree": 3.9
+      "averageDegree": 6.19
     },
     "topNodes": [
       {
@@ -795,64 +939,7 @@
         "reason": "Connects 3 page types and works well as a bridge."
       }
     ],
-    "isolatedNodes": [
-      {
-        "id": "wiki/topics/ai-agents.md",
-        "title": "AI Agents",
-        "type": "topic",
-        "severity": "isolated",
-        "reason": "No relationships with other pages yet"
-      },
-      {
-        "id": "wiki/references/argocd.md",
-        "title": "ArgoCD",
-        "type": "reference",
-        "severity": "isolated",
-        "reason": "No relationships with other pages yet"
-      },
-      {
-        "id": "wiki/concepts/domain-driven-design.md",
-        "title": "Domain-Driven Design",
-        "type": "concept",
-        "severity": "isolated",
-        "reason": "No relationships with other pages yet"
-      },
-      {
-        "id": "wiki/concepts/gitops.md",
-        "title": "GitOps",
-        "type": "concept",
-        "severity": "isolated",
-        "reason": "No relationships with other pages yet"
-      },
-      {
-        "id": "wiki/references/graphrag.md",
-        "title": "GraphRAG",
-        "type": "reference",
-        "severity": "isolated",
-        "reason": "No relationships with other pages yet"
-      },
-      {
-        "id": "wiki/references/kubernetes.md",
-        "title": "Kubernetes",
-        "type": "reference",
-        "severity": "isolated",
-        "reason": "No relationships with other pages yet"
-      },
-      {
-        "id": "wiki/references/langchain.md",
-        "title": "LangChain",
-        "type": "reference",
-        "severity": "isolated",
-        "reason": "No relationships with other pages yet"
-      },
-      {
-        "id": "wiki/references/langgraph.md",
-        "title": "LangGraph",
-        "type": "reference",
-        "severity": "isolated",
-        "reason": "No relationships with other pages yet"
-      }
-    ],
+    "isolatedNodes": [],
     "suggestedLinks": [
       {
         "source": "wiki/decisions/context-budget.md",
@@ -1012,7 +1099,7 @@
         "sharedSources": []
       }
     ],
-    "summary": "The current key page is AI Native Team. There are 8 isolated pages that need links first. You can review 8 suggested links next."
+    "summary": "The current key page is AI Native Team. The main pages already have a basic connection structure. You can review 8 suggested links next."
   },
   "views": {
     "document": {
@@ -1531,6 +1618,18 @@
           "relation": "references"
         },
         {
+          "source": "wiki/concepts/domain-driven-design.md",
+          "target": "wiki/references/argocd.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/concepts/domain-driven-design.md",
+          "target": "wiki/references/kubernetes.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
           "source": "wiki/concepts/execution-spec.md",
           "target": "wiki/concepts/ai-native-team.md",
           "type": "links_to",
@@ -1559,6 +1658,54 @@
           "target": "wiki/sources/review-checklist.md",
           "type": "references",
           "relation": "references"
+        },
+        {
+          "source": "wiki/concepts/gitops.md",
+          "target": "wiki/references/argocd.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/concepts/gitops.md",
+          "target": "wiki/references/kubernetes.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/concepts/loop-engineering.md",
+          "target": "wiki/concepts/system-driver.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/concepts/loop-engineering.md",
+          "target": "wiki/references/graphrag.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/concepts/loop-engineering.md",
+          "target": "wiki/topics/ai-agents.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/concepts/system-driver.md",
+          "target": "wiki/concepts/loop-engineering.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/concepts/system-driver.md",
+          "target": "wiki/references/argocd.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/concepts/system-driver.md",
+          "target": "wiki/references/graphrag.md",
+          "type": "links_to",
+          "relation": "links_to"
         },
         {
           "source": "wiki/decisions/context-budget.md",
@@ -1607,6 +1754,72 @@
           "target": "wiki/decisions/execution-policy.md",
           "type": "references",
           "relation": "references"
+        },
+        {
+          "source": "wiki/references/argocd.md",
+          "target": "wiki/concepts/gitops.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/argocd.md",
+          "target": "wiki/references/kubernetes.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/graphrag.md",
+          "target": "wiki/concepts/loop-engineering.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/graphrag.md",
+          "target": "wiki/concepts/system-driver.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/kubernetes.md",
+          "target": "wiki/concepts/gitops.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/kubernetes.md",
+          "target": "wiki/references/argocd.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/langchain.md",
+          "target": "wiki/references/graphrag.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/langchain.md",
+          "target": "wiki/references/langgraph.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/langchain.md",
+          "target": "wiki/topics/ai-agents.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/langgraph.md",
+          "target": "wiki/references/langchain.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/langgraph.md",
+          "target": "wiki/topics/ai-agents.md",
+          "type": "links_to",
+          "relation": "links_to"
         },
         {
           "source": "wiki/sources/eval-loops.md",
@@ -1693,6 +1906,24 @@
           "relation": "references"
         },
         {
+          "source": "wiki/topics/ai-agents.md",
+          "target": "wiki/concepts/loop-engineering.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/topics/ai-agents.md",
+          "target": "wiki/concepts/system-driver.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/topics/ai-agents.md",
+          "target": "wiki/references/graphrag.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
           "source": "wiki/topics/eval-loops.md",
           "target": "wiki/sources/eval-loops.md",
           "type": "includes",
@@ -1756,10 +1987,10 @@
       "insights": {
         "stats": {
           "nodeCount": 21,
-          "edgeCount": 41,
-          "isolatedCount": 8,
+          "edgeCount": 65,
+          "isolatedCount": 0,
           "weakCount": 0,
-          "averageDegree": 3.9
+          "averageDegree": 6.19
         },
         "topNodes": [
           {
@@ -1842,64 +2073,7 @@
             "reason": "Connects 3 page types and works well as a bridge."
           }
         ],
-        "isolatedNodes": [
-          {
-            "id": "wiki/topics/ai-agents.md",
-            "title": "AI Agents",
-            "type": "topic",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/argocd.md",
-            "title": "ArgoCD",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/concepts/domain-driven-design.md",
-            "title": "Domain-Driven Design",
-            "type": "concept",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/concepts/gitops.md",
-            "title": "GitOps",
-            "type": "concept",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/graphrag.md",
-            "title": "GraphRAG",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/kubernetes.md",
-            "title": "Kubernetes",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/langchain.md",
-            "title": "LangChain",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/langgraph.md",
-            "title": "LangGraph",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          }
-        ],
+        "isolatedNodes": [],
         "suggestedLinks": [
           {
             "source": "wiki/decisions/context-budget.md",
@@ -2059,7 +2233,7 @@
             "sharedSources": []
           }
         ],
-        "summary": "The current key page is AI Native Team. There are 8 isolated pages that need links first. You can review 8 suggested links next."
+        "summary": "The current key page is AI Native Team. The main pages already have a basic connection structure. You can review 8 suggested links next."
       }
     },
     "knowledge": {
@@ -2557,6 +2731,18 @@
           "relation": "related_to"
         },
         {
+          "source": "wiki/concepts/domain-driven-design.md",
+          "target": "wiki/references/argocd.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/concepts/domain-driven-design.md",
+          "target": "wiki/references/kubernetes.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
           "source": "wiki/concepts/execution-spec.md",
           "target": "wiki/sources/platform-spec.md",
           "type": "about",
@@ -2583,6 +2769,54 @@
         {
           "source": "wiki/concepts/execution-spec.md",
           "target": "wiki/decisions/execution-policy.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/concepts/gitops.md",
+          "target": "wiki/references/argocd.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/concepts/gitops.md",
+          "target": "wiki/references/kubernetes.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/concepts/loop-engineering.md",
+          "target": "wiki/concepts/system-driver.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/concepts/loop-engineering.md",
+          "target": "wiki/references/graphrag.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/concepts/loop-engineering.md",
+          "target": "wiki/topics/ai-agents.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/concepts/system-driver.md",
+          "target": "wiki/concepts/loop-engineering.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/concepts/system-driver.md",
+          "target": "wiki/references/argocd.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/concepts/system-driver.md",
+          "target": "wiki/references/graphrag.md",
           "type": "related_to",
           "relation": "related_to"
         },
@@ -2631,6 +2865,72 @@
         {
           "source": "wiki/queries/what-makes-ai-native-team.md",
           "target": "wiki/decisions/execution-policy.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/argocd.md",
+          "target": "wiki/concepts/gitops.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/argocd.md",
+          "target": "wiki/references/kubernetes.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/graphrag.md",
+          "target": "wiki/concepts/loop-engineering.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/graphrag.md",
+          "target": "wiki/concepts/system-driver.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/kubernetes.md",
+          "target": "wiki/concepts/gitops.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/kubernetes.md",
+          "target": "wiki/references/argocd.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/langchain.md",
+          "target": "wiki/references/graphrag.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/langchain.md",
+          "target": "wiki/references/langgraph.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/langchain.md",
+          "target": "wiki/topics/ai-agents.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/langgraph.md",
+          "target": "wiki/references/langchain.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/langgraph.md",
+          "target": "wiki/topics/ai-agents.md",
           "type": "related_to",
           "relation": "related_to"
         },
@@ -2701,6 +3001,24 @@
           "relation": "about"
         },
         {
+          "source": "wiki/topics/ai-agents.md",
+          "target": "wiki/concepts/loop-engineering.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/topics/ai-agents.md",
+          "target": "wiki/concepts/system-driver.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/topics/ai-agents.md",
+          "target": "wiki/references/graphrag.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
           "source": "wiki/topics/eval-loops.md",
           "target": "wiki/sources/eval-loops.md",
           "type": "about",
@@ -2764,10 +3082,10 @@
       "insights": {
         "stats": {
           "nodeCount": 21,
-          "edgeCount": 41,
-          "isolatedCount": 8,
+          "edgeCount": 65,
+          "isolatedCount": 0,
           "weakCount": 0,
-          "averageDegree": 3.9
+          "averageDegree": 6.19
         },
         "topNodes": [
           {
@@ -2850,64 +3168,7 @@
             "reason": "Connects 3 page types and works well as a bridge."
           }
         ],
-        "isolatedNodes": [
-          {
-            "id": "wiki/topics/ai-agents.md",
-            "title": "AI Agents",
-            "type": "topic",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/argocd.md",
-            "title": "ArgoCD",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/concepts/domain-driven-design.md",
-            "title": "Domain-Driven Design",
-            "type": "concept",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/concepts/gitops.md",
-            "title": "GitOps",
-            "type": "concept",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/graphrag.md",
-            "title": "GraphRAG",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/kubernetes.md",
-            "title": "Kubernetes",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/langchain.md",
-            "title": "LangChain",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/langgraph.md",
-            "title": "LangGraph",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          }
-        ],
+        "isolatedNodes": [],
         "suggestedLinks": [
           {
             "source": "wiki/decisions/context-budget.md",
@@ -3067,7 +3328,7 @@
             "sharedSources": []
           }
         ],
-        "summary": "The current key page is AI Native Team. There are 8 isolated pages that need links first. You can review 8 suggested links next."
+        "summary": "The current key page is AI Native Team. The main pages already have a basic connection structure. You can review 8 suggested links next."
       }
     },
     "suggested": {
@@ -3582,10 +3843,10 @@
       "insights": {
         "stats": {
           "nodeCount": 21,
-          "edgeCount": 41,
-          "isolatedCount": 8,
+          "edgeCount": 65,
+          "isolatedCount": 0,
           "weakCount": 0,
-          "averageDegree": 3.9
+          "averageDegree": 6.19
         },
         "topNodes": [
           {
@@ -3668,64 +3929,7 @@
             "reason": "Connects 3 page types and works well as a bridge."
           }
         ],
-        "isolatedNodes": [
-          {
-            "id": "wiki/topics/ai-agents.md",
-            "title": "AI Agents",
-            "type": "topic",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/argocd.md",
-            "title": "ArgoCD",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/concepts/domain-driven-design.md",
-            "title": "Domain-Driven Design",
-            "type": "concept",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/concepts/gitops.md",
-            "title": "GitOps",
-            "type": "concept",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/graphrag.md",
-            "title": "GraphRAG",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/kubernetes.md",
-            "title": "Kubernetes",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/langchain.md",
-            "title": "LangChain",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          },
-          {
-            "id": "wiki/references/langgraph.md",
-            "title": "LangGraph",
-            "type": "reference",
-            "severity": "isolated",
-            "reason": "No relationships with other pages yet"
-          }
-        ],
+        "isolatedNodes": [],
         "suggestedLinks": [
           {
             "source": "wiki/decisions/context-budget.md",

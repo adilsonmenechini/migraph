@@ -86,12 +86,11 @@ Matematicamente: $\mathcal{L} = (S, A, O, T, E, M, \tau)$
 
 Declarative, machine-readable format para definir arquitetura, inputs, constraints de qualquer loop. Permite validação, scoring (LES - Loop Effectiveness Score), diagramação Mermaid, replay sandbox.
 
-## 🔗 Related
+## Connections
 
-- [[AI Agents]]
-- [[ReAct Framework]]
-- [[GraphRAG]]
-- [[System Driver]]
+- [AI Agents](../topics/ai-agents.md)
+- [GraphRAG](../references/graphrag.md)
+- [System Driver](system-driver.md)
 
 ## 🧩 Key Insights
 

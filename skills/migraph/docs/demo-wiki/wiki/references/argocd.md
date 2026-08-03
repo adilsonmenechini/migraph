@@ -85,11 +85,10 @@ syncPolicy:
 
 ApplicationSet com `strategy.type: RollingSync` — agrupa Applications por labels (`matchExpressions`), sincroniza grupo por grupo, esperando `Healthy` antes de avançar. `maxUpdate` controla % simultâneo; `deletionOrder: Reverse` para teardown ordenado.
 
-## 🔗 Related
+## Connections
 
-- [[Kubernetes]]
-- [[GitOps]]
-- [[Helm]]
+- [Kubernetes](kubernetes.md)
+- [GitOps](../concepts/gitops.md)
 
 ## 🧩 Key Insights
 

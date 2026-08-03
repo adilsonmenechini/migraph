@@ -54,11 +54,11 @@ summary: AI Agents são LLMs dentro de um loop que chamam tools, percebem o ambi
 - **Deterministic workflows**: reprodutível, testável, barato.
 - **Named patterns**: prompt chaining, routing, orchestrator-worker, evaluator-optimizer.
 
-## 🔗 Related
+## Connections
 
-- [[Loop Engineering]]
-- [[System Driver]]
-- [[GraphRAG]]
+- [Loop Engineering](../concepts/loop-engineering.md)
+- [System Driver](../concepts/system-driver.md)
+- [GraphRAG](../references/graphrag.md)
 
 ## 🧩 Key Insights
 

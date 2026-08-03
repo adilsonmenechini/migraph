@@ -138,12 +138,11 @@ O System Driver expõe tools ao LLM. Cada tool: `name`, `description`, `JSON sch
 
 RAG para binding answers: embed query → retrieve (hybrid BM25 + vectors + reranker) → cite sources. Citações mantêm resposta auditable.
 
-## 🔗 Related
+## Connections
 
-- [[Loop Engineering]]
-- [[GraphRAG]]
-- [[ArgoCD]]
-- [[Agent Loop]]
+- [Loop Engineering](loop-engineering.md)
+- [GraphRAG](../references/graphrag.md)
+- [ArgoCD](../references/argocd.md)
 
 ## 🧩 Key Insights
 

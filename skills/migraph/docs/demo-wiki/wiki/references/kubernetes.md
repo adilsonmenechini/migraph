@@ -79,11 +79,10 @@ Kubernetes (K8s) é uma plataforma de **orquestração de containers** que autom
 - **Secret**: dados sensíveis (base64; idealmente cifrados + External Secrets/SOPS).
 - **RBAC**: Role/ClusterRole + RoleBinding/ClusterRoleBinding.
 
-## 🔗 Related
+## Connections
 
-- [[ArgoCD]]
-- [[GitOps]]
-- [[Helm]]
+- [ArgoCD](argocd.md)
+- [GitOps](../concepts/gitops.md)
 
 ## 🧩 Key Insights
 

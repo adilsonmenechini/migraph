@@ -105,10 +105,10 @@ for event in app.stream(input, stream_mode="messages"):
 
 - `stream_mode="values"` (state a cada passo), `"updates"` (deltas), `"messages"` (tokens streaming).
 
-## 🔗 Related
+## Connections
 
-- [[LangChain]]
-- [[AI Agents]]
+- [LangChain](langchain.md)
+- [AI Agents](../topics/ai-agents.md)
 
 ## 🧩 Key Insights
 

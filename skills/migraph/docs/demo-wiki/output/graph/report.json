@@ -2,30 +2,30 @@
   "generated_at": "2026-08-03",
   "schemaVersion": "2",
   "view": "knowledge",
-  "summary": "The current key page is AI Native Team. There are 8 isolated pages that need links. There are 1 high-degree thin pages worth strengthening first. There are 8 suggested links ready for review.",
+  "summary": "The current key page is AI Native Team. The main pages already have a basic connection structure. There are 1 high-degree thin pages worth strengthening first. There are 1 clusters disconnected from the main graph. There are 8 suggested links ready for review.",
   "stats": {
     "view": "knowledge",
     "nodeCount": 21,
-    "edgeCount": 41,
+    "edgeCount": 65,
     "entityCount": 0,
     "aliasCount": 0,
     "aliasedEntityCount": 0,
     "ambiguousAliasGroupCount": 0,
     "ambiguousEntityCount": 0,
     "isolatedEntityCount": 0,
-    "isolatedPageCount": 8,
+    "isolatedPageCount": 0,
     "weakPageCount": 0,
     "bridgePageCount": 5,
     "suggestedLinkCount": 8,
     "hubStubCount": 1,
     "fragileBridgeCount": 0,
-    "isolatedClusterCount": 0,
-    "componentCount": 11,
-    "averageDegree": 3.9
+    "isolatedClusterCount": 1,
+    "componentCount": 2,
+    "averageDegree": 6.19
   },
   "topActions": [
-    "Fix isolated pages first by adding `links_to` edges or source references.",
     "Strengthen high-degree thin pages with better summaries, context, and sources.",
+    "Reconnect isolated clusters back to the main graph.",
     "Review suggested links and convert strong candidates into explicit page links."
   ],
   "topNodes": [
@@ -109,72 +109,7 @@
       "reason": "Connects 3 page types and works well as a bridge."
     }
   ],
-  "isolatedPages": [
-    {
-      "id": "wiki/topics/ai-agents.md",
-      "title": "AI Agents",
-      "type": "topic",
-      "severity": "isolated",
-      "degree": 0,
-      "reason": "No page-level relationships yet."
-    },
-    {
-      "id": "wiki/references/argocd.md",
-      "title": "ArgoCD",
-      "type": "reference",
-      "severity": "isolated",
-      "degree": 0,
-      "reason": "No page-level relationships yet."
-    },
-    {
-      "id": "wiki/concepts/domain-driven-design.md",
-      "title": "Domain-Driven Design",
-      "type": "concept",
-      "severity": "isolated",
-      "degree": 0,
-      "reason": "No page-level relationships yet."
-    },
-    {
-      "id": "wiki/concepts/gitops.md",
-      "title": "GitOps",
-      "type": "concept",
-      "severity": "isolated",
-      "degree": 0,
-      "reason": "No page-level relationships yet."
-    },
-    {
-      "id": "wiki/references/graphrag.md",
-      "title": "GraphRAG",
-      "type": "reference",
-      "severity": "isolated",
-      "degree": 0,
-      "reason": "No page-level relationships yet."
-    },
-    {
-      "id": "wiki/references/kubernetes.md",
-      "title": "Kubernetes",
-      "type": "reference",
-      "severity": "isolated",
-      "degree": 0,
-      "reason": "No page-level relationships yet."
-    },
-    {
-      "id": "wiki/references/langchain.md",
-      "title": "LangChain",
-      "type": "reference",
-      "severity": "isolated",
-      "degree": 0,
-      "reason": "No page-level relationships yet."
-    },
-    {
-      "id": "wiki/references/langgraph.md",
-      "title": "LangGraph",
-      "type": "reference",
-      "severity": "isolated",
-      "degree": 0,
-      "reason": "No page-level relationships yet."
-    }
-  ],
+  "isolatedPages": [],
   "isolatedEntities": [],
   "ambiguousEntityMergeCandidates": [],
   "hubStubs": [
@@ -188,7 +123,30 @@
     }
   ],
   "fragileBridges": [],
-  "isolatedClusters": [],
+  "isolatedClusters": [
+    {
+      "size": 10,
+      "nodeIds": [
+        "wiki/concepts/domain-driven-design.md",
+        "wiki/concepts/gitops.md",
+        "wiki/concepts/loop-engineering.md",
+        "wiki/concepts/system-driver.md",
+        "wiki/references/argocd.md",
+        "wiki/references/graphrag.md",
+        "wiki/references/kubernetes.md",
+        "wiki/references/langchain.md",
+        "wiki/references/langgraph.md",
+        "wiki/topics/ai-agents.md"
+      ],
+      "titles": [
+        "Domain-Driven Design",
+        "GitOps",
+        "Loop Engineering",
+        "System Driver"
+      ],
+      "reason": "This cluster is disconnected from the main graph and contains 10 pages."
+    }
+  ],
   "suggestedLinks": [
     {
       "source": "wiki/decisions/context-budget.md",

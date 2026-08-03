@@ -65,10 +65,10 @@ Padrões de integração entre bounded contexts:
 - **Domain Event**: fato do domínio ocorrido (OrderPlaced) para integração/efeitos colaterais.
 - **Factory**: criação de objetos complexos mantendo invariantes.
 
-## 🔗 Related
+## Connections
 
-- [[Kubernetes]]
-- [[ArgoCD]]
+- [Kubernetes](../references/kubernetes.md)
+- [ArgoCD](../references/argocd.md)
 
 ## 🧩 Key Insights
 

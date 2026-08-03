@@ -123,7 +123,20 @@
         "bounded-context",
         "domain-model"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "kubernetes.md",
+          "raw": "../references/kubernetes.md",
+          "targetId": "wiki/references/kubernetes.md",
+          "href": ""
+        },
+        {
+          "label": "argocd.md",
+          "raw": "../references/argocd.md",
+          "targetId": "wiki/references/argocd.md",
+          "href": ""
+        }
+      ],
       "sections": [
         {
           "title": "🧠 Definition",
@@ -154,11 +167,24 @@
           "links": []
         },
         {
-          "title": "🔗 Related",
-          "anchor": "related",
-          "content": "- [[Kubernetes]]\n- [[ArgoCD]]",
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [Kubernetes](../references/kubernetes.md)\n- [ArgoCD](../references/argocd.md)",
           "refs": [],
-          "links": []
+          "links": [
+            {
+              "label": "kubernetes.md",
+              "raw": "../references/kubernetes.md",
+              "targetId": "wiki/references/kubernetes.md",
+              "href": ""
+            },
+            {
+              "label": "argocd.md",
+              "raw": "../references/argocd.md",
+              "targetId": "wiki/references/argocd.md",
+              "href": ""
+            }
+          ]
         },
         {
           "title": "🧩 Key Insights",
@@ -294,7 +320,20 @@
         "ci-cd",
         "kubernetes"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "argocd.md",
+          "raw": "../references/argocd.md",
+          "targetId": "wiki/references/argocd.md",
+          "href": ""
+        },
+        {
+          "label": "kubernetes.md",
+          "raw": "../references/kubernetes.md",
+          "targetId": "wiki/references/kubernetes.md",
+          "href": ""
+        }
+      ],
       "sections": [
         {
           "title": "🧠 Definition",
@@ -318,11 +357,24 @@
           "links": []
         },
         {
-          "title": "🔗 Related",
-          "anchor": "related",
-          "content": "- [[ArgoCD]]\n- [[Kubernetes]]\n- [[Helm]]",
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [ArgoCD](../references/argocd.md)\n- [Kubernetes](../references/kubernetes.md)",
           "refs": [],
-          "links": []
+          "links": [
+            {
+              "label": "argocd.md",
+              "raw": "../references/argocd.md",
+              "targetId": "wiki/references/argocd.md",
+              "href": ""
+            },
+            {
+              "label": "kubernetes.md",
+              "raw": "../references/kubernetes.md",
+              "targetId": "wiki/references/kubernetes.md",
+              "href": ""
+            }
+          ]
         },
         {
           "title": "🧩 Key Insights",
@@ -386,7 +438,26 @@
         "feedback-loops",
         "ReAct"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "ai-agents.md",
+          "raw": "../topics/ai-agents.md",
+          "targetId": "wiki/topics/ai-agents.md",
+          "href": ""
+        },
+        {
+          "label": "graphrag.md",
+          "raw": "../references/graphrag.md",
+          "targetId": "wiki/references/graphrag.md",
+          "href": ""
+        },
+        {
+          "label": "system-driver.md",
+          "raw": "system-driver.md",
+          "targetId": "wiki/concepts/system-driver.md",
+          "href": ""
+        }
+      ],
       "sections": [
         {
           "title": "🧠 Definition",
@@ -424,11 +495,30 @@
           "links": []
         },
         {
-          "title": "🔗 Related",
-          "anchor": "related",
-          "content": "- [[AI Agents]]\n- [[ReAct Framework]]\n- [[GraphRAG]]\n- [[System Driver]]",
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [AI Agents](../topics/ai-agents.md)\n- [GraphRAG](../references/graphrag.md)\n- [System Driver](system-driver.md)",
           "refs": [],
-          "links": []
+          "links": [
+            {
+              "label": "ai-agents.md",
+              "raw": "../topics/ai-agents.md",
+              "targetId": "wiki/topics/ai-agents.md",
+              "href": ""
+            },
+            {
+              "label": "graphrag.md",
+              "raw": "../references/graphrag.md",
+              "targetId": "wiki/references/graphrag.md",
+              "href": ""
+            },
+            {
+              "label": "system-driver.md",
+              "raw": "system-driver.md",
+              "targetId": "wiki/concepts/system-driver.md",
+              "href": ""
+            }
+          ]
         },
         {
           "title": "🧩 Key Insights",
@@ -492,7 +582,26 @@
         "orchestration",
         "agentic-architecture"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "loop-engineering.md",
+          "raw": "loop-engineering.md",
+          "targetId": "wiki/concepts/loop-engineering.md",
+          "href": ""
+        },
+        {
+          "label": "graphrag.md",
+          "raw": "../references/graphrag.md",
+          "targetId": "wiki/references/graphrag.md",
+          "href": ""
+        },
+        {
+          "label": "argocd.md",
+          "raw": "../references/argocd.md",
+          "targetId": "wiki/references/argocd.md",
+          "href": ""
+        }
+      ],
       "sections": [
         {
           "title": "🧠 Definition",
@@ -558,11 +667,30 @@
           "links": []
         },
         {
-          "title": "🔗 Related",
-          "anchor": "related",
-          "content": "- [[Loop Engineering]]\n- [[GraphRAG]]\n- [[ArgoCD]]\n- [[Agent Loop]]",
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [Loop Engineering](loop-engineering.md)\n- [GraphRAG](../references/graphrag.md)\n- [ArgoCD](../references/argocd.md)",
           "refs": [],
-          "links": []
+          "links": [
+            {
+              "label": "loop-engineering.md",
+              "raw": "loop-engineering.md",
+              "targetId": "wiki/concepts/loop-engineering.md",
+              "href": ""
+            },
+            {
+              "label": "graphrag.md",
+              "raw": "../references/graphrag.md",
+              "targetId": "wiki/references/graphrag.md",
+              "href": ""
+            },
+            {
+              "label": "argocd.md",
+              "raw": "../references/argocd.md",
+              "targetId": "wiki/references/argocd.md",
+              "href": ""
+            }
+          ]
         },
         {
           "title": "🧩 Key Insights",
@@ -757,7 +885,20 @@
         "argocd",
         "cd"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "kubernetes.md",
+          "raw": "kubernetes.md",
+          "targetId": "wiki/references/kubernetes.md",
+          "href": ""
+        },
+        {
+          "label": "gitops.md",
+          "raw": "../concepts/gitops.md",
+          "targetId": "wiki/concepts/gitops.md",
+          "href": ""
+        }
+      ],
       "sections": [
         {
           "title": "🧠 Definition",
@@ -816,11 +957,24 @@
           "links": []
         },
         {
-          "title": "🔗 Related",
-          "anchor": "related",
-          "content": "- [[Kubernetes]]\n- [[GitOps]]\n- [[Helm]]",
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [Kubernetes](kubernetes.md)\n- [GitOps](../concepts/gitops.md)",
           "refs": [],
-          "links": []
+          "links": [
+            {
+              "label": "kubernetes.md",
+              "raw": "kubernetes.md",
+              "targetId": "wiki/references/kubernetes.md",
+              "href": ""
+            },
+            {
+              "label": "gitops.md",
+              "raw": "../concepts/gitops.md",
+              "targetId": "wiki/concepts/gitops.md",
+              "href": ""
+            }
+          ]
         },
         {
           "title": "🧩 Key Insights",
@@ -884,7 +1038,20 @@
         "microsoft",
         "leiden"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "loop-engineering.md",
+          "raw": "../concepts/loop-engineering.md",
+          "targetId": "wiki/concepts/loop-engineering.md",
+          "href": ""
+        },
+        {
+          "label": "system-driver.md",
+          "raw": "../concepts/system-driver.md",
+          "targetId": "wiki/concepts/system-driver.md",
+          "href": ""
+        }
+      ],
       "sections": [
         {
           "title": "🧠 Definition",
@@ -936,11 +1103,24 @@
           "links": []
         },
         {
-          "title": "🔗 Related",
-          "anchor": "related",
-          "content": "- [[RAG]]\n- [[Knowledge Graph]]\n- [[Leiden Algorithm]]\n- [[Loop Engineering]]\n- [[System Driver]]",
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [Loop Engineering](../concepts/loop-engineering.md)\n- [System Driver](../concepts/system-driver.md)",
           "refs": [],
-          "links": []
+          "links": [
+            {
+              "label": "loop-engineering.md",
+              "raw": "../concepts/loop-engineering.md",
+              "targetId": "wiki/concepts/loop-engineering.md",
+              "href": ""
+            },
+            {
+              "label": "system-driver.md",
+              "raw": "../concepts/system-driver.md",
+              "targetId": "wiki/concepts/system-driver.md",
+              "href": ""
+            }
+          ]
         },
         {
           "title": "🧩 Key Insights",
@@ -1003,7 +1183,20 @@
         "orchestration",
         "devops"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "argocd.md",
+          "raw": "argocd.md",
+          "targetId": "wiki/references/argocd.md",
+          "href": ""
+        },
+        {
+          "label": "gitops.md",
+          "raw": "../concepts/gitops.md",
+          "targetId": "wiki/concepts/gitops.md",
+          "href": ""
+        }
+      ],
       "sections": [
         {
           "title": "🧠 Definition",
@@ -1048,11 +1241,24 @@
           "links": []
         },
         {
-          "title": "🔗 Related",
-          "anchor": "related",
-          "content": "- [[ArgoCD]]\n- [[GitOps]]\n- [[Helm]]",
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [ArgoCD](argocd.md)\n- [GitOps](../concepts/gitops.md)",
           "refs": [],
-          "links": []
+          "links": [
+            {
+              "label": "argocd.md",
+              "raw": "argocd.md",
+              "targetId": "wiki/references/argocd.md",
+              "href": ""
+            },
+            {
+              "label": "gitops.md",
+              "raw": "../concepts/gitops.md",
+              "targetId": "wiki/concepts/gitops.md",
+              "href": ""
+            }
+          ]
         },
         {
           "title": "🧩 Key Insights",
@@ -1115,7 +1321,26 @@
         "agents",
         "python"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "langgraph.md",
+          "raw": "langgraph.md",
+          "targetId": "wiki/references/langgraph.md",
+          "href": ""
+        },
+        {
+          "label": "ai-agents.md",
+          "raw": "../topics/ai-agents.md",
+          "targetId": "wiki/topics/ai-agents.md",
+          "href": ""
+        },
+        {
+          "label": "graphrag.md",
+          "raw": "graphrag.md",
+          "targetId": "wiki/references/graphrag.md",
+          "href": ""
+        }
+      ],
       "sections": [
         {
           "title": "🧠 Definition",
@@ -1153,11 +1378,30 @@
           "links": []
         },
         {
-          "title": "🔗 Related",
-          "anchor": "related",
-          "content": "- [[LangGraph]]\n- [[AI Agents]]\n- [[GraphRAG]]",
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [LangGraph](langgraph.md)\n- [AI Agents](../topics/ai-agents.md)\n- [GraphRAG](graphrag.md)",
           "refs": [],
-          "links": []
+          "links": [
+            {
+              "label": "langgraph.md",
+              "raw": "langgraph.md",
+              "targetId": "wiki/references/langgraph.md",
+              "href": ""
+            },
+            {
+              "label": "ai-agents.md",
+              "raw": "../topics/ai-agents.md",
+              "targetId": "wiki/topics/ai-agents.md",
+              "href": ""
+            },
+            {
+              "label": "graphrag.md",
+              "raw": "graphrag.md",
+              "targetId": "wiki/references/graphrag.md",
+              "href": ""
+            }
+          ]
         },
         {
           "title": "🧩 Key Insights",
@@ -1220,7 +1464,20 @@
         "state-machine",
         "agents"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "langchain.md",
+          "raw": "langchain.md",
+          "targetId": "wiki/references/langchain.md",
+          "href": ""
+        },
+        {
+          "label": "ai-agents.md",
+          "raw": "../topics/ai-agents.md",
+          "targetId": "wiki/topics/ai-agents.md",
+          "href": ""
+        }
+      ],
       "sections": [
         {
           "title": "🧠 Definition",
@@ -1272,11 +1529,24 @@
           "links": []
         },
         {
-          "title": "🔗 Related",
-          "anchor": "related",
-          "content": "- [[LangChain]]\n- [[AI Agents]]",
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [LangChain](langchain.md)\n- [AI Agents](../topics/ai-agents.md)",
           "refs": [],
-          "links": []
+          "links": [
+            {
+              "label": "langchain.md",
+              "raw": "langchain.md",
+              "targetId": "wiki/references/langchain.md",
+              "href": ""
+            },
+            {
+              "label": "ai-agents.md",
+              "raw": "../topics/ai-agents.md",
+              "targetId": "wiki/topics/ai-agents.md",
+              "href": ""
+            }
+          ]
         },
         {
           "title": "🧩 Key Insights",
@@ -1563,7 +1833,26 @@
         "agentic-systems",
         "llm"
       ],
-      "links": [],
+      "links": [
+        {
+          "label": "loop-engineering.md",
+          "raw": "../concepts/loop-engineering.md",
+          "targetId": "wiki/concepts/loop-engineering.md",
+          "href": ""
+        },
+        {
+          "label": "system-driver.md",
+          "raw": "../concepts/system-driver.md",
+          "targetId": "wiki/concepts/system-driver.md",
+          "href": ""
+        },
+        {
+          "label": "graphrag.md",
+          "raw": "../references/graphrag.md",
+          "targetId": "wiki/references/graphrag.md",
+          "href": ""
+        }
+      ],
       "sections": [
         {
           "title": "🧠 Definition",
@@ -1594,11 +1883,30 @@
           "links": []
         },
         {
-          "title": "🔗 Related",
-          "anchor": "related",
-          "content": "- [[Loop Engineering]]\n- [[System Driver]]\n- [[GraphRAG]]",
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [Loop Engineering](../concepts/loop-engineering.md)\n- [System Driver](../concepts/system-driver.md)\n- [GraphRAG](../references/graphrag.md)",
           "refs": [],
-          "links": []
+          "links": [
+            {
+              "label": "loop-engineering.md",
+              "raw": "../concepts/loop-engineering.md",
+              "targetId": "wiki/concepts/loop-engineering.md",
+              "href": ""
+            },
+            {
+              "label": "system-driver.md",
+              "raw": "../concepts/system-driver.md",
+              "targetId": "wiki/concepts/system-driver.md",
+              "href": ""
+            },
+            {
+              "label": "graphrag.md",
+              "raw": "../references/graphrag.md",
+              "targetId": "wiki/references/graphrag.md",
+              "href": ""
+            }
+          ]
         },
         {
           "title": "🧩 Key Insights",

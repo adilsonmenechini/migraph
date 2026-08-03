@@ -43,11 +43,10 @@ GitOps é um padrão de operação onde o **Git é a fonte da verdade** (single 
 - **Rollback**: `git revert` + sync = rollback confiável e auditable.
 - **Audit**: cada mudança tem commit, autor, diff — trilha completa.
 
-## 🔗 Related
+## Connections
 
-- [[ArgoCD]]
-- [[Kubernetes]]
-- [[Helm]]
+- [ArgoCD](../references/argocd.md)
+- [Kubernetes](../references/kubernetes.md)
 
 ## 🧩 Key Insights
 
