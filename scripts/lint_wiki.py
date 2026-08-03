@@ -40,17 +40,57 @@ SUMMARY_PLACEHOLDERS = {
 }
 SUMMARY_NOISE_HINTS = (
     "<ama-doc>",
-    "文件编号",
-    "文档版本",
-    "修订页",
-    "研究问题",
-    "作者：",
-    "日期：",
-    "日期:",
+    "Document Number",
+    "Document Version",
+    "Revision Page",
+    "Research Question",
+    "Author:",
+    "Date:",
+    "Date:",
 )
-CONTINUATION_ENDINGS = tuple("的了和与及并而按把将向在于为是小会度案等其")
-TERMINAL_PUNCTUATION = ("。", "！", "？", ".", "!", "?")
-BAD_TRAILING_PUNCTUATION = ("：", ":", "；", ";", "，", ",", "、", "（", "(")
+CONTINUATION_ENDINGS = (
+    "and",
+    "but",
+    "or",
+    "with",
+    "that",
+    "which",
+    "while",
+    "when",
+    "if",
+    "because",
+    "the",
+    "of",
+    "in",
+    "on",
+    "at",
+    "to",
+    "by",
+    "for",
+    "from",
+    "than",
+    "then",
+    "so",
+    "yet",
+    "not",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "has",
+    "have",
+    "will",
+    "would",
+    "can",
+    "could",
+    "should",
+    "may",
+    "might",
+    "must",
+)
+TERMINAL_PUNCTUATION = (".", "!", "?")
+BAD_TRAILING_PUNCTUATION = (":", ";", ",", "(", ")", "[", "]", "{", "}")
 LOW_CONFIDENCE = {"mixed", "inferred", ""}
 ARCHIVEABLE_STATUS = {"active", "stale", ""}
 PLACEHOLDER_PATTERNS = [
@@ -94,9 +134,9 @@ def weak_summary_reason(summary: str) -> str | None:
         return "appears truncated at a trailing number"
     if len(clean) >= 36 and not clean.endswith(TERMINAL_PUNCTUATION):
         return "looks incomplete because it lacks terminal punctuation"
-    if len(clean) >= 24 and clean[-1] in CONTINUATION_ENDINGS:
+    if len(clean) >= 24 and clean.split()[-1] in CONTINUATION_ENDINGS:
         return "looks incomplete because it ends mid-sentence"
-    if re.search(r"(?:^|\s)(?:\d+(?:\.\d+)+|[一二三四五六七八九十]+、)\s*[\u4e00-\u9fffA-Za-z]{0,20}$", clean):
+    if re.search(r"(?:^|\s)\d+(?:\.\d+)+\s*[A-Za-z]{0,20}$", clean):
         return "looks like a section heading fragment"
     return None
 

@@ -34,7 +34,7 @@ _SYSTEM_PROMPT = (
     "You are a knowledge synthesis assistant for MiGraph, a personal knowledge base. "
     "You read multiple source materials and produce structured wiki page content. "
     "Always respond with a single valid JSON object, no markdown fences, no extra prose. "
-    "Each summary must end with a period (。 for Chinese, . for English)."
+    "Each summary must end with a period (.)."
 )
 
 _PROMPT_TEMPLATES: dict[str, str] = {
@@ -84,7 +84,7 @@ _EMPTY_RESULT: dict[str, object] = {
     "tensions": [],
 }
 
-_TERMINAL_PUNCTUATION = ("。", "！", "？", ".", "!", "?")
+_TERMINAL_PUNCTUATION = (".", "!", "?")
 
 
 def _format_sources(sources: list[dict[str, str]]) -> str:
@@ -174,8 +174,7 @@ def _parse_result(content: str) -> dict[str, object]:
 
     summary = summary_raw.strip()
     if summary and not summary.endswith(_TERMINAL_PUNCTUATION):
-        ascii_count = sum(1 for c in summary if ord(c) < 128)
-        summary += "." if ascii_count > len(summary) / 2 else "。"
+        summary += "."
 
     return {
         "summary": summary,

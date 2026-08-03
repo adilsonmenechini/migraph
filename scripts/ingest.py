@@ -50,21 +50,69 @@ from utils import (
 )
 
 MARKDOWN_EXTENSIONS = {".md", ".txt", ".markdown"}
-META_PREFIXES = ("- 来源：", "- 作者：", "- 发布日期：", "- 原文链接：")
+META_PREFIXES = ("- Source:", "- Author:", "- Published:", "- Original link:")
 NOISE_MARKERS = (
     "<ama-doc>",
-    "文件编号",
-    "文档版本",
-    "最后修改日期",
-    "修订页",
-    "编 写 人",
-    "编写时间",
-    "目录",
+    "Document Number",
+    "Document Version",
+    "Last Modified",
+    "Revision Page",
+    "Prepared By",
+    "Prepared At",
+    "Table of Contents",
     "page ",
 )
-SUMMARY_SECTION_HINTS = {"摘要", "summary", "abstract", "概述", "方案结论"}
-CONTINUATION_ENDINGS = tuple("的了和与及并而按把将向在于为是小会度案等其")
-DECISION_SUMMARY_HINTS = ("不适合", "应按", "应采用", "建议采用", "推荐采用", "换句话说", "核心判断")
+SUMMARY_SECTION_HINTS = {"summary", "abstract", "overview", "conclusion"}
+CONTINUATION_ENDINGS = (
+    "and",
+    "but",
+    "or",
+    "with",
+    "that",
+    "which",
+    "while",
+    "when",
+    "if",
+    "because",
+    "the",
+    "of",
+    "in",
+    "on",
+    "at",
+    "to",
+    "by",
+    "for",
+    "from",
+    "than",
+    "then",
+    "so",
+    "yet",
+    "not",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "has",
+    "have",
+    "will",
+    "would",
+    "can",
+    "could",
+    "should",
+    "may",
+    "might",
+    "must",
+)
+DECISION_SUMMARY_HINTS = (
+    "is not suitable",
+    "should",
+    "should adopt",
+    "recommended",
+    "recommended",
+    "in other words",
+    "core judgment",
+)
 SKIP_CONCEPT_HEADINGS = {
     "summary",
     "key points",
@@ -211,18 +259,18 @@ def is_noise_line(text: str) -> bool:
 
 def looks_like_list_item(text: str) -> bool:
     compact = plain_text(text)
-    return bool(re.match(r"^(?:\d+[\.\)、]|[一二三四五六七八九十]+[、\.])", compact))
+    return bool(re.match(r"^(?:\d+[\.\)])", compact))
 
 
 def is_cover_like_text(text: str) -> bool:
     compact = plain_text(text)
     if not compact:
         return True
-    if compact.startswith(("日期：", "日期:")) and len(compact) <= 24:
+    if compact.startswith("date:") and len(compact) <= 24:
         return True
-    if re.match(r"^[一二三四五六七八九十]+、", compact) and len(compact) <= 20:
+    if re.match(r"^\d+[.]", compact) and len(compact) <= 20:
         return True
-    return bool(len(compact) <= 24 and not any(punct in compact for punct in ("。", "！", "？", "；", ":", "：")))
+    return bool(len(compact) <= 24 and not any(punct in compact for punct in (".", "!", "?", ";", ":")))
 
 
 def cleaned_content_blocks(text: str) -> list[dict[str, object]]:
@@ -261,7 +309,7 @@ def cleaned_content_blocks(text: str) -> list[dict[str, object]]:
             continue
         if stripped.startswith(("```", "<!--")):
             continue
-        if stripped.startswith(("更新时间", "更新于", "Published:", "Updated:")):
+        if stripped.startswith(("Published:", "Updated:")):
             continue
         if stripped.startswith(("http://", "https://")) and len(stripped) > 80:
             continue
@@ -283,8 +331,8 @@ def merge_adjacent_blocks(blocks: list[dict[str, object]]) -> list[dict[str, obj
         current_text = str(current["text"])
         next_text = str(block["text"])
         same_section = str(current["section"]) == str(block["section"])
-        current_ends_incomplete = not current_text.endswith(("。", "！", "？", "；", ".", "!", "?", ";", ":", "："))
-        current_ends_incomplete = current_ends_incomplete or current_text.endswith(CONTINUATION_ENDINGS)
+        current_ends_incomplete = not current_text.endswith((".", "!", "?", ";", ":"))
+        current_ends_incomplete = current_ends_incomplete or current_text.split()[-1] in CONTINUATION_ENDINGS
         next_is_continuation = not looks_like_list_item(next_text)
         next_is_short = len(next_text) <= 36
         if (
@@ -328,9 +376,9 @@ def summary_block_score(block: dict[str, object]) -> int:
         score -= 4
     if looks_like_list_item(text):
         score -= 10
-    if text.endswith(("：", ":")):
+    if text.endswith(":"):
         score -= 6
-    if any(punct in text for punct in ("。", "；", ":", "：")):
+    if any(punct in text for punct in (".", ";", ":")):
         score += 3
     if any(hint in text for hint in DECISION_SUMMARY_HINTS):
         score += 8
@@ -345,11 +393,9 @@ def summary_block_score(block: dict[str, object]) -> int:
 
 def trim_summary_tail(text: str) -> str:
     trimmed = text.strip()
-    trimmed = re.sub(r"\s+(?:建议采用|建议如下|如下|其中|包括|可分为)[:：]\s*$", "", trimmed)
-    if trimmed.endswith(("：", ":")):
-        sentence_end = max(
-            trimmed.rfind("。"), trimmed.rfind("！"), trimmed.rfind("？"), trimmed.rfind(";"), trimmed.rfind("；")
-        )
+    trimmed = re.sub(r"\s+(?:recommended|as follows|including|can be divided into)[:]\s*$", "", trimmed)
+    if trimmed.endswith(":"):
+        sentence_end = max(trimmed.rfind("."), trimmed.rfind("!"), trimmed.rfind("?"), trimmed.rfind(";"))
         if sentence_end != -1:
             trimmed = trimmed[: sentence_end + 1]
     return trimmed.strip()
@@ -437,7 +483,7 @@ def extract_title_from_markdown(text: str, fallback: str) -> str:
             continue
         if len(candidate) > 60:
             continue
-        if candidate.endswith(("：", ":")):
+        if candidate.endswith(":"):
             continue
         return candidate[:120]
     blocks = merge_adjacent_blocks(cleaned_content_blocks(text))
@@ -681,12 +727,12 @@ def html_to_markdown(content_node: Tag) -> str:
 def build_web_header(title: str, site_name: str, author: str, publish_date: str, url: str) -> str:
     lines = [f"# {title}", ""]
     if site_name:
-        lines.append(f"- 来源：{site_name}")
+        lines.append(f"- Source: {site_name}")
     if author:
-        lines.append(f"- 作者：{author}")
+        lines.append(f"- Author: {author}")
     if publish_date:
-        lines.append(f"- 发布日期：{publish_date}")
-    lines.append(f"- 原文链接：{url}")
+        lines.append(f"- Published: {publish_date}")
+    lines.append(f"- Original link: {url}")
     lines.extend(["", "---", ""])
     return "\n".join(lines)
 
@@ -709,16 +755,19 @@ def analyze_capture_reason(
 ) -> tuple[str, str]:
     body = plain_text("\n".join(body_lines(markdown))).lower()
     blocks = cleaned_content_blocks(markdown)
-    if any(marker in body for marker in ("loading", "加载中", "please wait", "稍后再试")):
-        return "loading_placeholder", "页面内容看起来仍像加载占位，建议稍后重试或改用 wait 模式。"
+    if any(marker in body for marker in ("loading", "please wait")):
+        return (
+            "loading_placeholder",
+            "Page content still looks like a loading placeholder; retry later or use wait mode.",
+        )
     if len(body) < 40:
-        return "body_too_short", "正文过短，建议优先人工检查页面是否真的完成加载。"
+        return "body_too_short", "Body is too short; manually verify the page actually finished loading."
     if len(blocks) < 2 and len(body) < 120:
-        return "sparse_structure", "正文结构较稀疏，建议复核是否抓到了真正的主内容区域。"
+        return "sparse_structure", "Body structure is sparse; verify the real main content area was captured."
     meta_hits = sum(1 for value in (title, site_name, author, publish_date) if str(value).strip())
     if meta_hits <= 1:
-        return "metadata_sparse", "来源元数据较少，建议核对标题、作者和发布时间。"
-    return "ready", "采集结果结构完整，可继续复核后正式 ingest。"
+        return "metadata_sparse", "Few source metadata fields; check title, author, and publish date."
+    return "ready", "Capture result structure is complete; safe to review and ingest."
 
 
 def build_capture_result(
