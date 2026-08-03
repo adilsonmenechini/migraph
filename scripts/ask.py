@@ -79,21 +79,21 @@ PLACEHOLDER_PATTERNS = [
     re.compile(r"\bno relevant pages found\b", re.IGNORECASE),
     re.compile(r"\bno matching evidence snippets found\b", re.IGNORECASE),
 ]
-META_LINE_PREFIXES = ("来源：", "作者：", "发布日期：", "原文链接：")
+META_LINE_PREFIXES = ("Source:", "Author:", "Published:", "Original link:")
 NOISE_MARKERS = (
     "<ama-doc>",
-    "文件编号",
-    "文档版本",
-    "最后修改日期",
-    "修订页",
-    "编 写 人",
-    "编写时间",
-    "目录",
+    "Document Number",
+    "Document Version",
+    "Last Modified",
+    "Revision Page",
+    "Prepared By",
+    "Prepared At",
+    "Table of Contents",
 )
-DEFINITION_HINTS = ("是", "定义", "本质", "指的是", "意味着", "可概括为")
-DECISION_HINTS = ("建议", "应", "因此", "因为", "关键", "核心", "推荐")
-ANSWER_HINTS = ("定义为", "本质上是", "指的是", "意味着", "换句话说", "可归纳为")
-QUESTION_SEGMENT_HINTS = ("研究问题", "问题一", "问题二", "问题三", "问题四")
+DEFINITION_HINTS = ("is", "definition", "essence", "refers to", "means", "can be summarized as")
+DECISION_HINTS = ("recommend", "should", "therefore", "because", "key", "core", "recommended")
+ANSWER_HINTS = ("is defined as", "essentially", "refers to", "means", "in other words", "can be summarized as")
+QUESTION_SEGMENT_HINTS = ("research question", "question 1", "question 2", "question 3", "question 4")
 
 
 def parse_iso_date(raw: str) -> date | None:
@@ -159,9 +159,9 @@ def meaningful_body_summary(body: str) -> str:
             continue
         if is_noise_line(line):
             continue
-        if line.startswith(("- 来源：", "- 作者：", "- 发布日期：", "- 原文链接：")):
+        if line.startswith(("- Source:", "- Author:", "- Published:", "- Original link:")):
             continue
-        if line.startswith(("更新时间", "更新于", "Published:", "Updated:")):
+        if line.startswith(("Updated:", "Published:", "Updated:", "Update time:")):
             continue
         if line.startswith(("http://", "https://")):
             continue
@@ -289,18 +289,18 @@ def segment_quality_bonus(section: str, text: str, question: str) -> int:
         score -= 8
     if len(normalized) < 20:
         score -= 3
-    if normalized.endswith(("？", "?")):
+    if normalized.endswith("?"):
         score -= 4
     if any(hint in normalized for hint in QUESTION_SEGMENT_HINTS):
         score -= 6
     if any(hint in normalized for hint in ANSWER_HINTS):
         score += 6
     if any(hint in normalized for hint in DEFINITION_HINTS) and any(
-        token in question for token in ("什么", "定义", "本质")
+        token in question for token in ("what", "definition", "essence")
     ):
         score += 8
     if any(hint in normalized for hint in DECISION_HINTS) and any(
-        token in question for token in ("为什么", "如何", "建议", "应")
+        token in question for token in ("why", "how", "recommend", "should")
     ):
         score += 6
     return score
@@ -597,38 +597,46 @@ def bullet_label(record: dict[str, object], score: int, root: Path) -> str:
 def build_answer(question: str, ranked: list[tuple[int, dict[str, object]]], evidence: list[dict[str, object]]) -> str:
     if not ranked:
         return (
-            f"- 当前知识库里没有找到足够相关的页面来回答“{question}”。\n"
-            "- 建议先导入相关资料，或补充一个 topic/source 页面后再查询。"
+            f'- No relevant pages found in the knowledge base to answer "{question}".\n'
+            "- Consider importing related material or adding a topic/source page first."
         )
 
     answer_lines = []
     best_score, best = ranked[0]
     answer_lines.append(
-        f"- 当前最相关的条目是《{best['title']}》，类型为 {best['type']}，"
-        f"置信度为 {best['confidence'] or 'n/a'}，状态为 {best['status'] or 'n/a'}。"
+        f'- The most relevant entry is "{best["title"]}", type {best["type"]}, '
+        f"confidence {best['confidence'] or 'n/a'}, status {best['status'] or 'n/a'}."
     )
-    answer_lines.append(f"- 该页摘要：{best['summary']}")
+    answer_lines.append(f"- Page summary: {best['summary']}")
     if evidence:
         top = evidence[0]
-        answer_lines.append(f"- 最直接的证据摘录来自《{top['page_title']}》的“{top['section']}”部分：{top['snippet']}")
+        answer_lines.append(
+            f'- Most direct evidence excerpt from "{top["section"]}" of "{top["page_title"]}": {top["snippet"]}'
+        )
 
     if len(ranked) > 1:
-        other_titles = "；".join(f"《{record['title']}》" for _score, record in ranked[1:4])
-        answer_lines.append(f"- 其他可交叉参考的页面有：{other_titles}。")
+        other_titles = ", ".join(f'"{record["title"]}"' for _score, record in ranked[1:4])
+        answer_lines.append(f"- Other cross-reference pages: {other_titles}.")
 
     low_confidence = [
         record["title"] for _score, record in ranked if str(record["confidence"]) in {"mixed", "inferred", ""}
     ]
     if low_confidence:
-        answer_lines.append(f"- 需要额外验证的页面包括：{'；'.join(f'《{title}》' for title in low_confidence[:3])}。")
+        answer_lines.append(
+            f"- Pages needing additional verification: {', '.join(str(title) for title in low_confidence[:3])}."
+        )
 
     stale_pages = [
         record["title"] for _score, record in ranked if str(record["status"]) in {"stale", "archived", "superseded"}
     ]
     if stale_pages:
-        answer_lines.append(f"- 其中有较旧或已降权的内容：{'；'.join(f'《{title}》' for title in stale_pages[:3])}。")
+        answer_lines.append(
+            f"- Some content is older or downranked: {', '.join(str(title) for title in stale_pages[:3])}."
+        )
 
-    answer_lines.append(f"- 检索排序优先考虑标题命中、摘要命中、置信度、状态和更新时间；最佳匹配得分为 {best_score}。")
+    answer_lines.append(
+        f"- Ranking prioritizes title hits, summary hits, confidence, status, and update time; best match score is {best_score}."
+    )
     return "\n".join(answer_lines)
 
 
@@ -636,7 +644,7 @@ def evidence_label(item: dict[str, object], root: Path) -> str:
     path = Path(str(item["page_path"])).relative_to(root).as_posix()
     ref = f"{path}#{item['section_anchor']}"
     return (
-        f"- 《{item['page_title']}》 | path: {path} | type: {item['page_type']} | "
+        f'- "{item["page_title"]}" | path: {path} | type: {item["page_type"]} | '
         f"section: {item['section']} | ref: {ref} | confidence: {item['confidence']} | status: {item['status']} | score: {item['score']} | "
         f"snippet: {item['snippet']}"
     )
