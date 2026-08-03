@@ -14,3 +14,5 @@ __pycache__/
 /AGENTS.md
 /.audit_runtime.py
 /.audit_runtime.log
+.ruff_cache
+.mypy_cache

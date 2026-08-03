@@ -16,7 +16,6 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS_DIR = REPO_ROOT / "scripts"
 if str(SCRIPTS_DIR) not in sys.path:
@@ -209,15 +208,19 @@ class MiGraphRegressionTest(unittest.TestCase):
             )
             write_text(
                 root / "normalized" / "inbox" / "2026-06-21-ready-item.json",
-                json.dumps({
-                    "kind": "web",
-                    "adapter": "generic",
-                    "title": "Ready Item",
-                    "siteName": "Example Blog",
-                    "author": "Ada Lovelace",
-                    "publishDate": "2026-06-21",
-                    "url": "https://example.com/ready",
-                }, ensure_ascii=False, indent=2),
+                json.dumps(
+                    {
+                        "kind": "web",
+                        "adapter": "generic",
+                        "title": "Ready Item",
+                        "siteName": "Example Blog",
+                        "author": "Ada Lovelace",
+                        "publishDate": "2026-06-21",
+                        "url": "https://example.com/ready",
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
             )
             write_text(
                 root / "normalized" / "inbox" / "2026-06-21-weak-item.md",
@@ -229,12 +232,16 @@ class MiGraphRegressionTest(unittest.TestCase):
             )
             write_text(
                 root / "normalized" / "inbox" / "2026-06-21-weak-item.json",
-                json.dumps({
-                    "kind": "web",
-                    "adapter": "generic",
-                    "title": "Weak Item",
-                    "url": "",
-                }, ensure_ascii=False, indent=2),
+                json.dumps(
+                    {
+                        "kind": "web",
+                        "adapter": "generic",
+                        "title": "Weak Item",
+                        "url": "",
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
             )
 
             result = run_migraph("batch-ingest", "--root", str(root), "--dry-run")
@@ -266,15 +273,19 @@ class MiGraphRegressionTest(unittest.TestCase):
             )
             write_text(
                 old_json,
-                json.dumps({
-                    "kind": "web",
-                    "adapter": "generic",
-                    "title": "Old Ready",
-                    "siteName": "Example Blog",
-                    "author": "Grace Hopper",
-                    "publishDate": "2026-06-21",
-                    "url": "https://example.com/old-ready",
-                }, ensure_ascii=False, indent=2),
+                json.dumps(
+                    {
+                        "kind": "web",
+                        "adapter": "generic",
+                        "title": "Old Ready",
+                        "siteName": "Example Blog",
+                        "author": "Grace Hopper",
+                        "publishDate": "2026-06-21",
+                        "url": "https://example.com/old-ready",
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
             )
             write_text(old_raw, "<html><body>old ready</body></html>")
 
@@ -292,16 +303,20 @@ class MiGraphRegressionTest(unittest.TestCase):
             )
             write_text(
                 new_json,
-                json.dumps({
-                    "kind": "web",
-                    "adapter": "generic",
-                    "title": "New Ready",
-                    "siteName": "Example Blog",
-                    "author": "Ada Lovelace",
-                    "publishDate": "2026-06-21",
-                    "url": "https://example.com/new-ready",
-                    "mediaDir": "normalized/assets/inbox/2026-06-21-new-ready",
-                }, ensure_ascii=False, indent=2),
+                json.dumps(
+                    {
+                        "kind": "web",
+                        "adapter": "generic",
+                        "title": "New Ready",
+                        "siteName": "Example Blog",
+                        "author": "Ada Lovelace",
+                        "publishDate": "2026-06-21",
+                        "url": "https://example.com/new-ready",
+                        "mediaDir": "normalized/assets/inbox/2026-06-21-new-ready",
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
             )
             write_text(new_raw, "<html><body>new ready</body></html>")
             write_text(new_media_dir / "pixel.png", "image")
@@ -382,15 +397,19 @@ class MiGraphRegressionTest(unittest.TestCase):
             )
             write_text(
                 root / "normalized" / "inbox" / "2026-06-21-captured-article.json",
-                json.dumps({
-                    "kind": "web",
-                    "adapter": "generic",
-                    "title": "Captured Article",
-                    "siteName": "Example Blog",
-                    "author": "Ada Lovelace",
-                    "publishDate": "2026-06-21",
-                    "url": "https://example.com/article",
-                }, ensure_ascii=False, indent=2),
+                json.dumps(
+                    {
+                        "kind": "web",
+                        "adapter": "generic",
+                        "title": "Captured Article",
+                        "siteName": "Example Blog",
+                        "author": "Ada Lovelace",
+                        "publishDate": "2026-06-21",
+                        "url": "https://example.com/article",
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
             )
 
             run_script("build_inbox.py", "--root", str(root))
@@ -667,11 +686,15 @@ class MiGraphRegressionTest(unittest.TestCase):
             self.assertGreaterEqual(len(insights["topNodes"]), 1)
             self.assertEqual(insights["topNodes"][0]["id"], "wiki/sources/platform-spec.md")
             self.assertTrue(
-                any(item["id"] == "wiki/queries/orphan-question.md" and item["severity"] == "isolated" for item in insights["isolatedNodes"])
+                any(
+                    item["id"] == "wiki/queries/orphan-question.md" and item["severity"] == "isolated"
+                    for item in insights["isolatedNodes"]
+                )
             )
             self.assertTrue(
                 any(
-                    {item["source"], item["target"]} == {
+                    {item["source"], item["target"]}
+                    == {
                         "wiki/topics/platform.md",
                         "wiki/concepts/platform-principles.md",
                     }
@@ -1330,10 +1353,7 @@ class MiGraphRegressionTest(unittest.TestCase):
                 )
             )
             self.assertTrue(
-                any(
-                    str(node["id"]).startswith("claim:wiki/sources/execution-spec.md#")
-                    for node in knowledge_nodes
-                )
+                any(str(node["id"]).startswith("claim:wiki/sources/execution-spec.md#") for node in knowledge_nodes)
             )
             self.assertNotIn("entity:openclaw", {node["id"] for node in knowledge_nodes})
 
@@ -1491,7 +1511,9 @@ class MiGraphRegressionTest(unittest.TestCase):
 
             self.assertIn("MiGraph Entity Merge Apply", apply_result.stdout)
             self.assertIn("Canonical: wiki/entities/openclaw.md", apply_result.stdout)
-            self.assertIn("merged: wiki/entities/openclaw-platform.md -> wiki/entities/openclaw.md", apply_result.stdout)
+            self.assertIn(
+                "merged: wiki/entities/openclaw-platform.md -> wiki/entities/openclaw.md", apply_result.stdout
+            )
 
             canonical_text = (root / "wiki" / "entities" / "openclaw.md").read_text(encoding="utf-8")
             merged_text = (root / "wiki" / "entities" / "openclaw-platform.md").read_text(encoding="utf-8")
@@ -1517,7 +1539,9 @@ class MiGraphRegressionTest(unittest.TestCase):
                 )
             )
 
-            entity_review = json.loads((root / "output" / "graph" / "entity-merge-review.json").read_text(encoding="utf-8"))
+            entity_review = json.loads(
+                (root / "output" / "graph" / "entity-merge-review.json").read_text(encoding="utf-8")
+            )
             self.assertEqual(entity_review["stats"]["ambiguousAliasGroupCount"], 0)
             self.assertEqual(entity_review["stats"]["ambiguousEntityCount"], 0)
 
@@ -1618,7 +1642,9 @@ class MiGraphRegressionTest(unittest.TestCase):
 
             self.assertIn("MiGraph Entity Merge Plan", dry_run_result.stdout)
             self.assertIn("Canonical: wiki/entities/openclaw.md", dry_run_result.stdout)
-            self.assertIn("preview merge: wiki/entities/openclaw-platform.md -> wiki/entities/openclaw.md", dry_run_result.stdout)
+            self.assertIn(
+                "preview merge: wiki/entities/openclaw-platform.md -> wiki/entities/openclaw.md", dry_run_result.stdout
+            )
             self.assertIn("Entity merge plan: output/graph/entity-merge-plan.html", dry_run_result.stdout)
             self.assertIn("Output hub: output/index.html", dry_run_result.stdout)
 
@@ -1727,18 +1753,24 @@ class MiGraphRegressionTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             root = Path(tmp_dir) / "wiki"
             run_script("init_wiki.py", "--root", str(root), "--title", "Inbox Wiki")
-            write_text(root / "normalized" / "inbox" / "2026-06-20-team-note.md", "# Team Note\n\nReview this before ingest.")
+            write_text(
+                root / "normalized" / "inbox" / "2026-06-20-team-note.md", "# Team Note\n\nReview this before ingest."
+            )
             write_text(
                 root / "normalized" / "inbox" / "2026-06-20-team-note.json",
-                json.dumps({
-                    "kind": "web",
-                    "adapter": "generic",
-                    "title": "Team Note",
-                    "siteName": "Example Blog",
-                    "author": "Ada Lovelace",
-                    "publishDate": "2026-06-20",
-                    "url": "https://example.com/team-note",
-                }, ensure_ascii=False, indent=2),
+                json.dumps(
+                    {
+                        "kind": "web",
+                        "adapter": "generic",
+                        "title": "Team Note",
+                        "siteName": "Example Blog",
+                        "author": "Ada Lovelace",
+                        "publishDate": "2026-06-20",
+                        "url": "https://example.com/team-note",
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
             )
 
             result = run_script("build_inbox.py", "--root", str(root))
@@ -1877,19 +1909,26 @@ class MiGraphRegressionTest(unittest.TestCase):
             write_text(root / "normalized" / "inbox" / "2026-06-20-weak-item.md", "# Weak Item\n\nshort")
             write_text(
                 root / "normalized" / "inbox" / "2026-06-20-weak-item.json",
-                json.dumps({
-                    "kind": "web",
-                    "adapter": "generic",
-                    "title": "Weak Item",
-                    "url": "",
-                }, ensure_ascii=False, indent=2),
+                json.dumps(
+                    {
+                        "kind": "web",
+                        "adapter": "generic",
+                        "title": "Weak Item",
+                        "url": "",
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
             )
 
             run_script("build_inbox.py", "--root", str(root))
 
             inbox_html = (root / "output" / "inbox" / "index.html").read_text(encoding="utf-8")
             self.assertIn("weak", inbox_html)
-            self.assertIn("Too little information was extracted. Check the article body and source details manually first.", inbox_html)
+            self.assertIn(
+                "Too little information was extracted. Check the article body and source details manually first.",
+                inbox_html,
+            )
 
     def test_clip_url_wait_mode_polls_until_content_is_ready(self) -> None:
         class PollingHandler(http.server.BaseHTTPRequestHandler):
@@ -2198,7 +2237,10 @@ class MiGraphRegressionTest(unittest.TestCase):
 
             self.assertIn("MiGraph output server: http://127.0.0.1:8765", result.stdout)
             self.assertIn("Workspace Home: http://127.0.0.1:8765/index.html", result.stdout)
-            self.assertIn("OpenClaw browser: openclaw browser --browser-profile openclaw open http://127.0.0.1:8765/index.html", result.stdout)
+            self.assertIn(
+                "OpenClaw browser: openclaw browser --browser-profile openclaw open http://127.0.0.1:8765/index.html",
+                result.stdout,
+            )
 
     def test_serve_command_serves_output_hub(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -2486,11 +2528,7 @@ class MiGraphSecurityTest(unittest.TestCase):
 
         import ai_config
 
-        ai_keys = [
-            key
-            for key in os.environ
-            if key.startswith(("MIGRAPH_", "MINIMAX_", "SILICONFLOW_", "BGE_"))
-        ]
+        ai_keys = [key for key in os.environ if key.startswith(("MIGRAPH_", "MINIMAX_", "SILICONFLOW_", "BGE_"))]
         preserved = {key: os.environ[key] for key in ai_keys}
         try:
             for key in ai_keys:
@@ -2509,11 +2547,7 @@ class MiGraphSecurityTest(unittest.TestCase):
 
         import ai_config
 
-        ai_keys = [
-            key
-            for key in os.environ
-            if key.startswith(("MIGRAPH_", "MINIMAX_", "SILICONFLOW_", "BGE_"))
-        ]
+        ai_keys = [key for key in os.environ if key.startswith(("MIGRAPH_", "MINIMAX_", "SILICONFLOW_", "BGE_"))]
         preserved = {key: os.environ[key] for key in ai_keys}
         try:
             for key in ai_keys:
@@ -2537,11 +2571,7 @@ class MiGraphSecurityTest(unittest.TestCase):
 
         import ai_config
 
-        ai_keys = [
-            key
-            for key in os.environ
-            if key.startswith(("MIGRAPH_", "MINIMAX_", "SILICONFLOW_", "BGE_"))
-        ]
+        ai_keys = [key for key in os.environ if key.startswith(("MIGRAPH_", "MINIMAX_", "SILICONFLOW_", "BGE_"))]
         preserved = {key: os.environ[key] for key in ai_keys}
         try:
             for key in ai_keys:
@@ -2564,11 +2594,7 @@ class MiGraphSecurityTest(unittest.TestCase):
 
         import ai_config
 
-        ai_keys = [
-            key
-            for key in os.environ
-            if key.startswith(("MIGRAPH_", "MINIMAX_", "SILICONFLOW_", "BGE_"))
-        ]
+        ai_keys = [key for key in os.environ if key.startswith(("MIGRAPH_", "MINIMAX_", "SILICONFLOW_", "BGE_"))]
         preserved = {key: os.environ[key] for key in ai_keys}
         try:
             for key in ai_keys:
@@ -2625,18 +2651,21 @@ class MiGraphSecurityTest(unittest.TestCase):
 class TestNewPageTypes(unittest.TestCase):
     def test_wiki_dirs_includes_new_types(self) -> None:
         from utils import WIKI_DIRS
+
         self.assertIn("patterns", WIKI_DIRS)
         self.assertIn("runbooks", WIKI_DIRS)
         self.assertIn("architectures", WIKI_DIRS)
 
     def test_page_type_to_dir_includes_new_types(self) -> None:
         from utils import PAGE_TYPE_TO_DIR
+
         self.assertEqual(PAGE_TYPE_TO_DIR["pattern"], "patterns")
         self.assertEqual(PAGE_TYPE_TO_DIR["runbook"], "runbooks")
         self.assertEqual(PAGE_TYPE_TO_DIR["architecture"], "architectures")
 
     def test_section_order_includes_new_types(self) -> None:
         from utils import SECTION_ORDER
+
         type_names = [t for _, t in SECTION_ORDER]
         self.assertIn("pattern", type_names)
         self.assertIn("runbook", type_names)
@@ -2647,7 +2676,7 @@ class TestDedupeBugFix(unittest.TestCase):
     def test_same_category_same_type_are_compared(self) -> None:
         """Regression: original skill-kwonledge deduplicate.py skipped pairs
         same category AND same type. MiGraph dedupe-pages must compare them."""
-        from dedupe_pages import _title_similarity, _content_similarity, _combined_score
+        from dedupe_pages import _combined_score, _content_similarity, _title_similarity
 
         # Two concept pages with identical title but different content
         # should NOT be skipped - they must be compared and scored
@@ -2663,7 +2692,8 @@ class TestDedupeBugFix(unittest.TestCase):
 
 class TestMigrationMapping(unittest.TestCase):
     def test_type_resolution(self) -> None:
-        import migrate_skill_knowledge as msk
+        import migrate_skill_kwonledge as msk
+
         self.assertEqual(msk._resolve_type("concept"), "concept")
         self.assertEqual(msk._resolve_type("guide"), "source")
         self.assertEqual(msk._resolve_type("reference"), "source")
@@ -2674,7 +2704,8 @@ class TestMigrationMapping(unittest.TestCase):
         self.assertEqual(msk._resolve_type("unknown"), "topic")
 
     def test_type_to_dir(self) -> None:
-        import migrate_skill_knowledge as msk
+        import migrate_skill_kwonledge as msk
+
         self.assertEqual(msk._type_to_dir("pattern"), "patterns")
         self.assertEqual(msk._type_to_dir("runbook"), "runbooks")
         self.assertEqual(msk._type_to_dir("architecture"), "architectures")
