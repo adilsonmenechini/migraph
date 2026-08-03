@@ -240,23 +240,93 @@ _HEURISTIC_BLOCKED_SECTIONS = {
     "Extracted Markdown",
     "Extracted Excerpt",
 }
-_HEURISTIC_META_PREFIXES = ("来源：", "作者：", "发布日期：", "原文链接：")
+_HEURISTIC_META_PREFIXES = ("Source:", "Author:", "Published:", "Original link:")
 _HEURISTIC_LOW_VALUE_LINE_HINTS = (
-    "本报告旨在回答",
-    "研究问题",
-    "副院长",
-    "资深专家",
-    "日期：",
-    "日期:",
+    "this report aims to answer",
+    "research question",
+    "deputy director",
+    "senior expert",
+    "date:",
+    "date:",
     "page ",
 )
-_HEURISTIC_DEFINITION_HINTS = ("定义为", "本质上是", "指的是", "意味着", "可概括为")
-_HEURISTIC_DECISION_HINTS = ("不适合", "应按", "应采用", "建议", "推荐", "换句话说", "关键在于", "核心判断")
-_HEURISTIC_STRATEGY_HINTS = ("缓解策略", "首要评判标准", "产品管理思维", "开发者体验（DevEx）", "开发者体验(DevEx)")
-_HEURISTIC_ROLE_HINTS = ("典型角色包括", "职责包括", "角色包括")
-_HEURISTIC_SYNTHESIS_HINTS = ("这意味着", "因此", "换句话说", "核心判断", "说明", "首先是一种", "本质上是")
-_HEURISTIC_ORGANIZATION_HINTS = ("团队", "组织", "平台", "协作", "运行机制", "交付系统")
-_HEURISTIC_CONTINUATION_ENDINGS = tuple("的了和与及并而按把将向在于为是小会度案等其")
+_HEURISTIC_DEFINITION_HINTS = ("is defined as", "essentially", "refers to", "means", "can be summarized as")
+_HEURISTIC_DECISION_HINTS = (
+    "is not suitable",
+    "should",
+    "should adopt",
+    "recommend",
+    "recommended",
+    "in other words",
+    "the key is",
+    "core judgment",
+)
+_HEURISTIC_STRATEGY_HINTS = (
+    "mitigation strategy",
+    "primary evaluation criterion",
+    "product management mindset",
+    "developer experience (DevEx)",
+    "developer experience(DevEx)",
+)
+_HEURISTIC_ROLE_HINTS = ("typical roles include", "responsibilities include", "roles include")
+_HEURISTIC_SYNTHESIS_HINTS = (
+    "this means",
+    "therefore",
+    "in other words",
+    "core judgment",
+    "indicates",
+    "first is a",
+    "essentially",
+)
+_HEURISTIC_ORGANIZATION_HINTS = (
+    "team",
+    "organization",
+    "platform",
+    "collaboration",
+    "operating mechanism",
+    "delivery system",
+)
+_HEURISTIC_CONTINUATION_ENDINGS = (
+    "and",
+    "but",
+    "or",
+    "with",
+    "that",
+    "which",
+    "while",
+    "when",
+    "if",
+    "because",
+    "the",
+    "of",
+    "in",
+    "on",
+    "at",
+    "to",
+    "by",
+    "for",
+    "from",
+    "than",
+    "then",
+    "so",
+    "yet",
+    "not",
+    "is",
+    "are",
+    "was",
+    "were",
+    "be",
+    "has",
+    "have",
+    "will",
+    "would",
+    "can",
+    "could",
+    "should",
+    "may",
+    "might",
+    "must",
+)
 
 
 def _heuristic_normalize_text(text: str) -> str:
@@ -278,10 +348,10 @@ def _heuristic_short_text(text: str, limit: int = 180) -> str:
     if len(value) <= limit:
         return value
     window = value[: limit - 1]
-    cut = max(window.rfind("。"), window.rfind("；"), window.rfind("."), window.rfind(";"), window.rfind(" "))
+    cut = max(window.rfind("."), window.rfind(";"), window.rfind(" "))
     if cut >= max(20, limit // 3):
         window = window[:cut]
-    return window.rstrip() + "…"
+    return window.rstrip() + "..."
 
 
 def _heuristic_cleaned_line(raw: str) -> str:
@@ -317,7 +387,9 @@ def _heuristic_low_value_summary(text: str) -> bool:
         return True
     if _heuristic_is_metadata_line(clean) or _heuristic_is_link_only(clean) or _heuristic_is_image_only(clean):
         return True
-    return clean.startswith("以下为") or any(hint in clean.lower() for hint in _HEURISTIC_LOW_VALUE_LINE_HINTS)
+    return clean.startswith("the following is") or any(
+        hint in clean.lower() for hint in _HEURISTIC_LOW_VALUE_LINE_HINTS
+    )
 
 
 def _heuristic_split_sentences(text: str) -> list[str]:
@@ -331,11 +403,11 @@ def _heuristic_split_sentences(text: str) -> list[str]:
         if not buffer:
             buffer = line
             continue
-        if buffer.endswith(("。", "！", "？", ".", "!", "?", "；", ";", "：", ":")):
+        if buffer.endswith((".", "!", "?", ";", ":")):
             merged_lines.append(buffer.strip())
             buffer = line
             continue
-        if re.match(r"^(?:[-*]|\d+[.)、])\s*", line):
+        if re.match(r"^(?:[-*]|\d+[.)])\s*", line):
             merged_lines.append(buffer.strip())
             buffer = line
             continue
@@ -345,7 +417,7 @@ def _heuristic_split_sentences(text: str) -> list[str]:
 
     parts: list[str] = []
     for chunk in merged_lines:
-        parts.extend(re.split(r"(?<=[。！？!?\.])\s+", chunk))
+        parts.extend(re.split(r"(?<=[.!?])\s+", chunk))
     return [part.strip(" -") for part in parts if part.strip(" -")]
 
 
@@ -353,11 +425,11 @@ def _heuristic_looks_incomplete_sentence(text: str) -> bool:
     clean = _heuristic_plain_text(text)
     if not clean:
         return True
-    if clean.endswith(("。", "！", "？", ".", "!", "?")):
+    if clean.endswith((".", "!", "?")):
         return False
-    if clean.endswith(("…", "；", ";", "：", ":")):
+    if clean.endswith(("...", ";", ":")):
         return True
-    if clean[-1] in _HEURISTIC_CONTINUATION_ENDINGS:
+    if clean.split()[-1] in _HEURISTIC_CONTINUATION_ENDINGS:
         return True
     return len(clean) < 30
 
@@ -373,7 +445,7 @@ def _heuristic_is_low_value_sentence(text: str) -> bool:
         return True
     if any(hint in lowered for hint in _HEURISTIC_LOW_VALUE_LINE_HINTS):
         return True
-    return bool(clean.endswith(("：", ":")))
+    return bool(clean.endswith(":"))
 
 
 def _heuristic_sentence_priority(text: str) -> int:
@@ -383,13 +455,13 @@ def _heuristic_sentence_priority(text: str) -> int:
         score += 8
     if any(hint in clean for hint in _HEURISTIC_DECISION_HINTS):
         score += 7
-    if "定义为" in clean:
+    if "is defined as" in clean:
         score += 8
-    if "不适合" in clean or "应采用" in clean or "推荐采用" in clean:
+    if "is not suitable" in clean or "should adopt" in clean or "recommended" in clean:
         score += 10
-    if "本质上是" in clean:
+    if "essentially" in clean:
         score += 4
-    if "指的是" in clean:
+    if "refers to" in clean:
         score += 2
     if len(clean) >= 30:
         score += 2
@@ -397,7 +469,7 @@ def _heuristic_sentence_priority(text: str) -> int:
         score += 2
     if len(clean) > 200:
         score -= 2
-    if "？" in clean or "?" in clean:
+    if "?" in clean:
         score -= 6
     return score
 
@@ -413,14 +485,14 @@ def _heuristic_summary_candidate_score(text: str) -> int:
         score += 1
     else:
         score -= 4
-    has_terminal_punctuation = clean.endswith(("。", "！", "？", ".", "!", "?"))
+    has_terminal_punctuation = clean.endswith((".", "!", "?"))
     if has_terminal_punctuation:
         score += 4
     else:
         score -= 14
-    if clean.endswith(("…", "；", ";", "：", ":")):
+    if clean.endswith(("...", ";", ":")):
         score -= 6
-    if clean and clean[-1] in _HEURISTIC_CONTINUATION_ENDINGS:
+    if clean and clean.split()[-1] in _HEURISTIC_CONTINUATION_ENDINGS:
         score -= 30
     if re.search(r"\d+$", clean):
         score -= 4
@@ -436,40 +508,44 @@ def _heuristic_kind_summary_score(text: str, kind: str, title: str = "") -> int:
     if normalized_kind == "concept":
         if any(hint in clean for hint in _HEURISTIC_DEFINITION_HINTS):
             score += 18
-        if "首先是一种" in clean or "可一句话概括" in clean:
+        if "first is a" in clean or "can be summarized in one sentence" in clean:
             score += 10
-        if "关键不在于" in clean or "围绕可执行规格" in clean:
+        if "the key is not" in clean or "around executable specs" in clean:
             score += 10
-        if "软件交付团队" in clean or "其关键不在于" in clean:
+        if "software delivery team" in clean or "its key is not" in clean:
             score += 12
-        if title_clean and (clean.startswith(title_clean) or clean.startswith(f"{title_clean}（")):
+        if title_clean and (clean.startswith(title_clean) or clean.startswith(f"{title_clean} (")):
             score += 14
         if (
             title_clean
             and title_clean in clean
-            and any(hint in clean for hint in ("定义为", "本质上是", "指的是", "意味着", "首先是一种"))
+            and any(hint in clean for hint in ("is defined as", "essentially", "refers to", "means", "first is a"))
         ):
             score += 8
-        if clean.startswith("本报告不将") or "并列的独立概念来讨论" in clean:
+        if clean.startswith("this report does not treat") or "as parallel independent concepts" in clean:
             score -= 24
-        if "而不是另一套平行的方法论" in clean:
+        if "rather than a parallel methodology" in clean:
             score -= 10
-        if "本报告" in clean and ("系统论证" in clean or "应运而生" in clean):
+        if "this report" in clean and ("systematic argument" in clean or "emerged" in clean):
             score -= 16
         if any(hint in clean for hint in _HEURISTIC_STRATEGY_HINTS):
             score -= 20
         if any(hint in clean for hint in _HEURISTIC_ROLE_HINTS):
             score -= 10
-        if "团队应" in clean or "建议" in clean:
+        if "the team should" in clean or "recommend" in clean:
             score -= 8
     elif normalized_kind == "decision":
         if any(hint in clean for hint in _HEURISTIC_DECISION_HINTS):
             score += 18
-        if "不适合" in clean or "应按" in clean or "应采用" in clean or "推荐采用" in clean:
+        if "is not suitable" in clean or "should" in clean or "should adopt" in clean or "recommended" in clean:
             score += 14
         if any(hint in clean for hint in _HEURISTIC_DEFINITION_HINTS):
             score -= 6
-        if clean.startswith(("缓解策略", "建议采用")) and "不适合" not in clean and "应按" not in clean:
+        if (
+            clean.startswith(("mitigation strategy", "recommended"))
+            and "is not suitable" not in clean
+            and "should" not in clean
+        ):
             score -= 12
     else:
         if any(hint in clean for hint in _HEURISTIC_SYNTHESIS_HINTS):
@@ -478,15 +554,15 @@ def _heuristic_kind_summary_score(text: str, kind: str, title: str = "") -> int:
             score += 8
         if any(hint in clean for hint in _HEURISTIC_DECISION_HINTS):
             score += 8
-        if "首先是一种组织模式" in clean or "组织模式而非工具清单" in clean:
+        if "first is an organizational pattern" in clean or "organizational pattern rather than a tool list" in clean:
             score += 16
-        if "关键不在于" in clean and "团队是否" in clean:
+        if "the key is not" in clean and "whether the team" in clean:
             score += 10
-        if "不能只理解为" in clean or "真正难点并不在于" in clean:
+        if "cannot be understood only as" in clean or "the real difficulty is not" in clean:
             score += 12
-        if clean.startswith("本报告不将") or "并列的独立概念来讨论" in clean:
+        if clean.startswith("this report does not treat") or "as parallel independent concepts" in clean:
             score -= 20
-        if "而不是另一套平行的方法论" in clean:
+        if "rather than a parallel methodology" in clean:
             score -= 10
         if any(hint in clean for hint in _HEURISTIC_STRATEGY_HINTS):
             score -= 18
@@ -494,16 +570,16 @@ def _heuristic_kind_summary_score(text: str, kind: str, title: str = "") -> int:
             score -= 10
         if any(hint in clean for hint in _HEURISTIC_ORGANIZATION_HINTS):
             score += 4
-        if "团队应" in clean or "建议采用" in clean:
+        if "the team should" in clean or "recommended" in clean:
             score -= 8
         if len(clean) > 180:
             score -= 12
         if len(clean) > 240:
             score -= 10
-        if clean.count("。") >= 3:
+        if clean.count(".") >= 3:
             score -= 6
 
-    if clean.count("；") + clean.count(";") >= 2:
+    if clean.count(";") >= 2:
         score -= 4
     return score
 
@@ -619,7 +695,8 @@ def _heuristic_auto_summary(records: list[dict[str, object]], fallback: str, sum
     support = next((part for _score, _index, part in ranked[1:] if part != lead), "")
     if support:
         return _heuristic_short_text(
-            f"{lead} 这一判断也得到其他来源的支持，说明相关结论并非单点材料中的孤立观点。", limit=220
+            f"{lead} This judgment is also supported by other sources, showing the conclusion is not an isolated point from a single material.",
+            limit=220,
         )
     return _heuristic_short_text(lead, limit=220)
 
