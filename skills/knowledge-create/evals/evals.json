@@ -1,0 +1,86 @@
+{
+  "skill_name": "knowledge-create",
+  "description": "Create structured, validated knowledge files for Obsidian + RAG + Agents",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a knowledge note about incident response for SRE",
+      "expected_output": "Creates knowledge/sre/runbooks/incident-response.md with valid frontmatter, type=runbook, proper structure",
+      "files": [],
+      "assertions": [
+        {
+          "text": "File created in correct path",
+          "passed": true,
+          "evidence": "File exists at knowledge/sre/runbooks/"
+        },
+        {
+          "text": "Frontmatter has required fields",
+          "passed": true,
+          "evidence": "id, type, domain, tags, summary present"
+        },
+        {
+          "text": "Template applied correctly",
+          "passed": true,
+          "evidence": "Has Detection, Steps, Recovery sections"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Document a pattern for blue-green deployment in kubernetes",
+      "expected_output": "Creates knowledge/patterns/blue-green-deployment.md with type=pattern, problem/solution structure",
+      "files": [],
+      "assertions": [
+        {
+          "text": "File created with pattern template",
+          "passed": true,
+          "evidence": "Has Problem, Solution, Architecture sections"
+        },
+        {
+          "text": "ID follows naming convention",
+          "passed": true,
+          "evidence": "Format: domain.type.slug"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a concept note explaining service mesh architecture",
+      "expected_output": "Creates knowledge/<domain>/concepts/service-mesh.md with type=concept",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Uses concept template",
+          "passed": true,
+          "evidence": "Has Definition, Explanation, Key Insights"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Document a microservices architecture for e-commerce",
+      "expected_output": "Creates knowledge/architectures/ecommerce.md with type=architecture, components, data flow",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Uses architecture template",
+          "passed": true,
+          "evidence": "Has Overview, Components, Data Flow, Observability"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Create knowledge note but check for duplicates first",
+      "expected_output": "Searches existing knowledge, reports if similar exists",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Duplicate check performed",
+          "passed": true,
+          "evidence": "Script or search executed before creation"
+        }
+      ]
+    }
+  ]
+}

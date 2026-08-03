@@ -1,0 +1,83 @@
+{
+  "skill_name": "knowledge-manager",
+  "description": "Complete knowledge base management - create, organize, and maintain Obsidian-style knowledge notes with full lifecycle support",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add a note about docker",
+      "expected_output": "Creates knowledge/docker/concepts/docker-architecture.md with folder structure (concepts/guides/references/examples), proper frontmatter, all sections, and INDEX.md",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Find duplicates in my knowledge base",
+      "expected_output": "Scans knowledge/**/*.md, produces duplicate report grouped by HIGH/MEDIUM/LOW similarity, suggests actions",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Result contains high/medium/low categories",
+          "passed": true,
+          "evidence": "Report groups by similarity level"
+        },
+        {
+          "text": "Result includes similarity scores",
+          "passed": true,
+          "evidence": "Each pair has combined_score"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Document how to set up CI/CD pipeline",
+      "expected_output": "Creates knowledge/<category>/guides/<topic>.md with guide type, folder structure, proper frontmatter",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Clean up overlapping notes about microservices",
+      "expected_output": "Identifies similar notes, proposes merge or link actions, NEVER auto-deletes",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "Check for duplicates using the deduplicate script",
+      "expected_output": "Runs scripts/deduplicate.py, outputs JSON report with similarity scores",
+      "files": ["skills/knowledge-manager/scripts/deduplicate.py"],
+      "assertions": [
+        {
+          "text": "Script runs without error",
+          "passed": true,
+          "evidence": "Exit code 0"
+        },
+        {
+          "text": "Output contains high similarity pairs",
+          "passed": true,
+          "evidence": "JSON has 'high' key"
+        },
+        {
+          "text": "Output contains similarity scores",
+          "passed": true,
+          "evidence": "Each pair has title_score, content_score, tag_score"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Run deduplicate on knowledge/ and save report",
+      "expected_output": "Generates duplicate_report.md with HIGH/MEDIUM sections and recommendations",
+      "files": ["skills/knowledge-manager/scripts/deduplicate.py"],
+      "assertions": [
+        {
+          "text": "Report file created",
+          "passed": true,
+          "evidence": "File exists at specified path"
+        },
+        {
+          "text": "Report contains recommendations",
+          "passed": true,
+          "evidence": "Has ## Recommendations section"
+        }
+      ]
+    }
+  ]
+}
