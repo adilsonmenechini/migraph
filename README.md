@@ -166,6 +166,25 @@ clip --url <URL>
 | **AI Clients** | `scripts/llm_client.py`, `scripts/embed_client.py` | LLM + embeddings, OpenAI-compatible |
 | **AI Config** | `scripts/ai_config.py` | Resolves `MIGRAPH_*` environment variables |
 
+### Repository Structure
+
+```
+MiGraph/
+├── scripts/                  # Unified CLI + all command scripts
+├── skills/
+│   ├── knowledge-create/     # Create validated knowledge notes (templates, validators, hooks)
+│   └── knowledge-manager/    # Full knowledge lifecycle (create, dedupe, organize)
+├── templates/
+│   ├── pages/                # Page templates (concept, pattern, runbook, ...)
+│   └── root/                 # Workspace scaffolding (index, log, AGENTS)
+├── examples/
+│   └── knowledge/            # Example knowledge base (IaC, DevOps, AI, patterns)
+├── tests/                    # Test suite
+├── docs/                     # Documentation and previews
+├── SKILL.md                  # Installed as the "migraph" skill
+└── pyproject.toml            # Ruff + mypy configuration
+```
+
 ### Workspace Structure
 
 ```
@@ -328,7 +347,7 @@ python3 scripts/migraph <command> [args]
 | `lint` | Validate wiki structure |
 | `rebuild-index` | Rebuild the workspace index |
 | `dedupe-pages` | Detect duplicate or similar pages |
-| `migrate-skill-knowledge` | Migrate skill-kwonledge content into a vault (alias `migrate-skill-kwonledge` retained for compatibility) |
+| `migrate-skill-kwonledge` | Migrate skill-kwonledge content into a vault (alias `migrate-skill-knowledge` accepted for corrected spelling) |
 
 ### Intent Mapping
 
@@ -377,6 +396,10 @@ python3 scripts/migraph serve --root <wiki-root>
 | `http://127.0.0.1:8765/graph/index.html` | Interactive graph |
 | `http://127.0.0.1:8765/graph/report.html` | Governance report |
 
+### Example Outputs
+
+Real, captured command outputs for the full workflow — `init`, `clip`, `batch-ingest`, `viewer`, `graph`, `graph-report`, `entity-merge-review`, `status`, `health`, `ask`, `lint`, `correct`, `query`, `crystallize`, `digest`, `serve`, and `doctor` — are in [docs/example-outputs.md](docs/example-outputs.md).
+
 ---
 
 ## Tests
@@ -387,12 +410,25 @@ python3 -m unittest discover -s tests -p "test_migraph.py" -v
 
 Test suite covers: init, clip (text and URL), ingest (file, directory, web), batch-clip, batch-ingest, graph, graph-report, entity-merge-review, entity-merge-apply, viewer, inbox, health, status, output hub.
 
+Current status: **52 tests passing**.
+
+### Lint & Type Checking
+
+```bash
+python3 -m ruff check scripts/
+python3 -m ruff format --check scripts/
+python3 -m mypy scripts/
+```
+
+Configuration lives in `pyproject.toml` (`[tool.ruff]`, `[tool.mypy]`). CI runs the test suite on Python 3.11, 3.12, and 3.13 (`.github/workflows/ci.yml`).
+
 ---
 
 ## Documentation
 
 - **README.md** — this page
 - **SKILL.md** — agent behavior contract
+- **docs/example-outputs.md** — real captured command outputs
 - **CHANGELOG.md** — version history
 
 ---

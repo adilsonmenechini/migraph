@@ -91,6 +91,8 @@ Platform note:
 - On macOS and Linux, `<python-command>` is usually `python3`.
 - On Windows, `<python-command>` is usually `python`.
 
+The repository also ships two auxiliary skills under `skills/` — `knowledge-create` (validated note creation with templates and validators) and `knowledge-manager` (full knowledge lifecycle: create, dedupe, organize) — plus an example knowledge base under `examples/knowledge/` that `migrate-skill-kwonledge` can import into a vault.
+
 ## Intent Mapping
 
 - Create a wiki -> `init`
@@ -112,7 +114,7 @@ Platform note:
 - Check a compact workspace snapshot -> `status`
 - Validate environment capabilities -> `doctor`
 - Detect duplicate or similar pages -> `dedupe-pages`
-- Import skill-kwonledge content into a MiGraph vault -> `migrate-skill-knowledge`
+- Import skill-kwonledge content into a MiGraph vault -> `migrate-skill-kwonledge`
 
 ## Gotchas
 
