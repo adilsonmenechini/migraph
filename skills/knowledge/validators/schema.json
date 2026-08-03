@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Knowledge Note Metadata Schema",
-  "description": "Schema for validating knowledge note frontmatter",
+  "description": "Schema for validating knowledge note frontmatter (7 types)",
   "type": "object",
   "required": ["id", "type", "domain", "tags", "summary"],
   "properties": {
@@ -13,12 +13,17 @@
     },
     "type": {
       "type": "string",
-      "enum": ["concept", "pattern", "runbook", "architecture"],
-      "description": "Knowledge type"
+      "enum": ["concept", "guide", "reference", "example", "pattern", "runbook", "architecture"],
+      "description": "Knowledge type (7 unified types)"
     },
     "domain": {
       "type": "string",
       "description": "Knowledge domain/category",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "category": {
+      "type": "string",
+      "description": "Knowledge category (IaC, DevOps, AI, or other)",
       "pattern": "^[a-z0-9-]+$"
     },
     "title": {
@@ -55,6 +60,21 @@
       },
       "description": "IDs of related knowledge"
     },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Related knowledge notes ([[wikilinks]])"
+    },
+    "inputs": {
+      "type": "array",
+      "description": "Expected inputs for knowledge usage"
+    },
+    "outputs": {
+      "type": "array",
+      "description": "Expected outputs from knowledge"
+    },
     "source": {
       "type": "string",
       "format": "uri",
@@ -62,7 +82,7 @@
     },
     "status": {
       "type": "string",
-      "enum": ["draft", "active", "deprecated"],
+      "enum": ["draft", "active", "deprecated", "archived"],
       "default": "active"
     },
     "version": {
@@ -75,15 +95,25 @@
       "enum": ["low", "medium", "high"],
       "default": "medium"
     },
+    "created": {
+      "type": "string",
+      "format": "date",
+      "description": "Creation date (YYYY-MM-DD)"
+    },
     "created_at": {
       "type": "string",
       "format": "date-time",
-      "description": "Creation timestamp"
+      "description": "Creation timestamp (legacy alias of created)"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date",
+      "description": "Last update date (YYYY-MM-DD)"
     },
     "updated_at": {
       "type": "string",
       "format": "date-time",
-      "description": "Last update timestamp"
+      "description": "Last update timestamp (legacy alias of updated)"
     },
     "quality_score": {
       "type": "integer",

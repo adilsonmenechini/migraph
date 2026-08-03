@@ -1,6 +1,29 @@
+---
+title: {{title}}
+type: concept
+category: {{category}}
+domain: {{domain}}
+created: {{date}}
+updated: {{date}}
+tags:
+  - {{tag1}}
+status: active
+id: {{domain}}.concept.{{slug}}
+version: "1.0.0"
+confidence: medium
+source: {{source}}
+inputs: []
+outputs: []
+dependencies: []
+quality_score: 0
+aliases: []
+summary: {{summary}}
+---
+
 # {{title}}
 
 ## 🧠 Definition
+
 {{summary}}
 
 ## 📚 Explanation

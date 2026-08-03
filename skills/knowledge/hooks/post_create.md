@@ -18,7 +18,7 @@ Check for potential backlinks (notes that might reference this new note):
 
 ```bash
 # Search for mentions of title or keywords
-grep -r "title_keyword" knowledge/
+grep -r "title_keyword" examples/knowledge/
 ```
 
 ## 3. Check for Duplication
@@ -26,7 +26,7 @@ grep -r "title_keyword" knowledge/
 Run similarity check:
 
 ```bash
-python3 scripts/deduplicate.py knowledge/
+python3 skills/knowledge/scripts/deduplicate.py examples/knowledge/
 ```
 
 If similarity > 0.85:
@@ -47,10 +47,10 @@ import yaml
 with open('{{file_path}}') as f:
     content = f.read()
     fm = yaml.safe_load(content.split('---')[1])
-    
+
     required = ['id', 'type', 'domain', 'tags', 'summary']
     missing = [k for k in required if k not in fm]
-    
+
     if missing:
         print(f'MISSING: {missing}')
         sys.exit(1)
@@ -68,7 +68,7 @@ For automation systems:
   "id": "{{note_id}}",
   "type": "{{type}}",
   "domain": "{{domain}}",
-  "source": "knowledge-create"
+  "source": "knowledge"
 }
 ```
 

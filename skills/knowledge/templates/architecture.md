@@ -1,3 +1,25 @@
+---
+title: {{title}}
+type: architecture
+category: {{category}}
+domain: {{domain}}
+created: {{date}}
+updated: {{date}}
+tags:
+  - {{tag1}}
+status: active
+id: {{domain}}.architecture.{{slug}}
+version: "1.0.0"
+confidence: high
+source: {{source}}
+inputs: []
+outputs: []
+dependencies: []
+quality_score: 0
+aliases: []
+summary: {{summary}}
+---
+
 # {{title}}
 
 ## 🧭 Overview

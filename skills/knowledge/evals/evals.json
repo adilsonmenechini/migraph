@@ -1,0 +1,189 @@
+{
+  "skill_name": "knowledge",
+  "description": "Complete knowledge base management - create, organize, and maintain Obsidian-style knowledge notes across 7 types (concept, guide, reference, example, pattern, runbook, architecture) with RAG compatibility, validation, deduplication, and cross-linking",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a knowledge note about incident response for SRE",
+      "expected_output": "Creates examples/knowledge/sre/runbooks/incident-response.md with valid frontmatter, type=runbook, proper structure",
+      "files": [],
+      "assertions": [
+        {
+          "text": "File created in correct path",
+          "passed": true,
+          "evidence": "File exists at examples/knowledge/sre/runbooks/"
+        },
+        {
+          "text": "Frontmatter has required fields",
+          "passed": true,
+          "evidence": "id, type, domain, tags, summary present"
+        },
+        {
+          "text": "Template applied correctly",
+          "passed": true,
+          "evidence": "Has Detection, Steps, Recovery sections"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Document a pattern for blue-green deployment in kubernetes",
+      "expected_output": "Creates examples/knowledge/patterns/blue-green-deployment.md with type=pattern, problem/solution structure",
+      "files": [],
+      "assertions": [
+        {
+          "text": "File created with pattern template",
+          "passed": true,
+          "evidence": "Has Problem, Solution, Architecture sections"
+        },
+        {
+          "text": "ID follows naming convention",
+          "passed": true,
+          "evidence": "Format: domain.type.slug"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a concept note explaining service mesh architecture",
+      "expected_output": "Creates examples/knowledge/<domain>/concepts/service-mesh.md with type=concept",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Uses concept template",
+          "passed": true,
+          "evidence": "Has Definition, Explanation, Key Insights"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Document a microservices architecture for e-commerce",
+      "expected_output": "Creates examples/knowledge/architectures/ecommerce.md with type=architecture, components, data flow",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Uses architecture template",
+          "passed": true,
+          "evidence": "Has Overview, Components, Data Flow, Observability"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Create knowledge note but check for duplicates first",
+      "expected_output": "Searches existing knowledge, reports if similar exists",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Duplicate check performed",
+          "passed": true,
+          "evidence": "Script or search executed before creation"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Add a note about docker",
+      "expected_output": "Creates examples/knowledge/docker/concepts/docker-architecture.md with folder structure (concepts/guides/references/examples), proper frontmatter, all sections, and INDEX.md",
+      "files": []
+    },
+    {
+      "id": 7,
+      "prompt": "Find duplicates in my knowledge base",
+      "expected_output": "Scans examples/knowledge/**/*.md, produces duplicate report grouped by HIGH/MEDIUM/LOW similarity, suggests actions",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Result contains high/medium/low categories",
+          "passed": true,
+          "evidence": "Report groups by similarity level"
+        },
+        {
+          "text": "Result includes similarity scores",
+          "passed": true,
+          "evidence": "Each pair has combined_score"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Document how to set up CI/CD pipeline",
+      "expected_output": "Creates examples/knowledge/<category>/guides/<topic>.md with guide type, folder structure, proper frontmatter",
+      "files": []
+    },
+    {
+      "id": 9,
+      "prompt": "Clean up overlapping notes about microservices",
+      "expected_output": "Identifies similar notes, proposes merge or link actions, NEVER auto-deletes",
+      "files": []
+    },
+    {
+      "id": 10,
+      "prompt": "Check for duplicates using the deduplicate script",
+      "expected_output": "Runs skills/knowledge/scripts/deduplicate.py, outputs JSON report with similarity scores",
+      "files": ["skills/knowledge/scripts/deduplicate.py"],
+      "assertions": [
+        {
+          "text": "Script runs without error",
+          "passed": true,
+          "evidence": "Exit code 0"
+        },
+        {
+          "text": "Output contains high similarity pairs",
+          "passed": true,
+          "evidence": "JSON has 'high' key"
+        },
+        {
+          "text": "Output contains similarity scores",
+          "passed": true,
+          "evidence": "Each pair has title_score, content_score, tag_score"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Run deduplicate on examples/knowledge/ and save report",
+      "expected_output": "Generates duplicate_report.md with HIGH/MEDIUM sections and recommendations",
+      "files": ["skills/knowledge/scripts/deduplicate.py"],
+      "assertions": [
+        {
+          "text": "Report file created",
+          "passed": true,
+          "evidence": "File exists at specified path"
+        },
+        {
+          "text": "Report contains recommendations",
+          "passed": true,
+          "evidence": "Has ## Recommendations section"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "prompt": "Create a quick reference for kubectl commands",
+      "expected_output": "Creates examples/knowledge/DevOps/kubernetes/references/kubectl.md with type=reference, quick reference table",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Uses reference template",
+          "passed": true,
+          "evidence": "Has Quick Reference, Commands sections"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "prompt": "Create an example for terraform from official docs",
+      "expected_output": "Creates examples/knowledge/IaC/terraform/examples/terraform-example.md with type=example, fetched from official documentation",
+      "files": [],
+      "assertions": [
+        {
+          "text": "Uses example template",
+          "passed": true,
+          "evidence": "Has Code, Explanation sections"
+        }
+      ]
+    }
+  ]
+}

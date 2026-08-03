@@ -1,14 +1,16 @@
 ---
-name: knowledge-manager
-description: Complete knowledge base management - create, organize, and maintain Obsidian-style knowledge notes. Use this skill for the full knowledge lifecycle: create new notes with proper structure and folder organization, detect and merge duplicate notes, optimize cross-linking, and maintain a clean, usable knowledge base. Also triggers when user wants to add research, document a topic, check for duplicates, clean up notes, or maintain knowledge organization.
-triggers: ["add note", "document this", "create knowledge", "research", "learn about", "build knowledge", "capture", "add IaC", "add DevOps", "add AI", "find duplicates", "merge notes", "clean up", "check duplicates", "organization", "maintain knowledge", "optimize knowledge"]
+name: knowledge
+description: Complete knowledge base management - create, organize, and maintain Obsidian-style knowledge notes with RAG compatibility. Covers the full lifecycle: create notes across 7 types (concept, guide, reference, example, pattern, runbook, architecture) with unified frontmatter and folder organization, validate schema, detect and merge duplicates, optimize cross-linking, and maintain INDEX files.
+triggers: ["add note", "document this", "create knowledge", "research", "learn about", "build knowledge", "capture", "add IaC", "add DevOps", "add AI", "create pattern", "build runbook", "capture architecture", "find duplicates", "merge notes", "clean up", "check duplicates", "organization", "maintain knowledge", "optimize knowledge", "deduplicate", "fix overlapping notes"]
 tools: [filesystem, read, write, glob, mkdir, grep]
 category: knowledge-management
+version: 2.0.0
+tags: [knowledge, obsidian, rag, automation, documentation]
 ---
 
-# Knowledge Manager
+# Knowledge
 
-Complete knowledge base management skill that handles the full knowledge lifecycle: creating new notes, organizing by type, detecting duplicates, and maintaining cross-links. Built on Obsidian best practices.
+Complete knowledge base management skill that handles the full knowledge lifecycle: creating new notes across 7 types, organizing by category, validating schema, detecting duplicates, and maintaining cross-links. Built on Obsidian best practices with RAG compatibility.
 
 ---
 
@@ -24,18 +26,9 @@ Complete knowledge base management skill that handles the full knowledge lifecyc
 - "build knowledge base on [topic]"
 - "learn about [subject]"
 - "create documentation about [X]"
-
-## Category Format
-
-When user provides category, use format: `"add <category>/<topic>"`
-
-Examples:
-| Request | Category | Topic | Output Path |
-|---------|---------|------|-----------|
-| "add IaC/ansible" | IaC | ansible | examples/knowledge/ansible/ |
-| "add DevOps/kubernetes" | DevOps | kubernetes | examples/knowledge/kubernetes/ |
-| "add AI/langchain" | AI | langchain | examples/knowledge/langchain-ai/ |
-| "add ansible" | (none) | ansible | examples/knowledge/ansible/ |
+- "create pattern for [X]"
+- "build runbook for [X]"
+- "capture architecture of [X]"
 
 ## Refactor Mode Trigger Phrases
 - "find duplicates"
@@ -83,21 +76,20 @@ Extract category from request format: `"add <category>/<topic>"`:
 
 If no category provided, topic goes directly to `examples/knowledge/<topic>/`
 
-### C. Determine CONTENT TYPE
-- Explanatory content → `concept` → `concepts/` folder
-- How-to/Process content → `guide` → `guides/` folder
-- Quick reference → `reference` → `references/` folder
-- Code examples → `example` → `examples/` folder
+### C. Determine CONTENT TYPE (7 types)
 
 Type inference:
 | Phrase | Type | Folder |
 |--------|------|--------|
 | "how does X work" | concept | concepts/ |
-| "architecture" | concept | concepts/ |
+| "explain X", "what is X" | concept | concepts/ |
 | "how to do X" | guide | guides/ |
 | "setup", "tutorial" | guide | guides/ |
 | "commands", "reference" | reference | references/ |
 | "example", "code", "sample" | example | examples/ |
+| "pattern", "best practice", "solved problem" | pattern | patterns/ |
+| "runbook", "incident", "troubleshooting" | runbook | runbooks/ |
+| "architecture", "system design" | architecture | architectures/ |
 
 ---
 
@@ -110,6 +102,9 @@ examples/knowledge/<category>/<topic>/
     ├── guides/
     ├── references/
     ├── examples/
+    ├── patterns/
+    ├── runbooks/
+    ├── architectures/
     └── INDEX.md
 ```
 
@@ -117,7 +112,6 @@ Example:
 - "add IaC/ansible" → `examples/knowledge/IaC/ansible/`
 - "add DevOps/kubernetes" → `examples/knowledge/DevOps/kubernetes/`
 - "add AI/langchain" → `examples/knowledge/AI/langchain-ai/`
-```
 
 **If no category:**
 ```
@@ -126,13 +120,13 @@ examples/knowledge/<topic>/
     ├── guides/
     ├── references/
     ├── examples/
+    ├── patterns/
+    ├── runbooks/
+    ├── architectures/
     └── INDEX.md
 ```
 
-Example:
-- "add ansible" → checks if existing in category first, otherwise creates new topic
-
-**For patterns (cross-category use patterns/ folder):**
+**For cross-category patterns:**
 ```
 examples/knowledge/patterns/
     └── <pattern-name>.md
@@ -149,11 +143,6 @@ examples/knowledge/
 ├── AI/             # deepagents, langchain-ai
 └── patterns/      # cross-category patterns
 ```
-- `1. Inbox/` - New notes pending organization
-- `2. Projects/` - Active knowledge projects
-- `3. Areas/` - Ongoing topics
-- `4. Resources/` - Reference materials
-- `5. Archive/` - Inactive notes
 
 ---
 
@@ -189,49 +178,16 @@ Search for official documentation based on topic:
 
 1. Use web search or fetch to get official documentation
 2. Extract a practical code example
-3. Create file in `examples/` folder
-
-Example format:
-```markdown
----
-type: example
-category: <category>
-tags: [example, code, sample]
-status: active
-created: YYYY-MM-DD
----
-
-# <Category> Example
-
-## Overview
-Practical example demonstrating <topic>.
-
-## Code
-
-```yaml
-# or python, bash, etc.
-<actual code from documentation>
-```
-
-## Explanation
-
-- What this code does
-- Key parameters
-- How to run it
-
-## Related
-- [[<category>-basics]]
-- [[<category>-architecture]]
-```
+3. Create file in `examples/` folder using `templates/example.md`
 
 ---
 
 ## Step 4: Generate File Path
 
-Format: `knowledge/<category>/<type>/<slug>.md`
+Format: `examples/knowledge/<category>/<type>/<slug>.md`
 
 Example:
-- kubernetes + concept + architecture → `knowledge/kubernetes/concepts/kubernetes-architecture.md`
+- kubernetes + concept + architecture → `examples/knowledge/kubernetes/concepts/kubernetes-architecture.md`
 
 Slug rules:
 - Lowercase
@@ -242,24 +198,48 @@ Slug rules:
 
 ## Step 5: Create Note Content
 
-### Frontmatter (REQUIRED)
+### Select Template by Type
 
-Follow Obsidian frontmatter best practices:
+| Type | Template |
+|------|----------|
+| concept | `templates/concept.md` |
+| guide | `templates/guide.md` |
+| reference | `templates/reference.md` |
+| example | `templates/example.md` |
+| pattern | `templates/pattern.md` |
+| runbook | `templates/runbook.md` |
+| architecture | `templates/architecture.md` |
+
+### Unified Frontmatter Schema (ALL types)
 
 ```yaml
 ---
-title: <Title>
-type: <concept|guide|reference|example>
-category: <category>
-tags:
-  - <tag1>
-  - <tag2>
-aliases:
-  - <alternative-name>
-status: active
+# Core (required for all types)
+title: <Title>              # human-readable
+type: <concept|guide|reference|example|pattern|runbook|architecture>
+category: <category>        # IaC | DevOps | AI | other
+domain: <domain>            # e.g., sre, kubernetes, terraform
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
+tags:                       # list, 2-space indent, min 1
+  - <tag1>
+status: active              # draft | active | deprecated | archived
+summary: <1-2 sentence summary>
+# Schema (required for pattern/runbook/architecture; optional for others)
+id: <domain>.<type>.<slug>
+version: "1.0.0"
+confidence: high            # high | medium | low
+source: docs                # docs | internal | external
+inputs: []
+outputs: []
+dependencies:
+  - [[<related-note>]]
+quality_score: 0            # 0-100
+# Optional
+aliases:
+  - <alternative-name>
 ---
+```
 
 **Critical YAML rules:**
 - Opening `---` must be on line 1 with no preceding blank lines
@@ -270,138 +250,10 @@ updated: YYYY-MM-DD
 - Boolean values: `true` / `false` (lowercase, no quotes)
 - Dates: ISO 8601 format `YYYY-MM-DD`
 - Wikilinks in frontmatter must be quoted: `project: "[[Project Name]]"`
-```
 
-### Standard Property Schema
-
-**Core properties (required for all notes):**
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `title` | Text | Human-readable title (often matches filename) |
-| `type` | Text | Note type: concept, guide, reference, example |
-| `category` | Text | Knowledge category |
-| `created` | Date | Creation date (YYYY-MM-DD) |
-| `updated` | Date | Last update date (YYYY-MM-DD) |
-| `tags` | List | Topics and categories for filtering |
-| `aliases` | List | Alternative names for link suggestions |
-| `status` | Text | Current state (e.g., `draft`, `active`, `done`) |
-
-**Schema properties (required for formal contracts):**
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `id` | Text | Unique ID (ex: `kubernetes.pods`) |
-| `version` | Text | Semantic version (e.g., `1.0.0`) |
-| `inputs` | List | Expected inputs for knowledge usage |
-| `outputs` | List | Expected outputs from knowledge |
-| `dependencies` | List | Related knowledge notes |
-| `quality_score` | Number | Quality score (0-100) |
-| `confidence` | Text | Confidence level (high/medium/low) |
-| `source` | Text | Source type (docs/internal/external) |
-
-```yaml
----
-id: kubernetes.pods
-title: Kubernetes Pods
-type: concept
-category: kubernetes
-tags:
-  - containers
-  - pods
-aliases:
-  - k8s pods
-status: active
-version: "1.0.0"
-created: 2026-04-27
-updated: 2026-04-27
-confidence: high
-source: docs
-inputs: []
-outputs:
-  - name: pod_spec
-    type: string
-    description: Pod specification
-dependencies:
-  - [[kubernetes-architecture]]
-quality_score: 85
----
-```
-
-```yaml
----
-title: <Title>
-type: <concept|guide|reference|example>
-category: <category>
-tags:
-  - <tag1>
-  - <tag2>
-aliases:
-  - <alternative-name>
-status: active
-version: "1.0.0"
-created: YYYY-MM-DD
-updated: YYYY-MM-DD
-inputs:
-  - name: <input-name>
-    type: <string|number|boolean>
-    required: <true|false>
-    description: <description>
-outputs:
-  - name: <output-name>
-    type: <string|number|boolean>
-    description: <description>
-dependencies:
-  - [[<related-note>]]
-quality_score: 85
----
-```
-
-### Extended properties (optional):
-
-```yaml
-# For project-like notes
-priority: high
-due_date: YYYY-MM-DD
-stakeholders:
-  - "[[Person Name]]"
-
-# For reference notes
-source: "https://example.com/article"
-author: Author Name
-
-# For learning notes
-read_date: YYYY-MM-DD
-rating: 1-5
-```
-
-### Body Sections (ALL REQUIRED)
-
-```markdown
-# <Title>
-
-## Overview
-Brief explanation (1-2 sentences).
-
-## Purpose
-Why this exists and when to use.
-
-## Content
-Main explanation with details.
-
-## Usage
-Practical examples and commands.
-
-## Relationships
-- [[related-note]]
-- [[another-note]]
-
-## Notes
-Important considerations.
-
-## References
-- [Source](url)
-```
+### Naming Convention
+- Filename: `slug-case.md` (e.g., `incident-response.md`)
+- ID: `{domain}.{type}.{slug}` (e.g., `sre.runbook.incident-response`)
 
 ---
 
@@ -471,7 +323,7 @@ Embed content from other notes:
 
 **IMPORTANT**: INDEX.md must have YAML frontmatter with name, description, and tags!
 
-In `knowledge/<category>/INDEX.md`:
+In `examples/knowledge/<category>/INDEX.md`:
 
 ```markdown
 ---
@@ -518,23 +370,42 @@ tags: ['kubernetes', 'containers', 'orchestration', 'devops', 'cloud-native']
 *Last updated: 2026-04-27*
 ```
 
+**Update rules:**
+- **For patterns (cross-category)**: add entry to `examples/knowledge/patterns/INDEX.md`
+- **For topics in categories**: add entry to category INDEX.md AND main INDEX.md (`examples/knowledge/INDEX.md`)
+
 ---
 
 ## Step 8: Validate
 
 Check:
+- [ ] `id` is unique and follows `domain.type.slug`
+- [ ] `type` is one of the 7 valid values
+- [ ] `domain` exists or will be created
+- [ ] `tags` array has at least 1 item
+- [ ] `summary` is 1-2 sentences
 - [ ] Category folder exists
-- [ ] Type subfolders exist (concepts/, guides/, references/, examples/)
+- [ ] Type subfolder exists (concepts/, guides/, references/, examples/, patterns/, runbooks/, architectures/)
 - [ ] Note in correct subfolder
-- [ ] INDEX.md exists
-- [ ] INDEX.md has frontmatter (name, description, tags)
+- [ ] INDEX.md exists and has frontmatter (name, description, tags)
 - [ ] Frontmatter uses two-space indentation
 - [ ] Frontmatter uses list format for tags (not inline)
 - [ ] Dates in ISO 8601 format (YYYY-MM-DD)
-- [ ] Frontmatter complete
-- [ ] All sections present
-- [ ] At least one [[wikilink]]
+- [ ] At least one [[wikilink]] in body
 - [ ] Example file created in examples/ (fetched from official documentation)
+
+Optionally validate against the schema:
+```bash
+python3 -c "
+import json, sys, yaml
+with open('<file>') as f:
+    fm = yaml.safe_load(f.read().split('---')[1])
+schema = json.load(open('skills/knowledge/validators/schema.json'))
+required = schema['required']
+missing = [k for k in required if k not in fm]
+sys.exit(1) if missing else print('VALID')
+"
+```
 
 ---
 
@@ -545,7 +416,7 @@ Follow these steps when refactoring existing knowledge.
 **IMPORTANT**: Use the bundled script for automated duplicate checking:
 
 ```bash
-python3 scripts/deduplicate.py <knowledge-path> [--output results.json] [--report report.md]
+python3 skills/knowledge/scripts/deduplicate.py <knowledge-path> [--output results.json] [--report report.md]
 ```
 
 The script uses multiple similarity strategies:
@@ -559,7 +430,7 @@ The script uses multiple similarity strategies:
 Execute the deduplication script:
 
 ```bash
-python3 scripts/deduplicate.py examples/knowledge/ --output duplicate_results.json --report duplicate_report.md
+python3 skills/knowledge/scripts/deduplicate.py examples/knowledge/ --output duplicate_results.json --report duplicate_report.md
 ```
 
 ## Step 2: Analyze Results
@@ -675,18 +546,20 @@ This note has been merged into [[primary-note]].
 
 1. **Create folder structure FIRST** (create mode)
 2. **Use topic as category** - from user's request
-3. **Separate by type** - concepts/guides/references/examples
+3. **Separate by type** - concepts/guides/references/examples/patterns/runbooks/architectures
 4. **Never placeholders** - fill all sections
 5. **Cross-link** - every note links to related content
 6. **NEVER auto-delete** - always suggest (refactor mode)
 7. **Update INDEX** - after changes
 8. **Create examples/ folder** - always include examples/ folder in structure
-9. **Frontmatter best practices**:
-   - Two-space indentation (no tabs)
-   - List format for tags (not inline)
-   - ISO 8601 dates (YYYY-MM-DD)
-   - Quoted wikilinks in frontmatter
-10. **Use Obsidian features** - wikilinks, callouts, block IDs, embeds
+9. **Atomicity** - one idea per file, maximum ~500 lines; split if longer
+10. **Avoid duplication** - search existing knowledge before creating; if similarity > 0.85, suggest merge
+11. **Frontmatter best practices**:
+    - Two-space indentation (no tabs)
+    - List format for tags (not inline)
+    - ISO 8601 dates (YYYY-MM-DD)
+    - Quoted wikilinks in frontmatter
+12. **Use Obsidian features** - wikilinks, callouts, block IDs, embeds
 
 ---
 
@@ -694,7 +567,7 @@ This note has been merged into [[primary-note]].
 
 ## Create Mode Structure
 ```
-knowledge/
+examples/knowledge/
 └── <category>/
     ├── concepts/
     │   └── <category>-<topic>.md
@@ -702,6 +575,9 @@ knowledge/
     ├── references/
     ├── examples/
     │   └── <category>-example.md
+    ├── patterns/
+    ├── runbooks/
+    ├── architectures/
     └── INDEX.md
 ```
 
@@ -714,6 +590,10 @@ knowledge/
 
 # Resources
 
-- resources/template.md
+- templates/ (7 templates: concept, guide, reference, example, pattern, runbook, architecture)
+- validators/schema.json (unified 7-type frontmatter schema)
+- hooks/post_create.md (post-creation actions)
 - resources/quality_rules.md
-- resources/index_rules.md
+- resources/template.md
+- scripts/deduplicate.py (duplicate detection)
+- scripts/update_schema.py (frontmatter schema migration)
