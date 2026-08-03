@@ -91,7 +91,7 @@ Platform note:
 - On macOS and Linux, `<python-command>` is usually `python3`.
 - On Windows, `<python-command>` is usually `python`.
 
-The repository also ships two auxiliary skills under `skills/` — `knowledge-create` (validated note creation with templates and validators) and `knowledge-manager` (full knowledge lifecycle: create, dedupe, organize) — plus an example knowledge base under `examples/knowledge/` that `migrate-skill-kwonledge` can import into a vault.
+The repository also ships an auxiliary skill under `skills/` — `knowledge` (unified knowledge lifecycle: create notes across 7 types with templates and validators, dedupe, organize) — plus an example knowledge base under `examples/knowledge/` that `migrate-skill-kwonledge` can import into a vault.
 
 ## Intent Mapping
 

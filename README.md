@@ -172,8 +172,7 @@ clip --url <URL>
 MiGraph/
 ├── scripts/                  # Unified CLI + all command scripts
 ├── skills/
-│   ├── knowledge-create/     # Create validated knowledge notes (templates, validators, hooks)
-│   └── knowledge-manager/    # Full knowledge lifecycle (create, dedupe, organize)
+│   └── knowledge/            # Unified knowledge lifecycle (7 note types, create, dedupe, organize)
 ├── templates/
 │   ├── pages/                # Page templates (concept, pattern, runbook, ...)
 │   └── root/                 # Workspace scaffolding (index, log, AGENTS)
