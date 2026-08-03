@@ -1,0 +1,41 @@
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+exclude = [".venv", "__pycache__", "docs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = [
+    "E501",   # line length enforced by formatter
+    "B008",   # function call in default argument (argparse patterns)
+    "B905",   # zip(strict=) would change behavior if lengths differ
+]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/migraph" = ["E402"]
+"scripts/build_demo_wiki.py" = ["E402"]
+"scripts/capture_readme_screenshots.py" = ["E402"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.12"
+files = ["scripts"]
+ignore_missing_imports = true
+check_untyped_defs = false
+disallow_untyped_defs = false
+warn_return_any = false
+warn_unused_ignores = true
+disable_error_code = [
+    "attr-defined",
+    "call-overload",
+    "arg-type",
+    "index",
+    "operator",
+]
+exclude = [
+    "scripts/build_demo_wiki.py",
+    "scripts/capture_readme_screenshots.py",
+]
