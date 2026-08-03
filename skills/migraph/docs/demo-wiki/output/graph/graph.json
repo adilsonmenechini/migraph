@@ -3,9 +3,9 @@
   "schema_version": "2",
   "default_view": "knowledge",
   "catalog": {
-    "pageCount": 11,
+    "pageCount": 15,
     "claimCount": 0,
-    "nodeCount": 11,
+    "nodeCount": 15,
     "edgeCount": 41
   },
   "nodes": [
@@ -51,6 +51,69 @@
       "entities": [],
       "concepts": [],
       "aliases": [],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/concepts/gitops.md",
+      "label": "GitOps",
+      "type": "concept",
+      "summary": "GitOps é um padrão operacional onde o Git é a fonte da verdade declarativa para infraestrutura e aplicações — o estado desejado é definido no repo, e um operador reconcilia o estado real continuamente.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/concepts/gitops.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "concept",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [
+        "[]"
+      ],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/concepts/loop-engineering.md",
+      "label": "Loop Engineering",
+      "type": "concept",
+      "summary": "Loop Engineering é a disciplina de projetar sistemas autônomos baseados em loops de feedback fechados — observe, decida, atue, avalie, atualize estado, repita — que substituem o prompting manual por sistemas autônomos que se autopromptam e se autoavaliam.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/concepts/loop-engineering.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "concept",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [
+        "[loopcraft, agentic loops]"
+      ],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/concepts/system-driver.md",
+      "label": "System Driver",
+      "type": "concept",
+      "summary": "System Driver é o padrão de arquitetura que implementa o loop de controle mestre em sistemas agenticos — o componente que orquestra o ciclo Perceive → Reason → Plan → Act → Observe, gerencia estado, impõe governança, impõe limites de autonomia e garante que o loop termine.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/concepts/system-driver.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "concept",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [
+        "[agent driver, control loop, orchestrator, system driver pattern]"
+      ],
       "maturity": "",
       "canonicalEntity": ""
     },
@@ -204,6 +267,27 @@
       "entities": [],
       "concepts": [],
       "aliases": [],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/topics/ai-agents.md",
+      "label": "AI Agents",
+      "type": "topic",
+      "summary": "AI Agents são LLMs dentro de um loop que chamam tools, percebem o ambiente, raciocinam, agem, observam resultados e repetem até completar a tarefa — com governança, estado e escalação.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/topics/ai-agents.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "topic",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [
+        "[agentic systems, autonomous agents]"
+      ],
       "maturity": "",
       "canonicalEntity": ""
     },
@@ -502,11 +586,11 @@
   ],
   "insights": {
     "stats": {
-      "nodeCount": 11,
+      "nodeCount": 15,
       "edgeCount": 41,
-      "isolatedCount": 0,
+      "isolatedCount": 4,
       "weakCount": 0,
-      "averageDegree": 7.45
+      "averageDegree": 5.47
     },
     "topNodes": [
       {
@@ -589,7 +673,36 @@
         "reason": "Connects 3 page types and works well as a bridge."
       }
     ],
-    "isolatedNodes": [],
+    "isolatedNodes": [
+      {
+        "id": "wiki/topics/ai-agents.md",
+        "title": "AI Agents",
+        "type": "topic",
+        "severity": "isolated",
+        "reason": "No relationships with other pages yet"
+      },
+      {
+        "id": "wiki/concepts/gitops.md",
+        "title": "GitOps",
+        "type": "concept",
+        "severity": "isolated",
+        "reason": "No relationships with other pages yet"
+      },
+      {
+        "id": "wiki/concepts/loop-engineering.md",
+        "title": "Loop Engineering",
+        "type": "concept",
+        "severity": "isolated",
+        "reason": "No relationships with other pages yet"
+      },
+      {
+        "id": "wiki/concepts/system-driver.md",
+        "title": "System Driver",
+        "type": "concept",
+        "severity": "isolated",
+        "reason": "No relationships with other pages yet"
+      }
+    ],
     "suggestedLinks": [
       {
         "source": "wiki/decisions/context-budget.md",
@@ -749,7 +862,7 @@
         "sharedSources": []
       }
     ],
-    "summary": "The current key page is AI Native Team. The main pages already have a basic connection structure. You can review 8 suggested links next."
+    "summary": "The current key page is AI Native Team. There are 4 isolated pages that need links first. You can review 8 suggested links next."
   },
   "views": {
     "document": {
@@ -829,6 +942,69 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/gitops.md",
+          "label": "GitOps",
+          "type": "concept",
+          "summary": "GitOps é um padrão operacional onde o Git é a fonte da verdade declarativa para infraestrutura e aplicações — o estado desejado é definido no repo, e um operador reconcilia o estado real continuamente.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/gitops.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/loop-engineering.md",
+          "label": "Loop Engineering",
+          "type": "concept",
+          "summary": "Loop Engineering é a disciplina de projetar sistemas autônomos baseados em loops de feedback fechados — observe, decida, atue, avalie, atualize estado, repita — que substituem o prompting manual por sistemas autônomos que se autopromptam e se autoavaliam.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/loop-engineering.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[loopcraft, agentic loops]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/system-driver.md",
+          "label": "System Driver",
+          "type": "concept",
+          "summary": "System Driver é o padrão de arquitetura que implementa o loop de controle mestre em sistemas agenticos — o componente que orquestra o ciclo Perceive → Reason → Plan → Act → Observe, gerencia estado, impõe governança, impõe limites de autonomia e garante que o loop termine.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/system-driver.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[agent driver, control loop, orchestrator, system driver pattern]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -974,6 +1150,27 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/topics/ai-agents.md",
+          "label": "AI Agents",
+          "type": "topic",
+          "summary": "AI Agents são LLMs dentro de um loop que chamam tools, percebem o ambiente, raciocinam, agem, observam resultados e repetem até completar a tarefa — com governança, estado e escalação.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/topics/ai-agents.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "topic",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[agentic systems, autonomous agents]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -1286,11 +1483,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 11,
+          "nodeCount": 15,
           "edgeCount": 41,
-          "isolatedCount": 0,
+          "isolatedCount": 4,
           "weakCount": 0,
-          "averageDegree": 7.45
+          "averageDegree": 5.47
         },
         "topNodes": [
           {
@@ -1373,7 +1570,36 @@
             "reason": "Connects 3 page types and works well as a bridge."
           }
         ],
-        "isolatedNodes": [],
+        "isolatedNodes": [
+          {
+            "id": "wiki/topics/ai-agents.md",
+            "title": "AI Agents",
+            "type": "topic",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/concepts/gitops.md",
+            "title": "GitOps",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/concepts/loop-engineering.md",
+            "title": "Loop Engineering",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/concepts/system-driver.md",
+            "title": "System Driver",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          }
+        ],
         "suggestedLinks": [
           {
             "source": "wiki/decisions/context-budget.md",
@@ -1533,7 +1759,7 @@
             "sharedSources": []
           }
         ],
-        "summary": "The current key page is AI Native Team. The main pages already have a basic connection structure. You can review 8 suggested links next."
+        "summary": "The current key page is AI Native Team. There are 4 isolated pages that need links first. You can review 8 suggested links next."
       }
     },
     "knowledge": {
@@ -1580,6 +1806,69 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/gitops.md",
+          "label": "GitOps",
+          "type": "concept",
+          "summary": "GitOps é um padrão operacional onde o Git é a fonte da verdade declarativa para infraestrutura e aplicações — o estado desejado é definido no repo, e um operador reconcilia o estado real continuamente.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/gitops.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/loop-engineering.md",
+          "label": "Loop Engineering",
+          "type": "concept",
+          "summary": "Loop Engineering é a disciplina de projetar sistemas autônomos baseados em loops de feedback fechados — observe, decida, atue, avalie, atualize estado, repita — que substituem o prompting manual por sistemas autônomos que se autopromptam e se autoavaliam.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/loop-engineering.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[loopcraft, agentic loops]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/system-driver.md",
+          "label": "System Driver",
+          "type": "concept",
+          "summary": "System Driver é o padrão de arquitetura que implementa o loop de controle mestre em sistemas agenticos — o componente que orquestra o ciclo Perceive → Reason → Plan → Act → Observe, gerencia estado, impõe governança, impõe limites de autonomia e garante que o loop termine.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/system-driver.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[agent driver, control loop, orchestrator, system driver pattern]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -1733,6 +2022,27 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/topics/ai-agents.md",
+          "label": "AI Agents",
+          "type": "topic",
+          "summary": "AI Agents são LLMs dentro de um loop que chamam tools, percebem o ambiente, raciocinam, agem, observam resultados e repetem até completar a tarefa — com governança, estado e escalação.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/topics/ai-agents.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "topic",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[agentic systems, autonomous agents]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -2031,11 +2341,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 11,
+          "nodeCount": 15,
           "edgeCount": 41,
-          "isolatedCount": 0,
+          "isolatedCount": 4,
           "weakCount": 0,
-          "averageDegree": 7.45
+          "averageDegree": 5.47
         },
         "topNodes": [
           {
@@ -2118,7 +2428,36 @@
             "reason": "Connects 3 page types and works well as a bridge."
           }
         ],
-        "isolatedNodes": [],
+        "isolatedNodes": [
+          {
+            "id": "wiki/topics/ai-agents.md",
+            "title": "AI Agents",
+            "type": "topic",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/concepts/gitops.md",
+            "title": "GitOps",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/concepts/loop-engineering.md",
+            "title": "Loop Engineering",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/concepts/system-driver.md",
+            "title": "System Driver",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          }
+        ],
         "suggestedLinks": [
           {
             "source": "wiki/decisions/context-budget.md",
@@ -2278,7 +2617,7 @@
             "sharedSources": []
           }
         ],
-        "summary": "The current key page is AI Native Team. The main pages already have a basic connection structure. You can review 8 suggested links next."
+        "summary": "The current key page is AI Native Team. There are 4 isolated pages that need links first. You can review 8 suggested links next."
       }
     },
     "suggested": {
@@ -2325,6 +2664,69 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/gitops.md",
+          "label": "GitOps",
+          "type": "concept",
+          "summary": "GitOps é um padrão operacional onde o Git é a fonte da verdade declarativa para infraestrutura e aplicações — o estado desejado é definido no repo, e um operador reconcilia o estado real continuamente.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/gitops.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/loop-engineering.md",
+          "label": "Loop Engineering",
+          "type": "concept",
+          "summary": "Loop Engineering é a disciplina de projetar sistemas autônomos baseados em loops de feedback fechados — observe, decida, atue, avalie, atualize estado, repita — que substituem o prompting manual por sistemas autônomos que se autopromptam e se autoavaliam.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/loop-engineering.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[loopcraft, agentic loops]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/system-driver.md",
+          "label": "System Driver",
+          "type": "concept",
+          "summary": "System Driver é o padrão de arquitetura que implementa o loop de controle mestre em sistemas agenticos — o componente que orquestra o ciclo Perceive → Reason → Plan → Act → Observe, gerencia estado, impõe governança, impõe limites de autonomia e garante que o loop termine.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/system-driver.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[agent driver, control loop, orchestrator, system driver pattern]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -2478,6 +2880,27 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/topics/ai-agents.md",
+          "label": "AI Agents",
+          "type": "topic",
+          "summary": "AI Agents são LLMs dentro de um loop que chamam tools, percebem o ambiente, raciocinam, agem, observam resultados e repetem até completar a tarefa — com governança, estado e escalação.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/topics/ai-agents.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "topic",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[agentic systems, autonomous agents]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -2586,11 +3009,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 11,
+          "nodeCount": 15,
           "edgeCount": 41,
-          "isolatedCount": 0,
+          "isolatedCount": 4,
           "weakCount": 0,
-          "averageDegree": 7.45
+          "averageDegree": 5.47
         },
         "topNodes": [
           {
@@ -2673,7 +3096,36 @@
             "reason": "Connects 3 page types and works well as a bridge."
           }
         ],
-        "isolatedNodes": [],
+        "isolatedNodes": [
+          {
+            "id": "wiki/topics/ai-agents.md",
+            "title": "AI Agents",
+            "type": "topic",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/concepts/gitops.md",
+            "title": "GitOps",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/concepts/loop-engineering.md",
+            "title": "Loop Engineering",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/concepts/system-driver.md",
+            "title": "System Driver",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          }
+        ],
         "suggestedLinks": [
           {
             "source": "wiki/decisions/context-budget.md",

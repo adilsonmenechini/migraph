@@ -2,10 +2,10 @@
   "generated_at": "2026-08-03",
   "schemaVersion": "2",
   "view": "knowledge",
-  "summary": "The current key page is AI Native Team. The main pages already have a basic connection structure. There are 1 high-degree thin pages worth strengthening first. There are 8 suggested links ready for review.",
+  "summary": "The current key page is AI Native Team. There are 4 isolated pages that need links. There are 1 high-degree thin pages worth strengthening first. There are 8 suggested links ready for review.",
   "stats": {
     "view": "knowledge",
-    "nodeCount": 11,
+    "nodeCount": 15,
     "edgeCount": 41,
     "entityCount": 0,
     "aliasCount": 0,
@@ -13,17 +13,18 @@
     "ambiguousAliasGroupCount": 0,
     "ambiguousEntityCount": 0,
     "isolatedEntityCount": 0,
-    "isolatedPageCount": 0,
+    "isolatedPageCount": 4,
     "weakPageCount": 0,
     "bridgePageCount": 5,
     "suggestedLinkCount": 8,
     "hubStubCount": 1,
     "fragileBridgeCount": 0,
     "isolatedClusterCount": 0,
-    "componentCount": 1,
-    "averageDegree": 7.45
+    "componentCount": 5,
+    "averageDegree": 5.47
   },
   "topActions": [
+    "Fix isolated pages first by adding `links_to` edges or source references.",
     "Strengthen high-degree thin pages with better summaries, context, and sources.",
     "Review suggested links and convert strong candidates into explicit page links."
   ],
@@ -108,7 +109,40 @@
       "reason": "Connects 3 page types and works well as a bridge."
     }
   ],
-  "isolatedPages": [],
+  "isolatedPages": [
+    {
+      "id": "wiki/topics/ai-agents.md",
+      "title": "AI Agents",
+      "type": "topic",
+      "severity": "isolated",
+      "degree": 0,
+      "reason": "No page-level relationships yet."
+    },
+    {
+      "id": "wiki/concepts/gitops.md",
+      "title": "GitOps",
+      "type": "concept",
+      "severity": "isolated",
+      "degree": 0,
+      "reason": "No page-level relationships yet."
+    },
+    {
+      "id": "wiki/concepts/loop-engineering.md",
+      "title": "Loop Engineering",
+      "type": "concept",
+      "severity": "isolated",
+      "degree": 0,
+      "reason": "No page-level relationships yet."
+    },
+    {
+      "id": "wiki/concepts/system-driver.md",
+      "title": "System Driver",
+      "type": "concept",
+      "severity": "isolated",
+      "degree": 0,
+      "reason": "No page-level relationships yet."
+    }
+  ],
   "isolatedEntities": [],
   "ambiguousEntityMergeCandidates": [],
   "hubStubs": [

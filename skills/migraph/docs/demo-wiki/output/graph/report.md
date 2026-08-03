@@ -1,11 +1,11 @@
 # MiGraph Graph Report
 
 - Generated: 2026-08-03
-- Summary: The current key page is AI Native Team. The main pages already have a basic connection structure. There are 1 high-degree thin pages worth strengthening first. There are 8 suggested links ready for review.
+- Summary: The current key page is AI Native Team. There are 4 isolated pages that need links. There are 1 high-degree thin pages worth strengthening first. There are 8 suggested links ready for review.
 
 ## Health Summary
 
-- Pages: 11
+- Pages: 15
 - Relations: 41
 - Entities: 0
 - Aliased Entities: 0
@@ -13,8 +13,8 @@
 - Ambiguous Alias Groups: 0
 - Ambiguous Entities: 0
 - Isolated Entities: 0
-- Average Degree: 7.45
-- Isolated Pages: 0
+- Average Degree: 5.47
+- Isolated Pages: 4
 - Weak Pages: 0
 - Bridge Pages: 5
 - Suggested Links: 8
@@ -24,6 +24,7 @@
 
 ## Top Actions
 
+- Fix isolated pages first by adding `links_to` edges or source references.
 - Strengthen high-degree thin pages with better summaries, context, and sources.
 - Review suggested links and convert strong candidates into explicit page links.
 

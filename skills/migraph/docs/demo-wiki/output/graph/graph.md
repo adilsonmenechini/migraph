@@ -1,8 +1,8 @@
 # Knowledge Graph
 
-- Nodes: 11
+- Nodes: 15
 - Edges: 41
-- Summary: The current key page is AI Native Team. The main pages already have a basic connection structure. You can review 8 suggested links next.
+- Summary: The current key page is AI Native Team. There are 4 isolated pages that need links first. You can review 8 suggested links next.
 
 ## Key Pages
 - AI Native Team (concept) | score=70 | Degree 14, inbound 7, spanning 6 neighbor types.
@@ -25,6 +25,9 @@
 ## Nodes
 - concept: AI Native Team (wiki/concepts/ai-native-team.md)
 - concept: Execution Spec (wiki/concepts/execution-spec.md)
+- concept: GitOps (wiki/concepts/gitops.md)
+- concept: Loop Engineering (wiki/concepts/loop-engineering.md)
+- concept: System Driver (wiki/concepts/system-driver.md)
 - decision: Context Budget (wiki/decisions/context-budget.md)
 - decision: Execution Policy (wiki/decisions/execution-policy.md)
 - query: What Makes an AI Native Team (wiki/queries/what-makes-ai-native-team.md)
@@ -32,6 +35,7 @@
 - source: Platform Spec (wiki/sources/platform-spec.md)
 - source: Review Checklist (wiki/sources/review-checklist.md)
 - synthesis: Delivery System Synthesis (wiki/syntheses/delivery-system.md)
+- topic: AI Agents (wiki/topics/ai-agents.md)
 - topic: Eval Loops (wiki/topics/eval-loops.md)
 - topic: Model Platform (wiki/topics/model-platform.md)
 
