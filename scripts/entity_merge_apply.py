@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: entity_merge_apply
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import json
@@ -69,8 +68,7 @@ def _knowledge_entity_nodes(graph: dict[str, object]) -> list[dict[str, object]]
             nodes = knowledge.get("nodes", [])
             if isinstance(nodes, list):
                 return [
-                    node for node in nodes
-                    if isinstance(node, dict) and str(node.get("type", "") or "") == "entity"
+                    node for node in nodes if isinstance(node, dict) and str(node.get("type", "") or "") == "entity"
                 ]
     return []
 
@@ -123,24 +121,28 @@ def _write_page(path: Path, meta: dict[str, object], body: str) -> None:
     write_text(path, _serialize_frontmatter(meta) + "\n\n" + body.strip())
 
 
-def _merged_entity_body(merged_title: str, canonical_title: str, merged_page: Path, canonical_page: Path, aliases: list[str]) -> str:
+def _merged_entity_body(
+    merged_title: str, canonical_title: str, merged_page: Path, canonical_page: Path, aliases: list[str]
+) -> str:
     canonical_link = _relative_link(merged_page, canonical_page)
     alias_lines = "\n".join(f"- {alias}" for alias in aliases) or "- (none)"
-    return "\n".join([
-        f"# {merged_title}",
-        "",
-        "## Summary",
-        "",
-        f"This entity page has been merged into [{canonical_title}]({canonical_link}).",
-        "",
-        "## Canonical Entity",
-        "",
-        f"- [{canonical_title}]({canonical_link})",
-        "",
-        "## Aliases",
-        "",
-        alias_lines,
-    ])
+    return "\n".join(
+        [
+            f"# {merged_title}",
+            "",
+            "## Summary",
+            "",
+            f"This entity page has been merged into [{canonical_title}]({canonical_link}).",
+            "",
+            "## Canonical Entity",
+            "",
+            f"- [{canonical_title}]({canonical_link})",
+            "",
+            "## Aliases",
+            "",
+            alias_lines,
+        ]
+    )
 
 
 def _resolve_entity_id(candidates: list[dict[str, object]], selector: str) -> str:
@@ -223,17 +225,19 @@ def _build_merge_plan(
             canonical_page=canonical_page,
             aliases=_meta_list(merged_after_meta.get("aliases", [])),
         )
-        merged_pages.append({
-            "id": merged_entity_id,
-            "title": merged_title,
-            "beforeStatus": str(merged_meta.get("status") or "").strip(),
-            "afterStatus": "merged",
-            "canonicalEntity": canonical_entity_id,
-            "beforeAliases": _meta_list(merged_meta.get("aliases", [])),
-            "afterAliases": _meta_list(merged_after_meta.get("aliases", [])),
-            "afterMeta": merged_after_meta,
-            "afterBody": merged_after_body,
-        })
+        merged_pages.append(
+            {
+                "id": merged_entity_id,
+                "title": merged_title,
+                "beforeStatus": str(merged_meta.get("status") or "").strip(),
+                "afterStatus": "merged",
+                "canonicalEntity": canonical_entity_id,
+                "beforeAliases": _meta_list(merged_meta.get("aliases", [])),
+                "afterAliases": _meta_list(merged_after_meta.get("aliases", [])),
+                "afterMeta": merged_after_meta,
+                "afterBody": merged_after_body,
+            }
+        )
 
     canonical_after_meta = dict(canonical_meta)
     canonical_after_meta["type"] = "entity"
@@ -244,8 +248,7 @@ def _build_merge_plan(
     canonical_after_meta["sources"] = unique_strings(merged_sources)
     canonical_after_meta["topics"] = unique_strings(merged_topics)
     canonical_after_meta["aliases"] = [
-        item for item in unique_strings(merged_aliases)
-        if item.casefold() != canonical_title.casefold()
+        item for item in unique_strings(merged_aliases) if item.casefold() != canonical_title.casefold()
     ]
     if not str(canonical_after_meta.get("summary") or "").strip():
         canonical_after_meta["summary"] = f"{canonical_title} is an entity tracked in MiGraph."
@@ -270,15 +273,18 @@ def _build_merge_plan(
                 "topics": _meta_list(canonical_after_meta.get("topics", [])),
             },
             "addedAliases": [
-                item for item in _meta_list(canonical_after_meta.get("aliases", []))
+                item
+                for item in _meta_list(canonical_after_meta.get("aliases", []))
                 if item not in canonical_before_aliases
             ],
             "addedSources": [
-                item for item in _meta_list(canonical_after_meta.get("sources", []))
+                item
+                for item in _meta_list(canonical_after_meta.get("sources", []))
                 if item not in canonical_before_sources
             ],
             "addedTopics": [
-                item for item in _meta_list(canonical_after_meta.get("topics", []))
+                item
+                for item in _meta_list(canonical_after_meta.get("topics", []))
                 if item not in canonical_before_topics
             ],
             "afterMeta": canonical_after_meta,
@@ -287,18 +293,27 @@ def _build_merge_plan(
         "mergedPages": merged_pages,
         "stats": {
             "mergedPageCount": len(merged_pages),
-            "addedAliasCount": len([
-                item for item in _meta_list(canonical_after_meta.get("aliases", []))
-                if item not in canonical_before_aliases
-            ]),
-            "addedSourceCount": len([
-                item for item in _meta_list(canonical_after_meta.get("sources", []))
-                if item not in canonical_before_sources
-            ]),
-            "addedTopicCount": len([
-                item for item in _meta_list(canonical_after_meta.get("topics", []))
-                if item not in canonical_before_topics
-            ]),
+            "addedAliasCount": len(
+                [
+                    item
+                    for item in _meta_list(canonical_after_meta.get("aliases", []))
+                    if item not in canonical_before_aliases
+                ]
+            ),
+            "addedSourceCount": len(
+                [
+                    item
+                    for item in _meta_list(canonical_after_meta.get("sources", []))
+                    if item not in canonical_before_sources
+                ]
+            ),
+            "addedTopicCount": len(
+                [
+                    item
+                    for item in _meta_list(canonical_after_meta.get("topics", []))
+                    if item not in canonical_before_topics
+                ]
+            ),
         },
     }
 
@@ -332,13 +347,15 @@ def render_plan_markdown(plan: dict[str, object]) -> str:
     merged_pages = plan.get("mergedPages", [])
     if isinstance(merged_pages, list) and merged_pages:
         for item in merged_pages:
-            lines.extend([
-                f"- {item['id']}",
-                f"  Title: {item['title']}",
-                f"  Status: {item['beforeStatus'] or 'active'} -> {item['afterStatus']}",
-                f"  Canonical: {item['canonicalEntity']}",
-                "",
-            ])
+            lines.extend(
+                [
+                    f"- {item['id']}",
+                    f"  Title: {item['title']}",
+                    f"  Status: {item['beforeStatus'] or 'active'} -> {item['afterStatus']}",
+                    f"  Canonical: {item['canonicalEntity']}",
+                    "",
+                ]
+            )
     else:
         lines.append("- No merged pages")
     return "\n".join(lines).rstrip()
@@ -462,7 +479,9 @@ def render_plan_html(plan: dict[str, object]) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Apply a reviewed entity merge to canonicalize ambiguous entity pages.")
+    parser = argparse.ArgumentParser(
+        description="Apply a reviewed entity merge to canonicalize ambiguous entity pages."
+    )
     parser.add_argument("--root", default=".", help="Wiki root path")
     parser.add_argument("--identity-key", required=True, help="Identity key from entity-merge-review")
     parser.add_argument("--canonical", required=True, help="Canonical entity page id or title")
@@ -474,7 +493,8 @@ def main() -> int:
     entity_nodes = _knowledge_entity_nodes(graph)
     candidates, _ambiguous_entity_count = ambiguous_entity_merge_candidates(entity_nodes)
     selected = [
-        item for item in candidates
+        item
+        for item in candidates
         if str(item.get("identityKey") or "").casefold() == args.identity_key.strip().casefold()
     ]
     if len(selected) != 1:
@@ -505,12 +525,16 @@ def main() -> int:
         write_text(plan_md_path, render_plan_markdown(plan))
         write_text(plan_html_path, render_plan_html(plan))
         output_home = write_output_home(root)
-        append_log(root, f"[{today_str()}] entity-merge-plan | {args.identity_key}", [
-            f"- canonical: {canonical_entity_id}",
-            *[f"- preview merge: {item['id']}" for item in merged_pages],
-            "- plan html: output/graph/entity-merge-plan.html",
-            "- hub: output/index.html",
-        ])
+        append_log(
+            root,
+            f"[{today_str()}] entity-merge-plan | {args.identity_key}",
+            [
+                f"- canonical: {canonical_entity_id}",
+                *[f"- preview merge: {item['id']}" for item in merged_pages],
+                "- plan html: output/graph/entity-merge-plan.html",
+                "- hub: output/index.html",
+            ],
+        )
         print("# MiGraph Entity Merge Plan")
         print("")
         print(f"- Root: {root}")
@@ -545,14 +569,18 @@ def main() -> int:
     _run_follow_up(root, "graph_report.py")
     _run_follow_up(root, "entity_merge_review.py")
 
-    append_log(root, f"[{today_str()}] entity-merge-apply | {args.identity_key}", [
-        f"- canonical: {canonical_entity_id}",
-        *[f"- merged: {item}" for item in merged_page_paths],
-        "- viewer: output/viewer/index.html",
-        "- graph: output/graph/index.html",
-        "- graph report: output/graph/report.html",
-        "- merge review: output/graph/entity-merge-review.html",
-    ])
+    append_log(
+        root,
+        f"[{today_str()}] entity-merge-apply | {args.identity_key}",
+        [
+            f"- canonical: {canonical_entity_id}",
+            *[f"- merged: {item}" for item in merged_page_paths],
+            "- viewer: output/viewer/index.html",
+            "- graph: output/graph/index.html",
+            "- graph report: output/graph/report.html",
+            "- merge review: output/graph/entity-merge-review.html",
+        ],
+    )
     print("# MiGraph Entity Merge Apply")
     print("")
     print(f"- Root: {root}")
@@ -560,8 +588,8 @@ def main() -> int:
     print(f"- Canonical: {canonical_entity_id}")
     print(f"- Merged Pages: {len(merged_page_paths)}")
     print("")
-    for merged_page in merged_page_paths:
-        print(f"- merged: {merged_page} -> {canonical_entity_id}")
+    for merged_id in merged_page_paths:
+        print(f"- merged: {merged_id} -> {canonical_entity_id}")
     print("")
     print("Viewer: output/viewer/index.html")
     print("Graph: output/graph/index.html")

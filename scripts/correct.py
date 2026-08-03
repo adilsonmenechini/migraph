@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: correct
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 from pathlib import Path
@@ -41,19 +40,23 @@ def build_content(mistake: str, fix: str, apply_when: str, context: str) -> str:
         fix.strip() or "TODO",
     ]
     if apply_when.strip():
-        lines.extend([
-            "",
-            "## When To Apply",
-            "",
-            apply_when.strip(),
-        ])
+        lines.extend(
+            [
+                "",
+                "## When To Apply",
+                "",
+                apply_when.strip(),
+            ]
+        )
     if context.strip():
-        lines.extend([
-            "",
-            "## Context",
-            "",
-            context.strip(),
-        ])
+        lines.extend(
+            [
+                "",
+                "## Context",
+                "",
+                context.strip(),
+            ]
+        )
     return "\n".join(lines)
 
 
@@ -70,7 +73,9 @@ def main() -> int:
     parser.add_argument("--context", default="", help="Extra context explaining the correction")
     parser.add_argument("--slug", default="", help="Explicit target slug")
     parser.add_argument("--update", action="store_true", help="Update an existing correction page")
-    parser.add_argument("--merge-mode", choices=["append", "replace", "dedupe"], default="dedupe", help="How to merge content on update")
+    parser.add_argument(
+        "--merge-mode", choices=["append", "replace", "dedupe"], default="dedupe", help="How to merge content on update"
+    )
     parser.add_argument("--confidence", default="verified", help="Confidence label for the correction page")
     parser.add_argument("--status", default="active", help="Status label for the correction page")
     args = parser.parse_args()

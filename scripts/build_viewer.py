@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: build_viewer
 
@@ -12,13 +10,14 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import json
-from html import escape
 import os
-from pathlib import Path
 import re
+from html import escape
+from pathlib import Path
 
 from utils import (
     append_log,
@@ -32,10 +31,9 @@ from utils import (
     print_output_serve_hint,
     read_text,
     today_str,
-    write_text,
     write_output_home,
+    write_text,
 )
-
 
 SECTION_TITLES = {
     "topic": "Topics",
@@ -112,13 +110,17 @@ def extract_section_records(root: Path, page: Path, body: str) -> list[dict[str,
         content = "\n".join(lines).strip()
         if not content:
             return
-        records.append({
-            "title": current_title,
-            "anchor": slugify_anchor(current_title),
-            "content": content[:2400],
-            "refs": extract_ref_targets(content),
-            "links": [link_record(root, page, link) for link in markdown_links(content) if not is_external_link(link)],
-        })
+        records.append(
+            {
+                "title": current_title,
+                "anchor": slugify_anchor(current_title),
+                "content": content[:2400],
+                "refs": extract_ref_targets(content),
+                "links": [
+                    link_record(root, page, link) for link in markdown_links(content) if not is_external_link(link)
+                ],
+            }
+        )
 
     for raw_line in body.replace("\r\n", "\n").splitlines():
         stripped = raw_line.strip()

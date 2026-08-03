@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """
 MiGraph Module: ai_config
 
@@ -7,6 +5,8 @@ Purpose:
 - Resolve optional remote AI service configuration from environment variables.
 - LLM and embedding features stay disabled unless explicitly configured.
 """
+
+from __future__ import annotations
 
 import os
 import sys
@@ -44,11 +44,7 @@ def _validate_service_url(url: str, env_name: str) -> None:
 
 
 def llm_is_configured() -> bool:
-    return bool(
-        _env("MIGRAPH_LLM_API_KEY")
-        and _env("MIGRAPH_LLM_BASE_URL")
-        and _env("MIGRAPH_LLM_MODEL")
-    )
+    return bool(_env("MIGRAPH_LLM_API_KEY") and _env("MIGRAPH_LLM_BASE_URL") and _env("MIGRAPH_LLM_MODEL"))
 
 
 def resolve_llm_config() -> LlmConfig:
@@ -100,16 +96,13 @@ def embed_is_configured() -> bool:
 def resolve_embed_config() -> EmbedConfig:
     api_key = _env("MIGRAPH_EMBED_API_KEY")
     if not api_key:
-        raise RuntimeError(
-            "Embedding is not configured. Set MIGRAPH_EMBED_API_KEY to enable semantic entity matching."
-        )
+        raise RuntimeError("Embedding is not configured. Set MIGRAPH_EMBED_API_KEY to enable semantic entity matching.")
     base_url_env = _env("MIGRAPH_EMBED_BASE_URL")
     if base_url_env:
         base_urls = tuple(item.strip() for item in base_url_env.split(",") if item.strip())
         if not base_urls:
             print(
-                "Warning: MIGRAPH_EMBED_BASE_URL is set but empty; "
-                f"falling back to {DEFAULT_EMBED_BASE_URL}.",
+                f"Warning: MIGRAPH_EMBED_BASE_URL is set but empty; falling back to {DEFAULT_EMBED_BASE_URL}.",
                 file=sys.stderr,
             )
             base_urls = (DEFAULT_EMBED_BASE_URL,)

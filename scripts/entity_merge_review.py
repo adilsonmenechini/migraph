@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: entity_merge_review
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import json
@@ -47,13 +46,17 @@ def _knowledge_entity_nodes(graph: dict[str, object]) -> list[dict[str, object]]
             nodes = knowledge.get("nodes", [])
             if isinstance(nodes, list):
                 return [
-                    node for node in nodes
-                    if isinstance(node, dict) and str(node.get("type", "") or "") == "entity"
+                    node for node in nodes if isinstance(node, dict) and str(node.get("type", "") or "") == "entity"
                 ]
-    return [
-        node for node in graph.get("nodes", [])
-        if isinstance(node, dict) and str(node.get("type", "") or "") == "entity"
-    ] if isinstance(graph.get("nodes"), list) else []
+    return (
+        [
+            node
+            for node in graph.get("nodes", [])
+            if isinstance(node, dict) and str(node.get("type", "") or "") == "entity"
+        ]
+        if isinstance(graph.get("nodes"), list)
+        else []
+    )
 
 
 def build_review(graph: dict[str, object]) -> dict[str, object]:
@@ -110,14 +113,16 @@ def render_review_markdown(review: dict[str, object]) -> str:
             titles = ", ".join(str(title) for title in item.get("titles", []))
             labels = ", ".join(str(label) for label in item.get("labels", []))
             entity_ids = ", ".join(str(entity_id) for entity_id in item.get("entityIds", []))
-            lines.extend([
-                f"- Identity Key: {item.get('identityKey', 'n/a')}",
-                f"  Titles: {titles}",
-                f"  Labels: {labels}",
-                f"  Entity IDs: {entity_ids}",
-                f"  Reason: {item.get('reason', '')}",
-                "",
-            ])
+            lines.extend(
+                [
+                    f"- Identity Key: {item.get('identityKey', 'n/a')}",
+                    f"  Titles: {titles}",
+                    f"  Labels: {labels}",
+                    f"  Entity IDs: {entity_ids}",
+                    f"  Reason: {item.get('reason', '')}",
+                    "",
+                ]
+            )
     else:
         lines.append("- No candidates")
     return "\n".join(lines).rstrip()
@@ -158,9 +163,7 @@ def render_review_html(review: dict[str, object]) -> str:
     cards = _render_candidate_cards(candidates if isinstance(candidates, list) else [])
     actions = review.get("topActions", [])
     action_html = (
-        "<ul class='bullet-list'>{}</ul>".format(
-            "".join(f"<li>{escape(str(item))}</li>" for item in actions)
-        )
+        "<ul class='bullet-list'>{}</ul>".format("".join(f"<li>{escape(str(item))}</li>" for item in actions))
         if isinstance(actions, list) and actions
         else "<div class='empty'>No actions.</div>"
     )
@@ -342,7 +345,9 @@ def render_review_html(review: dict[str, object]) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build a deterministic entity merge review from the current MiGraph graph data.")
+    parser = argparse.ArgumentParser(
+        description="Build a deterministic entity merge review from the current MiGraph graph data."
+    )
     parser.add_argument("--root", default=".", help="Wiki root path")
     args = parser.parse_args()
 
@@ -359,12 +364,16 @@ def main() -> int:
     write_text(review_html_path, render_review_html(review))
     output_home = write_output_home(root)
 
-    append_log(root, f"[{today_str()}] entity-merge-review | {review['stats']['ambiguousAliasGroupCount']} groups", [
-        "- review html: output/graph/entity-merge-review.html",
-        "- review: output/graph/entity-merge-review.md",
-        "- data: output/graph/entity-merge-review.json",
-        "- hub: output/index.html",
-    ])
+    append_log(
+        root,
+        f"[{today_str()}] entity-merge-review | {review['stats']['ambiguousAliasGroupCount']} groups",
+        [
+            "- review html: output/graph/entity-merge-review.html",
+            "- review: output/graph/entity-merge-review.md",
+            "- data: output/graph/entity-merge-review.json",
+            "- hub: output/index.html",
+        ],
+    )
     print("# MiGraph Entity Merge Review")
     print("")
     print(f"- Root: {root}")

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """
 MiGraph Module: embed_client
 
@@ -8,9 +6,10 @@ Purpose:
 - Disabled unless MiGraph_EMBED_API_KEY is configured.
 """
 
+from __future__ import annotations
+
 import json
-import sys
-from typing import Iterable
+from collections.abc import Iterable
 from urllib import error as urllib_error
 from urllib import request as urllib_request
 

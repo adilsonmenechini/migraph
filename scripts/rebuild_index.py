@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: rebuild_index
 
@@ -12,16 +10,25 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 from pathlib import Path
 
-from utils import SECTION_ORDER, collect_wiki_pages, extract_summary, find_repo_root, parse_frontmatter, read_text, write_text
+from utils import (
+    SECTION_ORDER,
+    collect_wiki_pages,
+    extract_summary,
+    find_repo_root,
+    parse_frontmatter,
+    read_text,
+    write_text,
+)
 
 
 def build_index(root: Path) -> str:
     type_to_section = {page_type: heading for heading, page_type in SECTION_ORDER}
-    sections = {heading: [] for heading, _page_type in SECTION_ORDER}
+    sections: dict[str, list[str]] = {heading: [] for heading, _page_type in SECTION_ORDER}
 
     for page in collect_wiki_pages(root):
         meta, body = parse_frontmatter(read_text(page))
@@ -46,14 +53,16 @@ def build_index(root: Path) -> str:
         "",
     ]
     for heading, _page_type in SECTION_ORDER:
-        lines.extend([
-            f"## {heading}",
-            "",
-            "| Page | Type | Summary | Updated |",
-            "| --- | --- | --- | --- |",
-            *sections[heading],
-            "",
-        ])
+        lines.extend(
+            [
+                f"## {heading}",
+                "",
+                "| Page | Type | Summary | Updated |",
+                "| --- | --- | --- | --- |",
+                *sections[heading],
+                "",
+            ]
+        )
     return "\n".join(lines).rstrip() + "\n"
 
 

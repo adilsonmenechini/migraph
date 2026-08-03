@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: query_wiki
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 from pathlib import Path
@@ -29,8 +28,15 @@ def main() -> int:
     parser.add_argument("--source-path", action="append", default=[], help="Consulted page path")
     parser.add_argument("--follow-up", action="append", default=[], help="Follow-up question or TODO")
     parser.add_argument("--slug", default="", help="Explicit target slug")
-    parser.add_argument("--update", action="store_true", help="Update an existing query page with the same title or slug")
-    parser.add_argument("--merge-mode", choices=["append", "replace", "dedupe"], default="dedupe", help="How to merge fields when --update is used")
+    parser.add_argument(
+        "--update", action="store_true", help="Update an existing query page with the same title or slug"
+    )
+    parser.add_argument(
+        "--merge-mode",
+        choices=["append", "replace", "dedupe"],
+        default="dedupe",
+        help="How to merge fields when --update is used",
+    )
     args = parser.parse_args()
 
     root = find_repo_root(Path(args.root))

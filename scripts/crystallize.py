@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: crystallize
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import re
@@ -35,13 +34,13 @@ from utils import (
     normalize_repo_path,
     parse_frontmatter,
     read_text,
+    refresh_output_home_if_present,
     relative_link,
     render_template,
     slugify,
     today_str,
     unique_path,
     write_text,
-    refresh_output_home_if_present,
 )
 
 TEMPLATE_BY_KIND = {
@@ -199,7 +198,9 @@ def collect_related_paths(root: Path, body: str, page_path: Path) -> list[str]:
     return ordered_unique([item for item in related if item.startswith("wiki/") and item.endswith(".md")])
 
 
-def source_record(root: Path, raw_path: Path, summary_kind: str = "concept", summary_focus: str = "") -> dict[str, object]:
+def source_record(
+    root: Path, raw_path: Path, summary_kind: str = "concept", summary_focus: str = ""
+) -> dict[str, object]:
     text = read_text(raw_path)
     if not text:
         raise SystemExit(f"Cannot read source content: {raw_path}")
@@ -208,7 +209,9 @@ def source_record(root: Path, raw_path: Path, summary_kind: str = "concept", sum
         meta, body = parse_frontmatter(text)
         title = str(meta.get("title") or raw_path.stem)
         source_values = meta.get("sources", [])
-        source_paths = [normalize_repo_path(root, str(item)) for item in source_values] if isinstance(source_values, list) else []
+        source_paths = (
+            [normalize_repo_path(root, str(item)) for item in source_values] if isinstance(source_values, list) else []
+        )
         related_paths = collect_related_paths(root, body, raw_path)
         companion = source_page_companion(root, raw_path)
         primary_body = read_text(companion) if companion else body
@@ -356,9 +359,7 @@ def _heuristic_looks_incomplete_sentence(text: str) -> bool:
         return True
     if clean[-1] in _HEURISTIC_CONTINUATION_ENDINGS:
         return True
-    if len(clean) < 30:
-        return True
-    return False
+    return len(clean) < 30
 
 
 def _heuristic_is_low_value_sentence(text: str) -> bool:
@@ -372,9 +373,7 @@ def _heuristic_is_low_value_sentence(text: str) -> bool:
         return True
     if any(hint in lowered for hint in _HEURISTIC_LOW_VALUE_LINE_HINTS):
         return True
-    if clean.endswith(("：", ":")):
-        return True
-    return False
+    return bool(clean.endswith(("：", ":")))
 
 
 def _heuristic_sentence_priority(text: str) -> int:
@@ -445,8 +444,10 @@ def _heuristic_kind_summary_score(text: str, kind: str, title: str = "") -> int:
             score += 12
         if title_clean and (clean.startswith(title_clean) or clean.startswith(f"{title_clean}（")):
             score += 14
-        if title_clean and title_clean in clean and any(
-            hint in clean for hint in ("定义为", "本质上是", "指的是", "意味着", "首先是一种")
+        if (
+            title_clean
+            and title_clean in clean
+            and any(hint in clean for hint in ("定义为", "本质上是", "指的是", "意味着", "首先是一种"))
         ):
             score += 8
         if clean.startswith("本报告不将") or "并列的独立概念来讨论" in clean:
@@ -528,7 +529,10 @@ def _heuristic_choose_best_summary(summary: str, primary_body: str, title: str, 
     if not candidates:
         return title
     scored = sorted(
-        ((_heuristic_kind_summary_score(candidate, summary_kind, title), index, candidate) for index, candidate in enumerate(candidates)),
+        (
+            (_heuristic_kind_summary_score(candidate, summary_kind, title), index, candidate)
+            for index, candidate in enumerate(candidates)
+        ),
         key=lambda item: (-item[0], item[1], item[2]),
     )
     return scored[0][2]
@@ -547,7 +551,9 @@ def _heuristic_meaningful_sentences(text: str, limit: int = 8) -> list[str]:
     return [item[2] for item in candidates[:limit]]
 
 
-def _heuristic_source_record(root: Path, raw_path: Path, summary_kind: str = "concept", summary_focus: str = "") -> dict[str, object]:
+def _heuristic_source_record(
+    root: Path, raw_path: Path, summary_kind: str = "concept", summary_focus: str = ""
+) -> dict[str, object]:
     text = read_text(raw_path)
     if not text:
         raise SystemExit(f"Cannot read source content: {raw_path}")
@@ -557,7 +563,9 @@ def _heuristic_source_record(root: Path, raw_path: Path, summary_kind: str = "co
         title = str(meta.get("title") or raw_path.stem)
         summary = str(meta.get("summary") or "").strip()
         source_values = meta.get("sources", [])
-        source_paths = [normalize_repo_path(root, str(item)) for item in source_values] if isinstance(source_values, list) else []
+        source_paths = (
+            [normalize_repo_path(root, str(item)) for item in source_values] if isinstance(source_values, list) else []
+        )
         related_paths = collect_related_paths(root, body, raw_path)
         companion = source_page_companion(root, raw_path)
         primary_body = read_text(companion) if companion else body
@@ -588,7 +596,9 @@ def _heuristic_source_record(root: Path, raw_path: Path, summary_kind: str = "co
         "summary": summary,
         "source_paths": ordered_unique(source_paths),
         "related_paths": ordered_unique(related_paths),
-        "snippets": ordered_unique([item for _score, item in sorted(bullets, key=lambda value: (-value[0], value[1]))] + sentences),
+        "snippets": ordered_unique(
+            [item for _score, item in sorted(bullets, key=lambda value: (-value[0], value[1]))] + sentences
+        ),
     }
 
 
@@ -599,13 +609,18 @@ def _heuristic_auto_summary(records: list[dict[str, object]], fallback: str, sum
     if len(parts) == 1:
         return _heuristic_short_text(parts[0], limit=220)
     ranked = sorted(
-        ((_heuristic_kind_summary_score(part, summary_kind, fallback), index, part) for index, part in enumerate(parts)),
+        (
+            (_heuristic_kind_summary_score(part, summary_kind, fallback), index, part)
+            for index, part in enumerate(parts)
+        ),
         key=lambda item: (-item[0], item[1], item[2]),
     )
     lead = ranked[0][2]
     support = next((part for _score, _index, part in ranked[1:] if part != lead), "")
     if support:
-        return _heuristic_short_text(f"{lead} 这一判断也得到其他来源的支持，说明相关结论并非单点材料中的孤立观点。", limit=220)
+        return _heuristic_short_text(
+            f"{lead} 这一判断也得到其他来源的支持，说明相关结论并非单点材料中的孤立观点。", limit=220
+        )
     return _heuristic_short_text(lead, limit=220)
 
 
@@ -637,7 +652,9 @@ def _heuristic_auto_body(records: list[dict[str, object]], kind: str, summary: s
     return "\n".join(f"- {item}" for item in points) if points else summary.strip()
 
 
-def _fallback_crystallize(root: Path, source_paths: list[str], kind: str, title: str, content_fallback: str = "") -> dict[str, object]:
+def _fallback_crystallize(
+    root: Path, source_paths: list[str], kind: str, title: str, content_fallback: str = ""
+) -> dict[str, object]:
     records: list[dict[str, object]] = []
     for raw in source_paths:
         path = resolve_input_path(root, raw)
@@ -695,7 +712,9 @@ def merge_text_mode(existing: str, incoming: str, fallback: str, merge_mode: str
     return fallback
 
 
-def merge_list_mode(existing: list[str], incoming: list[str], merge_mode: str, fallback: list[str] | None = None) -> list[str]:
+def merge_list_mode(
+    existing: list[str], incoming: list[str], merge_mode: str, fallback: list[str] | None = None
+) -> list[str]:
     fallback = fallback or []
     if merge_mode == "replace":
         merged = [item for item in incoming if item.strip()] or [item for item in existing if item.strip()] or fallback
@@ -915,7 +934,11 @@ def source_page_for_material(root: Path, material_path: str) -> Path | None:
             companion = Path("normalized", *raw_path.parts[1:]).with_suffix(".md").as_posix()
             if companion == normalized_material:
                 return page
-        if page_source.startswith("raw/") and normalized_material.startswith("raw/") and page_source == normalized_material:
+        if (
+            page_source.startswith("raw/")
+            and normalized_material.startswith("raw/")
+            and page_source == normalized_material
+        ):
             return page
     return None
 
@@ -1068,7 +1091,9 @@ def main() -> int:
     parser.add_argument("--key-point", action="append", default=[], help="Key point for concept pages")
     parser.add_argument("--slug", default="", help="Explicit target slug")
     parser.add_argument("--update", action="store_true", help="Update an existing page with the same title or slug")
-    parser.add_argument("--merge-mode", choices=list(MERGE_MODES), default="dedupe", help="How to merge fields when --update is used")
+    parser.add_argument(
+        "--merge-mode", choices=list(MERGE_MODES), default="dedupe", help="How to merge fields when --update is used"
+    )
     parser.add_argument("--confidence", default="", help="Optional confidence override for the target page")
     parser.add_argument("--status", default="", help="Optional status override for the target page")
     args = parser.parse_args()
@@ -1081,19 +1106,23 @@ def main() -> int:
             raise SystemExit(f"Source path not found: {raw}")
         records.append(source_record(root, path, summary_kind=args.kind, summary_focus=args.title))
 
-    auto_source_paths = ordered_unique([
-        source_path
-        for record in records
-        for source_path in list(record["source_paths"]) or ([Path(record["path"]).relative_to(root).as_posix()] if Path(record["path"]).is_relative_to(root) else [])
-    ])
+    auto_source_paths = ordered_unique(
+        [
+            source_path
+            for record in records
+            for source_path in list(record["source_paths"])
+            or (
+                [Path(record["path"]).relative_to(root).as_posix()] if Path(record["path"]).is_relative_to(root) else []
+            )
+        ]
+    )
     auto_related_paths = ordered_unique([item for record in records for item in list(record["related_paths"])])
 
     source_data_list = [record["source_data"] for record in records]
     if llm_is_configured():
         llm_config = resolve_llm_config()
         print(
-            f"Notice: sending source content to configured LLM at {llm_config.base_url} "
-            f"(model: {llm_config.model}).",
+            f"Notice: sending source content to configured LLM at {llm_config.base_url} (model: {llm_config.model}).",
             file=sys.stderr,
         )
         try:
@@ -1108,7 +1137,9 @@ def main() -> int:
     content = args.content.strip() or str(llm_result["body"])
     related_paths = ordered_unique(args.related_path + auto_related_paths)
     source_paths = ordered_unique(args.source_path + auto_source_paths)
-    key_points = ordered_unique(args.key_point + list(llm_result["key_points"])) if args.kind == "concept" else args.key_point
+    key_points = (
+        ordered_unique(args.key_point + list(llm_result["key_points"])) if args.kind == "concept" else args.key_point
+    )
     findings = ordered_unique(args.finding + list(llm_result["findings"])) if args.kind == "synthesis" else args.finding
     tensions = ordered_unique(args.tension + list(llm_result["tensions"]))
     page_path, action = write_page(

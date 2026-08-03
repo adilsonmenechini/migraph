@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: convert_source
 
@@ -12,9 +10,9 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
-import sys
 from pathlib import Path
 
 from ingest import MARKDOWN_EXTENSIONS, fetch_webpage_as_markdown, normalize_local_source
@@ -72,9 +70,7 @@ def convert_directory(source_dir: Path, output_dir: str, extensions: set[str], o
     if not output_dir:
         raise SystemExit("--output-dir is required when --source points to a directory")
     target_root = Path(output_dir).expanduser().resolve()
-    files = sorted(
-        path for path in source_dir.rglob("*") if path.is_file() and path.suffix.lower() in extensions
-    )
+    files = sorted(path for path in source_dir.rglob("*") if path.is_file() and path.suffix.lower() in extensions)
     if not files:
         print("No matching files found.")
         return 0

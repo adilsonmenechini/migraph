@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Module: runtime_capabilities
 
@@ -12,10 +10,11 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import importlib
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 
 Importer = Callable[[str], object]
 
@@ -79,19 +78,18 @@ def missing_modules_for_group(group_name: str, importer: Importer | None = None)
         try:
             importer(module_name)
         except Exception as exc:  # pragma: no cover - exercised via subprocess/import state
-            missing.append({
-                "module": module_name,
-                "purpose": purpose,
-                "reason": str(exc),
-            })
+            missing.append(
+                {
+                    "module": module_name,
+                    "purpose": purpose,
+                    "reason": str(exc),
+                }
+            )
     return missing
 
 
 def runtime_report(importer: Importer | None = None) -> dict[str, list[dict[str, str]]]:
-    return {
-        group_name: missing_modules_for_group(group_name, importer)
-        for group_name in CAPABILITY_ORDER
-    }
+    return {group_name: missing_modules_for_group(group_name, importer) for group_name in CAPABILITY_ORDER}
 
 
 def office_runtime_ready(importer: Importer | None = None) -> bool:

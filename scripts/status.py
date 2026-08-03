@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: status
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 from pathlib import Path
@@ -21,7 +20,9 @@ from workspace_status import collect_workspace_snapshot, format_status_lines
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Show a compact operational status summary for the current MiGraph workspace.")
+    parser = argparse.ArgumentParser(
+        description="Show a compact operational status summary for the current MiGraph workspace."
+    )
     parser.add_argument("--root", default=".", help="Wiki root path")
     args = parser.parse_args()
 

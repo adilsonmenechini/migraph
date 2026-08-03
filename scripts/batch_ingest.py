@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: batch_ingest
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import shutil
@@ -90,8 +89,12 @@ def main() -> int:
         choices=["ready", "review", "weak", "all"],
         help="Only process inbox items with the selected quality status",
     )
-    parser.add_argument("--limit", default=0, type=int, help="Maximum number of inbox items to process (0 means no limit)")
-    parser.add_argument("--dry-run", action="store_true", help="Show which inbox items would be ingested without changing files")
+    parser.add_argument(
+        "--limit", default=0, type=int, help="Maximum number of inbox items to process (0 means no limit)"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show which inbox items would be ingested without changing files"
+    )
     args = parser.parse_args()
 
     root = find_repo_root(Path(args.root))
@@ -136,10 +139,12 @@ def main() -> int:
         except SystemExit as exc:
             failures.append(f"- failed: {source_path.relative_to(root).as_posix()} | {exc}")
             continue
-        ingested.append({
-            "title": str(result["title"]),
-            "source_page": Path(result["source_page"]).relative_to(root).as_posix(),
-        })
+        ingested.append(
+            {
+                "title": str(result["title"]),
+                "source_page": Path(result["source_page"]).relative_to(root).as_posix(),
+            }
+        )
         removed_paths.extend(cleanup_inbox_artifacts(root, item))
 
     write_text(root / "index.md", rebuild_index.build_index(root))
@@ -158,28 +163,32 @@ def main() -> int:
         ],
     )
 
-    lines.extend([
-        "## Results",
-        "",
-        f"- Ingested: {len(ingested)}",
-        f"- Cleared Inbox Artifacts: {len(removed_paths)}",
-        f"- Failed: {len(failures)}",
-    ])
+    lines.extend(
+        [
+            "## Results",
+            "",
+            f"- Ingested: {len(ingested)}",
+            f"- Cleared Inbox Artifacts: {len(removed_paths)}",
+            f"- Failed: {len(failures)}",
+        ]
+    )
     lines.extend(f"- {item['title']} -> {item['source_page']}" for item in ingested)
     if failures:
         lines.append("")
         lines.append("## Failures")
         lines.append("")
         lines.extend(failures)
-    lines.extend([
-        "",
-        "Inbox review: output/inbox/index.html",
-        f"Inbox review URI: {file_uri(inbox_page)}",
-        "Output hub: output/index.html",
-        f"Output hub URI: {file_uri(output_home)}",
-        f"Next: run `python scripts/migraph viewer --root {root}` to refresh the local viewer page.",
-        f"Next: run `python scripts/migraph graph --root {root}` to refresh the knowledge graph page.",
-    ])
+    lines.extend(
+        [
+            "",
+            "Inbox review: output/inbox/index.html",
+            f"Inbox review URI: {file_uri(inbox_page)}",
+            "Output hub: output/index.html",
+            f"Output hub URI: {file_uri(output_home)}",
+            f"Next: run `python scripts/migraph viewer --root {root}` to refresh the local viewer page.",
+            f"Next: run `python scripts/migraph graph --root {root}` to refresh the knowledge graph page.",
+        ]
+    )
     print("\n".join(lines))
     return 1 if failures else 0
 

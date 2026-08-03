@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: bootstrap_runtime
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import json
@@ -66,15 +65,17 @@ def requirements_path(repo_root: Path) -> Path:
 
 def runtime_probe_script(repo_root: Path) -> str:
     scripts_dir = (repo_root / "scripts").resolve()
-    return "\n".join([
-        "import json",
-        "import sys",
-        f"sys.path.insert(0, {str(scripts_dir)!r})",
-        "from runtime_capabilities import runtime_report",
-        "report = runtime_report()",
-        "print(json.dumps(report))",
-        "sys.exit(0 if all(not report[name] for name in report) else 1)",
-    ])
+    return "\n".join(
+        [
+            "import json",
+            "import sys",
+            f"sys.path.insert(0, {str(scripts_dir)!r})",
+            "from runtime_capabilities import runtime_report",
+            "report = runtime_report()",
+            "print(json.dumps(report))",
+            "sys.exit(0 if all(not report[name] for name in report) else 1)",
+        ]
+    )
 
 
 def runtime_report_with_python(repo_root: Path, python_bin: Path) -> tuple[bool, dict[str, list[dict[str, str]]]]:

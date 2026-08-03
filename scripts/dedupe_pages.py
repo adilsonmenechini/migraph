@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: dedupe_pages
 
@@ -12,6 +10,8 @@ Purpose:
 Usage:
 - Run as `python scripts/migraph dedupe-pages --root <wiki-root>`.
 """
+
+from __future__ import annotations
 
 import argparse
 import hashlib
@@ -176,13 +176,15 @@ def _load_pages(root: Path) -> list[dict[str, Any]]:
             continue
         meta, body = parse_frontmatter(raw)
         rel = md_path.relative_to(root).as_posix()
-        pages.append({
-            "path": rel,
-            "title": str(meta.get("title", "") or md_path.stem),
-            "type": str(meta.get("type", "") or "page"),
-            "tags": [str(t) for t in (meta.get("tags") or []) if str(t).strip()],
-            "content": body,
-        })
+        pages.append(
+            {
+                "path": rel,
+                "title": str(meta.get("title", "") or md_path.stem),
+                "type": str(meta.get("type", "") or "page"),
+                "tags": [str(t) for t in (meta.get("tags") or []) if str(t).strip()],
+                "content": body,
+            }
+        )
     return pages
 
 
@@ -204,16 +206,18 @@ def find_duplicates(root: Path, threshold_high: float = 0.7, threshold_medium: f
             combined = _combined_score(ts, cs, tg, sem)
             if combined < threshold_medium:
                 continue
-            pairs.append({
-                "note_a": a["path"],
-                "note_b": b["path"],
-                "title_score": round(ts, 3),
-                "content_score": round(cs, 3),
-                "tag_score": round(tg, 3),
-                "semantic_score": round(sem, 3),
-                "combined_score": round(combined, 3),
-                "level": _level(combined),
-            })
+            pairs.append(
+                {
+                    "note_a": a["path"],
+                    "note_b": b["path"],
+                    "title_score": round(ts, 3),
+                    "content_score": round(cs, 3),
+                    "tag_score": round(tg, 3),
+                    "semantic_score": round(sem, 3),
+                    "combined_score": round(combined, 3),
+                    "level": _level(combined),
+                }
+            )
 
     pairs.sort(key=lambda p: p["combined_score"], reverse=True)
     return {"total_pages": len(pages), "pairs": pairs}
@@ -237,7 +241,9 @@ def _generate_report(data: dict[str, Any]) -> str:
         lines.append("## HIGH Similarity (likely duplicates)")
         for p in high:
             lines.append(f"- [[{Path(p['note_a']).stem}]] <-> [[{Path(p['note_b']).stem}]]")
-            lines.append(f"  - Combined: {p['combined_score']:.1%} (title: {p['title_score']:.1%}, content: {p['content_score']:.1%}, tags: {p['tag_score']:.1%}, semantic: {p['semantic_score']:.1%})")
+            lines.append(
+                f"  - Combined: {p['combined_score']:.1%} (title: {p['title_score']:.1%}, content: {p['content_score']:.1%}, tags: {p['tag_score']:.1%}, semantic: {p['semantic_score']:.1%})"
+            )
         lines.append("")
 
     if medium:

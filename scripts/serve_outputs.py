@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: serve_outputs
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import functools
@@ -50,9 +49,7 @@ def resolve_port(host: str, port: int) -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Serve MiGraph HTML outputs over loopback HTTP for browser access."
-    )
+    parser = argparse.ArgumentParser(description="Serve MiGraph HTML outputs over loopback HTTP for browser access.")
     parser.add_argument("--root", default=".", help="Wiki root path")
     parser.add_argument(
         "--host",
@@ -136,6 +133,7 @@ def main() -> int:
     except OSError as exc:
         print(f"Could not start output server on {args.host}:{port}: {exc}", file=sys.stderr)
         return 1
+    return 0
 
 
 if __name__ == "__main__":

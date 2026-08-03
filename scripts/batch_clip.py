@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: batch_clip
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import json
@@ -38,12 +37,14 @@ def collect_source_dir_items(source_dir: Path) -> list[dict[str, object]]:
             continue
         if path.suffix.lower() not in SUPPORTED_INGEST_EXTENSIONS:
             continue
-        items.append({
-            "kind": "source",
-            "source_path": path.resolve(),
-            "display": str(path),
-            "title": "",
-        })
+        items.append(
+            {
+                "kind": "source",
+                "source_path": path.resolve(),
+                "display": str(path),
+                "title": "",
+            }
+        )
     return items
 
 
@@ -72,7 +73,11 @@ def load_manifest_items(manifest_path: Path) -> list[dict[str, object]]:
 
 
 def normalize_manifest_item(row: dict[str, object], base_dir: Path, index: int) -> dict[str, object]:
-    provided = [bool(str(row.get("source", "") or "").strip()), bool(str(row.get("url", "") or "").strip()), bool("text" in row and str(row.get("text", "") or "").strip())]
+    provided = [
+        bool(str(row.get("source", "") or "").strip()),
+        bool(str(row.get("url", "") or "").strip()),
+        bool("text" in row and str(row.get("text", "") or "").strip()),
+    ]
     if sum(provided) != 1:
         raise SystemExit(f"Manifest item {index} must provide exactly one of `source`, `url`, or `text`")
     title = str(row.get("title", "") or "").strip()
@@ -161,7 +166,9 @@ def execute_item(root: Path, item: dict[str, object]) -> dict[str, str]:
             "normalized_path": normalized_path.relative_to(root).as_posix(),
             "metadata_path": metadata_path.relative_to(root).as_posix(),
         }
-    title, raw_path, normalized_path = clip_text_source(root, str(item.get("text", "") or ""), str(item.get("title", "") or ""))
+    title, raw_path, normalized_path = clip_text_source(
+        root, str(item.get("text", "") or ""), str(item.get("title", "") or "")
+    )
     return {
         "title": title,
         "raw_path": raw_path.relative_to(root).as_posix(),
@@ -171,13 +178,17 @@ def execute_item(root: Path, item: dict[str, object]) -> dict[str, str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Clip multiple files, webpages, or inline notes into the MiGraph inbox.")
+    parser = argparse.ArgumentParser(
+        description="Clip multiple files, webpages, or inline notes into the MiGraph inbox."
+    )
     parser.add_argument("--root", default=".", help="Wiki root path")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--source-dir", help="Directory of local source files to clip into inbox")
     group.add_argument("--manifest", help="JSON or JSONL manifest that lists source/url/text items to clip")
     parser.add_argument("--limit", default=0, type=int, help="Maximum number of items to process (0 means no limit)")
-    parser.add_argument("--dry-run", action="store_true", help="Show which items would be clipped without changing files")
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Show which items would be clipped without changing files"
+    )
     args = parser.parse_args()
 
     root = find_repo_root(Path(args.root))
@@ -229,27 +240,28 @@ def main() -> int:
         ],
     )
 
-    lines.extend([
-        "## Results",
-        "",
-        f"- Clipped: {len(successes)}",
-        f"- Failed: {len(failures)}",
-    ])
     lines.extend(
-        "- {title} -> {path}".format(title=item["title"], path=item["normalized_path"])
-        for item in successes
+        [
+            "## Results",
+            "",
+            f"- Clipped: {len(successes)}",
+            f"- Failed: {len(failures)}",
+        ]
     )
+    lines.extend("- {title} -> {path}".format(title=item["title"], path=item["normalized_path"]) for item in successes)
     if failures:
         lines.extend(["", "## Failures", ""])
         lines.extend(failures)
-    lines.extend([
-        "",
-        "Inbox review: output/inbox/index.html",
-        f"Inbox review URI: {file_uri(inbox_page)}",
-        "Output hub: output/index.html",
-        f"Output hub URI: {file_uri(output_home)}",
-        f"Next: run `{batch_ingest_command(root, quality='ready', dry_run=True)}` to preview batch ingest candidates.",
-    ])
+    lines.extend(
+        [
+            "",
+            "Inbox review: output/inbox/index.html",
+            f"Inbox review URI: {file_uri(inbox_page)}",
+            "Output hub: output/index.html",
+            f"Output hub URI: {file_uri(output_home)}",
+            f"Next: run `{batch_ingest_command(root, quality='ready', dry_run=True)}` to preview batch ingest candidates.",
+        ]
+    )
     print("\n".join(lines))
     return 1 if failures else 0
 

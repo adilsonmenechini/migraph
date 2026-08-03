@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: doctor
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import sys
@@ -84,6 +83,8 @@ WIKI_REQUIRED_PATHS = [
     "wiki",
     "output",
 ]
+
+
 def check_root_skill_package(repo_root: Path, errors: list[str]) -> None:
     for relative_path in ROOT_REQUIRED_FILES:
         target = repo_root / relative_path
@@ -95,6 +96,8 @@ def check_root_skill_package(repo_root: Path, errors: list[str]) -> None:
     for template_path in ROOT_REQUIRED_TEMPLATES:
         if not (repo_root / template_path).exists():
             errors.append(f"[missing-template-asset] {repo_root / template_path}")
+
+
 def check_wiki_workspace(wiki_root: Path | None, errors: list[str]) -> None:
     if wiki_root is None or not wiki_root.exists():
         return

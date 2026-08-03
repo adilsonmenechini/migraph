@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """
 MiGraph Module: url_safety
 
@@ -7,19 +5,22 @@ Purpose:
 - Validate outbound fetch URLs to reduce SSRF risk for user-supplied links.
 """
 
+from __future__ import annotations
+
 import ipaddress
 import os
 import socket
-from urllib import error as urllib_error
 from urllib import request as urllib_request
 from urllib.parse import urlparse
 
-_BLOCKED_HOSTNAMES = frozenset({
-    "localhost",
-    "localhost.localdomain",
-    "metadata.google.internal",
-    "metadata.google",
-})
+_BLOCKED_HOSTNAMES = frozenset(
+    {
+        "localhost",
+        "localhost.localdomain",
+        "metadata.google.internal",
+        "metadata.google",
+    }
+)
 
 _METADATA_IPV4 = ipaddress.ip_address("169.254.169.254")
 
@@ -34,12 +35,7 @@ def _allow_private_url_fetch() -> bool:
 
 def _is_blocked_ip(ip: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
     return (
-        ip.is_private
-        or ip.is_loopback
-        or ip.is_link_local
-        or ip.is_reserved
-        or ip.is_multicast
-        or ip == _METADATA_IPV4
+        ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip == _METADATA_IPV4
     )
 
 
@@ -80,7 +76,7 @@ def validate_fetch_url(url: str) -> str:
 
 
 class _SafeRedirectHandler(urllib_request.HTTPRedirectHandler):
-    def redirect_request(self, req, fp, code, msg, headers, newurl):  # type: ignore[no-untyped-def]
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
         validate_fetch_url(newurl)
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 

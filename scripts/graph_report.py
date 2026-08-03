@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: graph_report
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import json
@@ -19,7 +18,16 @@ from html import escape
 from pathlib import Path
 
 from build_graph import node_metrics
-from utils import ambiguous_entity_merge_candidates, append_log, file_uri, find_repo_root, print_output_serve_hint, today_str, write_output_home, write_text
+from utils import (
+    ambiguous_entity_merge_candidates,
+    append_log,
+    file_uri,
+    find_repo_root,
+    print_output_serve_hint,
+    today_str,
+    write_output_home,
+    write_text,
+)
 
 
 def _load_graph(root: Path) -> dict[str, object]:
@@ -122,15 +130,19 @@ def _hub_stub_candidates(
         summary_length = _summary_length(node)
         if degree < threshold or summary_length >= 80:
             continue
-        items.append({
-            "id": node_id,
-            "title": str(node.get("label") or node_id),
-            "type": str(node.get("type") or "page"),
-            "degree": degree,
-            "summaryLength": summary_length,
-            "reason": f"Degree is {degree}, but the summary is only {summary_length} characters long.",
-        })
-    return sorted(items, key=lambda item: (-int(item["degree"]), int(item["summaryLength"]), str(item["title"]).lower()))[:6]
+        items.append(
+            {
+                "id": node_id,
+                "title": str(node.get("label") or node_id),
+                "type": str(node.get("type") or "page"),
+                "degree": degree,
+                "summaryLength": summary_length,
+                "reason": f"Degree is {degree}, but the summary is only {summary_length} characters long.",
+            }
+        )
+    return sorted(
+        items, key=lambda item: (-int(item["degree"]), int(item["summaryLength"]), str(item["title"]).lower())
+    )[:6]
 
 
 def _fragile_bridge_candidates(
@@ -144,15 +156,19 @@ def _fragile_bridge_candidates(
         degree = int(info["degree"])
         neighbor_types = {str(item) for item in info["neighbor_types"]}
         if degree > 0 and degree <= 2 and len(neighbor_types) >= 2:
-            items.append({
-                "id": node_id,
-                "title": str(node.get("label") or node_id),
-                "type": str(node.get("type") or "page"),
-                "degree": degree,
-                "neighborTypes": sorted(neighbor_types),
-                "reason": f"Only {degree} relations connect {len(neighbor_types)} page types, so this bridge is fragile.",
-            })
-    return sorted(items, key=lambda item: (int(item["degree"]), -len(item["neighborTypes"]), str(item["title"]).lower()))[:6]
+            items.append(
+                {
+                    "id": node_id,
+                    "title": str(node.get("label") or node_id),
+                    "type": str(node.get("type") or "page"),
+                    "degree": degree,
+                    "neighborTypes": sorted(neighbor_types),
+                    "reason": f"Only {degree} relations connect {len(neighbor_types)} page types, so this bridge is fragile.",
+                }
+            )
+    return sorted(
+        items, key=lambda item: (int(item["degree"]), -len(item["neighborTypes"]), str(item["title"]).lower())
+    )[:6]
 
 
 def _page_health_candidates(
@@ -164,23 +180,27 @@ def _page_health_candidates(
         node_id = str(node["id"])
         degree = int(metrics[node_id]["degree"])
         if degree == 0:
-            items.append({
-                "id": node_id,
-                "title": str(node.get("label") or node_id),
-                "type": str(node.get("type") or "page"),
-                "severity": "isolated",
-                "degree": degree,
-                "reason": "No page-level relationships yet.",
-            })
+            items.append(
+                {
+                    "id": node_id,
+                    "title": str(node.get("label") or node_id),
+                    "type": str(node.get("type") or "page"),
+                    "severity": "isolated",
+                    "degree": degree,
+                    "reason": "No page-level relationships yet.",
+                }
+            )
         elif degree == 1:
-            items.append({
-                "id": node_id,
-                "title": str(node.get("label") or node_id),
-                "type": str(node.get("type") or "page"),
-                "severity": "weak",
-                "degree": degree,
-                "reason": "Only one page-level relationship so far. Add more links.",
-            })
+            items.append(
+                {
+                    "id": node_id,
+                    "title": str(node.get("label") or node_id),
+                    "type": str(node.get("type") or "page"),
+                    "severity": "weak",
+                    "degree": degree,
+                    "reason": "Only one page-level relationship so far. Add more links.",
+                }
+            )
     return sorted(
         items,
         key=lambda item: (
@@ -204,12 +224,14 @@ def _isolated_cluster_candidates(
         if len(component) < 2:
             continue
         labels = [str(node_by_id[node_id].get("label") or node_id) for node_id in component if node_id in node_by_id]
-        items.append({
-            "size": len(component),
-            "nodeIds": component,
-            "titles": labels[:4],
-            "reason": f"This cluster is disconnected from the main graph and contains {len(component)} pages.",
-        })
+        items.append(
+            {
+                "size": len(component),
+                "nodeIds": component,
+                "titles": labels[:4],
+                "reason": f"This cluster is disconnected from the main graph and contains {len(component)} pages.",
+            }
+        )
     return sorted(items, key=lambda item: (-int(item["size"]), ",".join(item["titles"]).lower()))[:4]
 
 
@@ -228,7 +250,9 @@ def _top_actions(report: dict[str, object]) -> list[str]:
     if int(stats.get("suggestedLinkCount", 0) or 0):
         actions.append("Review suggested links and convert strong candidates into explicit page links.")
     if int(stats.get("ambiguousAliasGroupCount", 0) or 0):
-        actions.append("Review ambiguous alias groups so multiple entity pages do not collapse into the same identity key unexpectedly.")
+        actions.append(
+            "Review ambiguous alias groups so multiple entity pages do not collapse into the same identity key unexpectedly."
+        )
     return actions[:4] or ["The graph structure looks stable. Continue expanding high-value pages."]
 
 
@@ -288,7 +312,8 @@ def build_report(graph: dict[str, object]) -> dict[str, object]:
     entity_nodes = _entity_nodes(nodes)
     page_node_ids = {str(node["id"]) for node in page_nodes}
     filtered_edges = [
-        edge for edge in edges
+        edge
+        for edge in edges
         if str(edge.get("source") or "") in page_node_ids and str(edge.get("target") or "") in page_node_ids
     ]
     metrics = node_metrics(page_nodes, filtered_edges)
@@ -298,10 +323,7 @@ def build_report(graph: dict[str, object]) -> dict[str, object]:
     hub_stubs = _hub_stub_candidates(page_nodes, metrics)
     fragile_bridges = _fragile_bridge_candidates(page_nodes, metrics)
     isolated_clusters = _isolated_cluster_candidates(page_nodes, filtered_edges, node_by_id)
-    suggested_links = [
-        item for item in insights.get("suggestedLinks", [])
-        if isinstance(item, dict)
-    ]
+    suggested_links = [item for item in insights.get("suggestedLinks", []) if isinstance(item, dict)]
     isolated_entities = sorted(
         [
             {
@@ -361,7 +383,9 @@ def build_report(graph: dict[str, object]) -> dict[str, object]:
     if stats["entityCount"]:
         summary_parts.append(f"The graph currently identifies {stats['entityCount']} entity nodes.")
     if stats["aliasCount"]:
-        summary_parts.append(f"Among them, {stats['aliasedEntityCount']} entities carry aliases for a total of {stats['aliasCount']} alias entries.")
+        summary_parts.append(
+            f"Among them, {stats['aliasedEntityCount']} entities carry aliases for a total of {stats['aliasCount']} alias entries."
+        )
     if stats["ambiguousAliasGroupCount"]:
         summary_parts.append(
             f"There are also {stats['ambiguousAliasGroupCount']} ambiguous alias groups spanning {stats['ambiguousEntityCount']} entity pages. Review them manually."
@@ -421,10 +445,7 @@ def render_report_markdown(report: dict[str, object]) -> str:
     lines.extend(f"- {item}" for item in report["topActions"])
     lines.extend(["", "## Entities That Need Links", ""])
     if report["isolatedEntities"]:
-        lines.extend(
-            f"- {item['title']} | {item['reason']}"
-            for item in report["isolatedEntities"]
-        )
+        lines.extend(f"- {item['title']} | {item['reason']}" for item in report["isolatedEntities"])
     else:
         lines.append("- No isolated entities")
     lines.extend(["", "## Ambiguous Entity Merge Candidates", ""])
@@ -462,8 +483,7 @@ def render_report_markdown(report: dict[str, object]) -> str:
     lines.extend(["", "## Suggested Links", ""])
     if report["suggestedLinks"]:
         lines.extend(
-            f"- {item['source']} <-> {item['target']} | score={item['score']}"
-            for item in report["suggestedLinks"]
+            f"- {item['source']} <-> {item['target']} | score={item['score']}" for item in report["suggestedLinks"]
         )
     else:
         lines.append("- No suggested links")
@@ -473,9 +493,7 @@ def render_report_markdown(report: dict[str, object]) -> str:
 def _render_html_list(items: list[str]) -> str:
     if not items:
         return "<div class='empty'>Nothing here yet.</div>"
-    return "<ul class='bullet-list'>{}</ul>".format(
-        "".join(f"<li>{escape(item)}</li>" for item in items)
-    )
+    return "<ul class='bullet-list'>{}</ul>".format("".join(f"<li>{escape(item)}</li>" for item in items))
 
 
 def _render_html_metric_cards(stats: dict[str, object]) -> str:
@@ -499,30 +517,19 @@ def _render_html_metric_cards(stats: dict[str, object]) -> str:
         ("Isolated Clusters", "isolatedClusterCount"),
     ]:
         cards.append(
-            "<div class='stat'><strong>{}</strong><span>{}</span></div>".format(
-                escape(str(stats.get(key, 0) or 0)),
-                escape(label),
-            )
+            f"<div class='stat'><strong>{escape(str(stats.get(key, 0) or 0))}</strong><span>{escape(label)}</span></div>"
         )
     return "\n".join(cards)
 
 
 def _render_html_record_cards(items: list[dict[str, object]], empty_text: str, formatter) -> str:
     if not items:
-        return "<div class='empty'>{}</div>".format(escape(empty_text))
+        return f"<div class='empty'>{escape(empty_text)}</div>"
     rows = []
     for item in items:
         title, meta, reason = formatter(item)
         rows.append(
-            "<div class='record-card'>"
-            "<strong>{}</strong>"
-            "<div class='record-meta'>{}</div>"
-            "<p>{}</p>"
-            "</div>".format(
-                escape(title),
-                escape(meta),
-                escape(reason),
-            )
+            f"<div class='record-card'><strong>{escape(title)}</strong><div class='record-meta'>{escape(meta)}</div><p>{escape(reason)}</p></div>"
         )
     return "\n".join(rows)
 
@@ -861,7 +868,9 @@ def render_report_html(report: dict[str, object]) -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build a deterministic graph health report from the current MiGraph graph data.")
+    parser = argparse.ArgumentParser(
+        description="Build a deterministic graph health report from the current MiGraph graph data."
+    )
     parser.add_argument("--root", default=".", help="Wiki root path")
     args = parser.parse_args()
 
@@ -878,12 +887,16 @@ def main() -> int:
     write_text(report_html_path, render_report_html(report))
     output_home = write_output_home(root)
 
-    append_log(root, f"[{today_str()}] graph-report | {report['stats']['nodeCount']} pages", [
-        "- report html: output/graph/report.html",
-        "- report: output/graph/report.md",
-        "- data: output/graph/report.json",
-        "- hub: output/index.html",
-    ])
+    append_log(
+        root,
+        f"[{today_str()}] graph-report | {report['stats']['nodeCount']} pages",
+        [
+            "- report html: output/graph/report.html",
+            "- report: output/graph/report.md",
+            "- data: output/graph/report.json",
+            "- hub: output/index.html",
+        ],
+    )
     print("# MiGraph Graph Report")
     print("")
     print(f"- Root: {root}")

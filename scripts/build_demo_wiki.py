@@ -18,7 +18,6 @@ import json
 import textwrap
 from pathlib import Path
 
-
 ROOT_FILES = {
     ".wiki-schema.md": "# marker\n",
     "index.md": "# MiGraph Demo Wiki\n",

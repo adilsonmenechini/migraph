@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: ingest
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import gzip
@@ -22,18 +21,18 @@ import re
 import shutil
 import time
 import zlib
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from urllib import error as urllib_error
 from urllib import request as urllib_request
 from urllib.parse import urljoin, urlparse
 
-from url_safety import safe_urlopen, validate_fetch_url
-
 import rebuild_index
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
+from bs4.element import AttributeValueList
 from markdownify import markdownify as md
 from runtime_capabilities import missing_dependency_message, missing_modules_for_source
+from url_safety import safe_urlopen, validate_fetch_url
 from utils import (
     append_log,
     classify_raw_dir,
@@ -66,7 +65,16 @@ NOISE_MARKERS = (
 SUMMARY_SECTION_HINTS = {"摘要", "summary", "abstract", "概述", "方案结论"}
 CONTINUATION_ENDINGS = tuple("的了和与及并而按把将向在于为是小会度案等其")
 DECISION_SUMMARY_HINTS = ("不适合", "应按", "应采用", "建议采用", "推荐采用", "换句话说", "核心判断")
-SKIP_CONCEPT_HEADINGS = {"summary", "key points", "connections", "open questions", "claims", "raw source", "extracted markdown", "extracted excerpt"}
+SKIP_CONCEPT_HEADINGS = {
+    "summary",
+    "key points",
+    "connections",
+    "open questions",
+    "claims",
+    "raw source",
+    "extracted markdown",
+    "extracted excerpt",
+}
 SKIP_ENTITY_LABELS = {
     "summary",
     "key points",
@@ -168,9 +176,7 @@ def is_table_like_text(text: str) -> bool:
     if compact.count("|") >= 4:
         return True
     lines = [line.strip() for line in compact.splitlines() if line.strip()]
-    if lines and sum(1 for line in lines if "|" in line) >= max(2, len(lines) // 2 + 1):
-        return True
-    return False
+    return bool(lines and sum(1 for line in lines if "|" in line) >= max(2, len(lines) // 2 + 1))
 
 
 def is_toc_like_text(text: str) -> bool:
@@ -179,9 +185,7 @@ def is_toc_like_text(text: str) -> bool:
         return False
     if compact.startswith(("1.", "1.1", "2.", "2.1")) and len(compact) <= 40:
         return True
-    if re.match(r"^\d+(?:\.\d+){0,3}\s*[\u4e00-\u9fffA-Za-z].*\d+$", compact):
-        return True
-    return False
+    return bool(re.match(r"^\d+(?:\.\d+){0,3}\s*[\u4e00-\u9fffA-Za-z].*\d+$", compact))
 
 
 def is_page_marker(text: str) -> bool:
@@ -202,9 +206,7 @@ def is_noise_line(text: str) -> bool:
         return True
     if is_table_like_text(text):
         return True
-    if is_toc_like_text(compact):
-        return True
-    return False
+    return bool(is_toc_like_text(compact))
 
 
 def looks_like_list_item(text: str) -> bool:
@@ -220,9 +222,7 @@ def is_cover_like_text(text: str) -> bool:
         return True
     if re.match(r"^[一二三四五六七八九十]+、", compact) and len(compact) <= 20:
         return True
-    if len(compact) <= 24 and not any(punct in compact for punct in ("。", "！", "？", "；", ":", "：")):
-        return True
-    return False
+    return bool(len(compact) <= 24 and not any(punct in compact for punct in ("。", "！", "？", "；", ":", "：")))
 
 
 def cleaned_content_blocks(text: str) -> list[dict[str, object]]:
@@ -238,11 +238,13 @@ def cleaned_content_blocks(text: str) -> list[dict[str, object]]:
         block_lines = []
         if not joined:
             return
-        blocks.append({
-            "section": current_section,
-            "text": joined,
-            "index": len(blocks),
-        })
+        blocks.append(
+            {
+                "section": current_section,
+                "text": joined,
+                "index": len(blocks),
+            }
+        )
 
     for raw in body_lines(text):
         stripped = raw.strip()
@@ -285,7 +287,13 @@ def merge_adjacent_blocks(blocks: list[dict[str, object]]) -> list[dict[str, obj
         current_ends_incomplete = current_ends_incomplete or current_text.endswith(CONTINUATION_ENDINGS)
         next_is_continuation = not looks_like_list_item(next_text)
         next_is_short = len(next_text) <= 36
-        if same_section and not is_cover_like_text(current_text) and not is_cover_like_text(next_text) and next_is_continuation and (current_ends_incomplete or next_is_short):
+        if (
+            same_section
+            and not is_cover_like_text(current_text)
+            and not is_cover_like_text(next_text)
+            and next_is_continuation
+            and (current_ends_incomplete or next_is_short)
+        ):
             current["text"] = f"{current_text} {next_text}".strip()
             continue
         merged.append(current)
@@ -339,7 +347,9 @@ def trim_summary_tail(text: str) -> str:
     trimmed = text.strip()
     trimmed = re.sub(r"\s+(?:建议采用|建议如下|如下|其中|包括|可分为)[:：]\s*$", "", trimmed)
     if trimmed.endswith(("：", ":")):
-        sentence_end = max(trimmed.rfind("。"), trimmed.rfind("！"), trimmed.rfind("？"), trimmed.rfind(";"), trimmed.rfind("；"))
+        sentence_end = max(
+            trimmed.rfind("。"), trimmed.rfind("！"), trimmed.rfind("？"), trimmed.rfind(";"), trimmed.rfind("；")
+        )
         if sentence_end != -1:
             trimmed = trimmed[: sentence_end + 1]
     return trimmed.strip()
@@ -352,8 +362,14 @@ def summarize(text: str) -> tuple[str, list[str]]:
     scored_blocks = [(summary_block_score(block), block) for block in blocks]
     high_quality_blocks = [block for score, block in scored_blocks if score >= 8]
     best_block = high_quality_blocks[0] if high_quality_blocks else max(scored_blocks, key=lambda item: item[0])[1]
-    ranked_blocks = [block for _score, block in sorted(scored_blocks, key=lambda item: (-item[0], int(item[1]["index"])))]
-    summary = trim_summary_tail(str(best_block["text"]))[:140] if summary_block_score(best_block) > -10 else "Imported source."
+    ranked_blocks = [
+        block for _score, block in sorted(scored_blocks, key=lambda item: (-item[0], int(item[1]["index"])))
+    ]
+    summary = (
+        trim_summary_tail(str(best_block["text"]))[:140]
+        if summary_block_score(best_block) > -10
+        else "Imported source."
+    )
     bullets: list[str] = []
     used: set[str] = set()
     for block in ranked_blocks:
@@ -519,14 +535,12 @@ def parse_publish_date_from_timestamp(raw: str) -> str:
     try:
         # WeChat `ct` values are UTC epoch seconds; use UTC to keep parsing
         # deterministic across host timezones.
-        return datetime.fromtimestamp(int(raw), tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+        return datetime.fromtimestamp(int(raw), tz=UTC).strftime("%Y-%m-%d %H:%M:%S")
     except Exception:
         return raw
 
 
-def extract_wechat_metadata(
-    soup: BeautifulSoup, raw_html: str, url: str
-) -> tuple[str, str, str, str, BeautifulSoup]:
+def extract_wechat_metadata(soup: BeautifulSoup, raw_html: str, url: str) -> tuple[str, str, str, str, Tag]:
     title_node = soup.select_one("#activity-name .js_title_inner") or soup.select_one("#activity-name")
     author_node = soup.select_one("#js_author_name_text") or soup.select_one("#js_author_name")
     account_node = soup.select_one("#js_name")
@@ -543,7 +557,7 @@ def extract_wechat_metadata(
     return title, author, account, publish_date, content_node
 
 
-def extract_generic_metadata(soup: BeautifulSoup, url: str) -> tuple[str, str, str, str, BeautifulSoup]:
+def extract_generic_metadata(soup: BeautifulSoup, url: str) -> tuple[str, str, str, str, Tag]:
     title = ""
     h1 = soup.find("h1")
     if h1:
@@ -576,7 +590,7 @@ def extract_generic_metadata(soup: BeautifulSoup, url: str) -> tuple[str, str, s
     return title or "webpage", author, site_name, publish_date, content_node
 
 
-def normalize_images(content_node: BeautifulSoup) -> None:
+def normalize_images(content_node: Tag) -> None:
     for img in content_node.select("img"):
         src = (
             img.get("data-src")
@@ -592,7 +606,7 @@ def normalize_images(content_node: BeautifulSoup) -> None:
             img["alt"] = clean_text(alt)
 
 
-def collect_media_urls(content_node: BeautifulSoup, base_url: str) -> list[str]:
+def collect_media_urls(content_node: Tag, base_url: str) -> list[str]:
     urls: list[str] = []
     seen: set[str] = set()
     for img in content_node.select("img"):
@@ -608,7 +622,7 @@ def collect_media_urls(content_node: BeautifulSoup, base_url: str) -> list[str]:
     return urls
 
 
-def normalize_wechat_code_blocks(content_node: BeautifulSoup) -> None:
+def normalize_wechat_code_blocks(content_node: Tag) -> None:
     selectors = (
         ".js_code_area",
         ".code-snippet__js",
@@ -627,14 +641,19 @@ def normalize_wechat_code_blocks(content_node: BeautifulSoup) -> None:
             code_text = code_node.get_text("\n", strip=False)
             if not clean_text(code_text):
                 continue
-            language = (
+            language: str = str(
                 node.get("data-lang")
                 or node.get("data-language")
                 or code_node.get("data-lang")
                 or code_node.get("data-language")
                 or ""
             )
-            classes = list(node.get("class", [])) + list(code_node.get("class", []))
+            classes: list[str] = []
+            for raw_class in [node.get("class", []), code_node.get("class", [])]:
+                if isinstance(raw_class, str):
+                    classes.append(raw_class)
+                else:
+                    classes.extend(raw_class)
             for class_name in classes:
                 if class_name.startswith("language-"):
                     language = class_name.split("-", 1)[1]
@@ -642,19 +661,19 @@ def normalize_wechat_code_blocks(content_node: BeautifulSoup) -> None:
             pre = content_node.new_tag("pre")
             code = content_node.new_tag("code")
             if language:
-                code["class"] = [f"language-{language.strip().lower()}"]
+                code["class"] = AttributeValueList([f"language-{language.strip().lower()}"])
             code.string = code_text.strip("\n")
             pre.append(code)
             node.replace_with(pre)
 
 
-def remove_noise(content_node: BeautifulSoup) -> None:
+def remove_noise(content_node: Tag) -> None:
     for selector in REMOVE_SELECTORS:
         for node in content_node.select(selector):
             node.decompose()
 
 
-def html_to_markdown(content_node: BeautifulSoup) -> str:
+def html_to_markdown(content_node: Tag) -> str:
     raw_markdown = md(str(content_node), heading_style="ATX", bullets="-", strip=["script", "style"])
     return clean_markdown(raw_markdown)
 
@@ -677,9 +696,7 @@ def capture_ready(markdown: str) -> bool:
     body = plain_text("\n".join(body_lines(markdown)))
     if len(body) >= 160:
         return True
-    if len(body) >= 80 and len(blocks) >= 2:
-        return True
-    return False
+    return bool(len(body) >= 80 and len(blocks) >= 2)
 
 
 def analyze_capture_reason(
@@ -792,7 +809,7 @@ def fetch_webpage_capture(
     last_capture["capture_state"] = final_state
     last_capture["capture_mode"] = normalized_mode
     last_capture["capture_attempts"] = str(attempts)
-    last_capture["capture_elapsed_seconds"] = "{:.1f}".format(elapsed)
+    last_capture["capture_elapsed_seconds"] = f"{elapsed:.1f}"
     return last_capture
 
 
@@ -1072,7 +1089,9 @@ def ensure_entity_page(
         existing_meta, _body = parse_frontmatter(read_text(entity_path))
 
     entity_title = str(existing_meta.get("title") or normalized_label).strip() or normalized_label
-    entity_summary = str(existing_meta.get("summary") or "").strip() or f"{entity_title} is an entity tracked in MiGraph."
+    entity_summary = (
+        str(existing_meta.get("summary") or "").strip() or f"{entity_title} is an entity tracked in MiGraph."
+    )
     created = str(existing_meta.get("created") or today_str()).strip() or today_str()
     source_repo_path = source_page.relative_to(root).as_posix()
     merged_sources = ordered_unique(meta_list(existing_meta.get("sources", [])) + [source_repo_path])
@@ -1081,24 +1100,26 @@ def ensure_entity_page(
         + ([normalized_label] if normalized_label.casefold() != entity_title.casefold() else [])
     )
     merged_topics = ordered_unique(
-        meta_list(existing_meta.get("topics", []))
-        + ([topic_name.strip()] if topic_name.strip() else [])
+        meta_list(existing_meta.get("topics", [])) + ([topic_name.strip()] if topic_name.strip() else [])
     )
-    content = render_template(load_template("pages/entity.md"), {
-        "TITLE": entity_title,
-        "DATE": created,
-        "UPDATED": today_str(),
-        "SUMMARY": entity_summary,
-        "SOURCE_ITEMS": source_items_block(merged_sources),
-        "SOURCE_LINKS": source_links_block(entity_path, root, merged_sources),
-        "ALIAS_ITEMS": yaml_list_block(merged_aliases),
-        "ALIAS_MARKDOWN": "\n".join(f"- {item}" for item in merged_aliases) or "- (pending)",
-        "TOPIC_ITEMS": yaml_list_block(merged_topics),
-        "TOPIC_LINKS": markdown_link_block(
-            entity_path,
-            [(topic_name.strip(), topic_page)] if topic_name.strip() else [],
-        ),
-    })
+    content = render_template(
+        load_template("pages/entity.md"),
+        {
+            "TITLE": entity_title,
+            "DATE": created,
+            "UPDATED": today_str(),
+            "SUMMARY": entity_summary,
+            "SOURCE_ITEMS": source_items_block(merged_sources),
+            "SOURCE_LINKS": source_links_block(entity_path, root, merged_sources),
+            "ALIAS_ITEMS": yaml_list_block(merged_aliases),
+            "ALIAS_MARKDOWN": "\n".join(f"- {item}" for item in merged_aliases) or "- (pending)",
+            "TOPIC_ITEMS": yaml_list_block(merged_topics),
+            "TOPIC_LINKS": markdown_link_block(
+                entity_path,
+                [(topic_name.strip(), topic_page)] if topic_name.strip() else [],
+            ),
+        },
+    )
     write_text(entity_path, content)
     return {
         "title": entity_title,
@@ -1144,42 +1165,49 @@ def render_source_page_content(
     status: str,
 ) -> str:
     claims = claim_items(summary, bullets)
-    entity_markdown = markdown_link_block(
-        source_page,
-        [
-            (
-                item["title"],
-                root / str(item["path"]),
-            )
-            for item in entity_pages
-        ],
-    ) if entity_pages else "\n".join(f"- {item}" for item in entity_items) or "- (pending)"
-    return render_template(load_template("pages/source.md"), {
-        "TITLE": title,
-        "DATE": date,
-        "SUMMARY": summary,
-        "RAW_PATH": raw_path.relative_to(root).as_posix(),
-        "TOPIC_ITEMS": yaml_list_block([topic_name] if topic_name else []),
-        "ENTITY_ITEMS": yaml_list_block(entity_items),
-        "CONCEPT_ITEMS": yaml_list_block([item["title"] for item in concept_items]),
-        "CLAIM_ITEMS": frontmatter_claim_block(claims),
-        "KEY_POINTS": "\n".join(f"- {item}" for item in bullets) or "- (pending)",
-        "RAW_LINKS": build_link(raw_path, root),
-        "NORMALIZED_LINKS": build_link(normalized_path, root),
-        "EXTRACTED_EXCERPT": excerpt_markdown(normalized_text),
-        "RELATED_LINKS": related_links,
-        "ENTITY_MARKDOWN": entity_markdown,
-        "CONNECTION_ITEMS": source_connection_links(
-            topic_name=topic_name,
-            topic_page=topic_page,
-            concept_items=concept_items,
-            entity_pages=entity_pages,
-        ),
-        "CLAIM_MARKDOWN": markdown_claim_block(claims),
-        "OPEN_QUESTIONS": "",
-        "CONFIDENCE": confidence,
-        "STATUS": status,
-    })
+    entity_markdown = (
+        markdown_link_block(
+            source_page,
+            [
+                (
+                    item["title"],
+                    root / str(item["path"]),
+                )
+                for item in entity_pages
+            ],
+        )
+        if entity_pages
+        else "\n".join(f"- {item}" for item in entity_items) or "- (pending)"
+    )
+    return render_template(
+        load_template("pages/source.md"),
+        {
+            "TITLE": title,
+            "DATE": date,
+            "SUMMARY": summary,
+            "RAW_PATH": raw_path.relative_to(root).as_posix(),
+            "TOPIC_ITEMS": yaml_list_block([topic_name] if topic_name else []),
+            "ENTITY_ITEMS": yaml_list_block(entity_items),
+            "CONCEPT_ITEMS": yaml_list_block([item["title"] for item in concept_items]),
+            "CLAIM_ITEMS": frontmatter_claim_block(claims),
+            "KEY_POINTS": "\n".join(f"- {item}" for item in bullets) or "- (pending)",
+            "RAW_LINKS": build_link(raw_path, root),
+            "NORMALIZED_LINKS": build_link(normalized_path, root),
+            "EXTRACTED_EXCERPT": excerpt_markdown(normalized_text),
+            "RELATED_LINKS": related_links,
+            "ENTITY_MARKDOWN": entity_markdown,
+            "CONNECTION_ITEMS": source_connection_links(
+                topic_name=topic_name,
+                topic_page=topic_page,
+                concept_items=concept_items,
+                entity_pages=entity_pages,
+            ),
+            "CLAIM_MARKDOWN": markdown_claim_block(claims),
+            "OPEN_QUESTIONS": "",
+            "CONFIDENCE": confidence,
+            "STATUS": status,
+        },
+    )
 
 
 def find_existing_source_page(root: Path, title: str, slug: str) -> Path | None:
@@ -1210,15 +1238,18 @@ def ensure_topic_page(root: Path, topic: str, source_page: Path, summary: str) -
     topic_title = str(existing_meta.get("title") or topic).strip() or topic
     topic_summary = str(existing_meta.get("summary") or "").strip() or summary
     created = str(existing_meta.get("created") or today_str()).strip() or today_str()
-    content = render_template(load_template("pages/topic.md"), {
-        "TITLE": topic_title,
-        "DATE": created,
-        "UPDATED": today_str(),
-        "SUMMARY": topic_summary,
-        "SOURCE_ITEMS": source_items_block(merged_sources),
-        "SOURCE_LINKS": source_links_block(topic_path, root, merged_sources),
-        "RELATED_LINKS": related_links,
-    })
+    content = render_template(
+        load_template("pages/topic.md"),
+        {
+            "TITLE": topic_title,
+            "DATE": created,
+            "UPDATED": today_str(),
+            "SUMMARY": topic_summary,
+            "SOURCE_ITEMS": source_items_block(merged_sources),
+            "SOURCE_LINKS": source_links_block(topic_path, root, merged_sources),
+            "RELATED_LINKS": related_links,
+        },
+    )
     write_text(topic_path, content)
     return topic_path
 
@@ -1272,11 +1303,7 @@ def ingest_local_source(
         )
         for entity_label in entity_items
     ]
-    touched.extend(
-        item["path"]
-        for item in entity_pages
-        if item["path"] not in touched
-    )
+    touched.extend(item["path"] for item in entity_pages if item["path"] not in touched)
     source_content = render_source_page_content(
         root=root,
         source_page=source_page,
@@ -1400,11 +1427,15 @@ def main() -> int:
 
     if args.source:
         write_text(root / "index.md", rebuild_index.build_index(root))
-        append_log(root, f"[{today_str()}] ingest | {result['title']}", [
-            f"- raw: {result['raw_path'].relative_to(root).as_posix()}",
-            f"- normalized: {result['normalized_path'].relative_to(root).as_posix()}",
-            *[f"- created: {item}" for item in result["touched"]],
-        ])
+        append_log(
+            root,
+            f"[{today_str()}] ingest | {result['title']}",
+            [
+                f"- raw: {result['raw_path'].relative_to(root).as_posix()}",
+                f"- normalized: {result['normalized_path'].relative_to(root).as_posix()}",
+                *[f"- created: {item}" for item in result["touched"]],
+            ],
+        )
         print(f"Ingested {result['title']}")
         for line in output_access_lines(root):
             print(line)
@@ -1452,12 +1483,16 @@ def main() -> int:
     )
     write_text(source_page, source_content)
     write_text(root / "index.md", rebuild_index.build_index(root))
-    append_log(root, f"[{today_str()}] ingest | {title}", [
-        f"- raw: {raw_path.relative_to(root).as_posix()}",
-        f"- normalized: {normalized_path.relative_to(root).as_posix()}",
-        f"- created: {source_page.relative_to(root).as_posix()}",
-        *[f"- created: {item['path']}" for item in entity_pages],
-    ])
+    append_log(
+        root,
+        f"[{today_str()}] ingest | {title}",
+        [
+            f"- raw: {raw_path.relative_to(root).as_posix()}",
+            f"- normalized: {normalized_path.relative_to(root).as_posix()}",
+            f"- created: {source_page.relative_to(root).as_posix()}",
+            *[f"- created: {item['path']}" for item in entity_pages],
+        ],
+    )
     print(f"Ingested {title}")
     for line in output_access_lines(root):
         print(line)

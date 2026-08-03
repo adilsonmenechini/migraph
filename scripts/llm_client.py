@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """
 MiGraph Module: llm_client
 
@@ -7,6 +5,8 @@ Purpose:
 - OpenAI-compatible chat completion client for crystallize and digest.
 - Disabled unless MIGRAPH_LLM_* environment variables are fully configured.
 """
+
+from __future__ import annotations
 
 import json
 import re
@@ -76,7 +76,7 @@ _PROMPT_TEMPLATES: dict[str, str] = {
     ),
 }
 
-_EMPTY_RESULT = {
+_EMPTY_RESULT: dict[str, object] = {
     "summary": "",
     "key_points": [],
     "body": "",
@@ -98,11 +98,13 @@ def _format_sources(sources: list[dict[str, str]]) -> str:
 
 def _call_llm(messages: list[dict[str, str]], temperature: float = 0.5) -> str:
     config = resolve_llm_config()
-    payload = json.dumps({
-        "model": config.model,
-        "messages": messages,
-        "temperature": temperature,
-    }).encode("utf-8")
+    payload = json.dumps(
+        {
+            "model": config.model,
+            "messages": messages,
+            "temperature": temperature,
+        }
+    ).encode("utf-8")
     last_error: Exception | None = None
     for attempt in range(LLM_RETRIES):
         try:
@@ -155,7 +157,7 @@ def _parse_result(content: str) -> dict[str, object]:
     brace_start = cleaned.find("{")
     brace_end = cleaned.rfind("}")
     if brace_start >= 0 and brace_end > brace_start:
-        cleaned = cleaned[brace_start:brace_end + 1]
+        cleaned = cleaned[brace_start : brace_end + 1]
     parsed = json.loads(cleaned)
     if not isinstance(parsed, dict):
         raise ValueError("LLM response is not a JSON object")
@@ -187,7 +189,10 @@ def _parse_result(content: str) -> dict[str, object]:
 def _fallback(sources: list[dict[str, str]], title: str, reason: str = "") -> dict[str, object]:
     if reason:
         display_title = title or "<untitled>"
-        print(f"Warning: LLM call failed for '{display_title}' ({reason}). Using degraded fallback result.", file=sys.stderr)
+        print(
+            f"Warning: LLM call failed for '{display_title}' ({reason}). Using degraded fallback result.",
+            file=sys.stderr,
+        )
     first = sources[0] if sources else {}
     first_title = str(first.get("title", "")).strip() or title
     first_body = str(first.get("body", "")).strip()

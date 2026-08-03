@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: init_wiki
 
@@ -12,11 +10,20 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 from pathlib import Path
 
-from utils import append_log, ensure_runtime_dirs, load_template, output_access_lines, render_template, today_str, write_text
+from utils import (
+    append_log,
+    ensure_runtime_dirs,
+    load_template,
+    output_access_lines,
+    render_template,
+    today_str,
+    write_text,
+)
 
 
 def main() -> int:
@@ -45,10 +52,14 @@ def main() -> int:
             continue
         write_text(target, render_template(load_template(source_name), values))
 
-    append_log(root, f"[{today_str()}] init | {args.title}", [
-        "- created: wiki directories and root files",
-        "- next: run ingest or add your first source",
-    ])
+    append_log(
+        root,
+        f"[{today_str()}] init | {args.title}",
+        [
+            "- created: wiki directories and root files",
+            "- next: run ingest or add your first source",
+        ],
+    )
     print(f"Initialized wiki at {root}")
     for line in output_access_lines(root):
         print(line)

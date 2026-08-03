@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: clip
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import json
@@ -21,8 +20,6 @@ from urllib import error as urllib_error
 from urllib import request as urllib_request
 from urllib.parse import urlparse
 
-from url_safety import safe_urlopen, validate_fetch_url
-
 from ingest import (
     clean_markdown,
     extract_title_from_markdown,
@@ -30,16 +27,17 @@ from ingest import (
     humanize_name,
     normalize_local_source,
 )
+from url_safety import safe_urlopen, validate_fetch_url
 from utils import (
     append_log,
     ensure_runtime_dirs,
     file_uri,
     find_repo_root,
-    write_inbox_review,
-    write_output_home,
     slugify,
     today_str,
     unique_path,
+    write_inbox_review,
+    write_output_home,
     write_text,
 )
 
@@ -80,7 +78,9 @@ def download_media(url: str, target: Path) -> bool:
         return False
 
 
-def localize_markdown_media(root: Path, normalized_path: Path, markdown: str, media_urls: list[str]) -> tuple[str, dict[str, object]]:
+def localize_markdown_media(
+    root: Path, normalized_path: Path, markdown: str, media_urls: list[str]
+) -> tuple[str, dict[str, object]]:
     if not media_urls:
         return markdown, {
             "mediaStatus": "none",
@@ -205,10 +205,20 @@ def main() -> int:
     parser.add_argument("--url", help="Webpage URL to clip into inbox")
     parser.add_argument("--text", help="Inline text to clip into inbox")
     parser.add_argument("--title", default="", help="Human readable title")
-    parser.add_argument("--adapter", default="auto", choices=["auto", "wechat", "generic"], help="Web extraction adapter when using --url")
+    parser.add_argument(
+        "--adapter",
+        default="auto",
+        choices=["auto", "wechat", "generic"],
+        help="Web extraction adapter when using --url",
+    )
     parser.add_argument("--mode", default="auto", choices=["auto", "wait"], help="Web capture mode when using --url")
     parser.add_argument("--wait-seconds", default=8, type=int, help="Maximum seconds to poll when --mode wait is used")
-    parser.add_argument("--media", default="ask", choices=["ask", "always", "never"], help="How to handle webpage images when using --url")
+    parser.add_argument(
+        "--media",
+        default="ask",
+        choices=["ask", "always", "never"],
+        help="How to handle webpage images when using --url",
+    )
     args = parser.parse_args()
 
     provided = [bool(args.source), bool(args.url), bool(args.text)]
@@ -248,7 +258,10 @@ def main() -> int:
         log_lines.insert(4, f"- mode: {metadata.get('captureMode', 'auto')}")
         log_lines.insert(5, f"- state: {metadata.get('captureState', 'ok')}")
         log_lines.insert(6, f"- reason: {metadata.get('captureReason', 'ready')}")
-        log_lines.insert(7, f"- media: {metadata.get('mediaStatus', 'none')} ({metadata.get('localizedMediaCount', 0)}/{metadata.get('mediaCount', 0)})")
+        log_lines.insert(
+            7,
+            f"- media: {metadata.get('mediaStatus', 'none')} ({metadata.get('localizedMediaCount', 0)}/{metadata.get('mediaCount', 0)})",
+        )
     append_log(root, f"[{today_str()}] clip | {title}", log_lines)
     print(f"Clipped {title} into inbox")
     print(f"Inbox raw: {raw_path.relative_to(root).as_posix()}")
@@ -259,7 +272,9 @@ def main() -> int:
         print(f"Capture mode: {metadata.get('captureMode', 'auto')}")
         print(f"Capture state: {metadata.get('captureState', 'ok')}")
         print(f"Capture reason: {metadata.get('captureReason', 'ready')}")
-        print(f"Media status: {metadata.get('mediaStatus', 'none')} ({metadata.get('localizedMediaCount', 0)}/{metadata.get('mediaCount', 0)})")
+        print(
+            f"Media status: {metadata.get('mediaStatus', 'none')} ({metadata.get('localizedMediaCount', 0)}/{metadata.get('mediaCount', 0)})"
+        )
     inbox_page = write_inbox_review(root)
     output_home = write_output_home(root)
     print("Inbox review: output/inbox/index.html")

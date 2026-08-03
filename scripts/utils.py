@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """
 MiGraph Module: utils
 
@@ -11,25 +9,33 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
-import sys
 import hashlib
 import json
 import os
 import re
 import shutil
+import sys
+from collections.abc import Iterable
 from datetime import date, datetime
 from html import escape
 from pathlib import Path
-from typing import Dict, Iterable, List, Tuple
 
 from ai_config import embed_is_configured
 
 ROOT_MARKER = ".wiki-schema.md"
 WIKI_DIRS = [
-    "concepts", "topics", "entities", "sources",
-    "syntheses", "queries", "decisions",
-    "patterns", "runbooks", "architectures",
+    "concepts",
+    "topics",
+    "entities",
+    "sources",
+    "syntheses",
+    "queries",
+    "decisions",
+    "patterns",
+    "runbooks",
+    "architectures",
 ]
 GENERIC_ENTITY_SUFFIXES = {
     "agent",
@@ -145,19 +151,17 @@ def ambiguous_entity_merge_candidates(
         ambiguous_entity_ids.update(entity_ids)
         titles = [entity_labels.get(entity_id, entity_id) for entity_id in entity_ids]
         labels = [str(item) for item in record["labels"] if str(item).strip()]
-        candidates.append({
-            "identityKey": identity_key,
-            "entityIds": entity_ids,
-            "titles": titles,
-            "labels": labels,
-            "reason": f"Identity key `{identity_key}` matches {len(entity_ids)} entity pages. Review manually before merging.",
-        })
+        candidates.append(
+            {
+                "identityKey": identity_key,
+                "entityIds": entity_ids,
+                "titles": titles,
+                "labels": labels,
+                "reason": f"Identity key `{identity_key}` matches {len(entity_ids)} entity pages. Review manually before merging.",
+            }
+        )
 
-    if (
-        embedding_enabled
-        and len(entity_labels) >= 2
-        and embed_is_configured()
-    ):
+    if embedding_enabled and len(entity_labels) >= 2 and embed_is_configured():
         try:
             from ai_config import resolve_embed_config
             from embed_client import cosine_similarity, embed_texts
@@ -173,7 +177,7 @@ def ambiguous_entity_merge_candidates(
             for candidate in candidates:
                 ids = [str(item) for item in candidate["entityIds"]]
                 for index, id_a in enumerate(ids):
-                    for id_b in ids[index + 1:]:
+                    for id_b in ids[index + 1 :]:
                         string_grouped_pairs.add(frozenset({id_a, id_b}))
 
             entity_ids_ordered = list(entity_labels.keys())
@@ -188,13 +192,15 @@ def ambiguous_entity_merge_candidates(
                         sim = cosine_similarity(vectors[i], vectors[j])
                         if sim >= embedding_threshold:
                             ambiguous_entity_ids.update({id_a, id_b})
-                            candidates.append({
-                                "identityKey": f"emb:{sim:.3f}",
-                                "entityIds": [id_a, id_b],
-                                "titles": [entity_labels.get(id_a, id_a), entity_labels.get(id_b, id_b)],
-                                "labels": [entity_labels.get(id_a, id_a), entity_labels.get(id_b, id_b)],
-                                "reason": f"Semantic similarity {sim:.3f} >= {embedding_threshold}. Review manually before merging.",
-                            })
+                            candidates.append(
+                                {
+                                    "identityKey": f"emb:{sim:.3f}",
+                                    "entityIds": [id_a, id_b],
+                                    "titles": [entity_labels.get(id_a, id_a), entity_labels.get(id_b, id_b)],
+                                    "labels": [entity_labels.get(id_a, id_a), entity_labels.get(id_b, id_b)],
+                                    "reason": f"Semantic similarity {sim:.3f} >= {embedding_threshold}. Review manually before merging.",
+                                }
+                            )
         except Exception as exc:
             print(
                 f"Warning: embedding API unavailable, using string-only entity matching: {exc}",
@@ -540,59 +546,59 @@ def collect_inbox_items(root: Path) -> list[dict]:
         repo_path = path.relative_to(root).as_posix()
         sidecar_path = path.with_suffix(".json")
         sidecar = _load_json(sidecar_path)
-        title = (
-            _first_markdown_heading(path)
-            or str(meta.get("title", "") or "").strip()
-            or _humanize_label(path.stem)
-        )
+        title = _first_markdown_heading(path) or str(meta.get("title", "") or "").strip() or _humanize_label(path.stem)
         summary = extract_summary(meta, body)
         try:
             updated = datetime.fromtimestamp(path.stat().st_mtime).strftime("%Y-%m-%d %H:%M")
         except OSError:
             updated = "n/a"
-        quality_status, quality_reason = _inbox_quality({
-            "kind": str(sidecar.get("kind", "") or ""),
-            "adapter": str(sidecar.get("adapter", "") or ""),
-            "summary": summary,
-            "title": title,
-            "site_name": str(sidecar.get("siteName", "") or ""),
-            "source_url": str(sidecar.get("url", "") or ""),
-            "author": str(sidecar.get("author", "") or ""),
-            "publish_date": str(sidecar.get("publishDate", "") or ""),
-        })
+        quality_status, quality_reason = _inbox_quality(
+            {
+                "kind": str(sidecar.get("kind", "") or ""),
+                "adapter": str(sidecar.get("adapter", "") or ""),
+                "summary": summary,
+                "title": title,
+                "site_name": str(sidecar.get("siteName", "") or ""),
+                "source_url": str(sidecar.get("url", "") or ""),
+                "author": str(sidecar.get("author", "") or ""),
+                "publish_date": str(sidecar.get("publishDate", "") or ""),
+            }
+        )
         capture_state = str(sidecar.get("captureState", "") or "")
         capture_mode = str(sidecar.get("captureMode", "") or "")
         capture_reason = str(sidecar.get("captureReason", "") or "")
         review_hint = str(sidecar.get("reviewHint", "") or "")
-        items.append({
-            "title": title,
-            "summary": summary,
-            "updated": updated,
-            "path": repo_path,
-            "href": Path(os.path.relpath(path, start=root / "output")).as_posix(),
-            "ingest_command": f"python scripts/migraph ingest --root {display_root_arg(root)} --source {repo_path}",
-            "kind": str(sidecar.get("kind", "") or ""),
-            "adapter": str(sidecar.get("adapter", "") or ""),
-            "site_name": str(sidecar.get("siteName", "") or ""),
-            "author": str(sidecar.get("author", "") or ""),
-            "publish_date": str(sidecar.get("publishDate", "") or ""),
-            "source_url": str(sidecar.get("url", "") or ""),
-            "metadata_path": sidecar_path.relative_to(root).as_posix() if sidecar_path.exists() else "",
-            "capture_state": capture_state,
-            "capture_mode": capture_mode,
-            "capture_attempts": int(sidecar.get("captureAttempts", 0) or 0),
-            "capture_elapsed_seconds": sidecar.get("captureElapsedSeconds", ""),
-            "capture_state_reason": _capture_state_reason(capture_state),
-            "capture_reason": capture_reason,
-            "review_hint": _capture_reason_hint(capture_reason, review_hint),
-            "media_policy": str(sidecar.get("mediaPolicy", "") or ""),
-            "media_status": str(sidecar.get("mediaStatus", "") or ""),
-            "media_count": int(sidecar.get("mediaCount", 0) or 0),
-            "localized_media_count": int(sidecar.get("localizedMediaCount", 0) or 0),
-            "media_dir": str(sidecar.get("mediaDir", "") or ""),
-            "quality_status": quality_status,
-            "quality_reason": quality_reason,
-        })
+        items.append(
+            {
+                "title": title,
+                "summary": summary,
+                "updated": updated,
+                "path": repo_path,
+                "href": Path(os.path.relpath(path, start=root / "output")).as_posix(),
+                "ingest_command": f"python scripts/migraph ingest --root {display_root_arg(root)} --source {repo_path}",
+                "kind": str(sidecar.get("kind", "") or ""),
+                "adapter": str(sidecar.get("adapter", "") or ""),
+                "site_name": str(sidecar.get("siteName", "") or ""),
+                "author": str(sidecar.get("author", "") or ""),
+                "publish_date": str(sidecar.get("publishDate", "") or ""),
+                "source_url": str(sidecar.get("url", "") or ""),
+                "metadata_path": sidecar_path.relative_to(root).as_posix() if sidecar_path.exists() else "",
+                "capture_state": capture_state,
+                "capture_mode": capture_mode,
+                "capture_attempts": int(sidecar.get("captureAttempts", 0) or 0),
+                "capture_elapsed_seconds": sidecar.get("captureElapsedSeconds", ""),
+                "capture_state_reason": _capture_state_reason(capture_state),
+                "capture_reason": capture_reason,
+                "review_hint": _capture_reason_hint(capture_reason, review_hint),
+                "media_policy": str(sidecar.get("mediaPolicy", "") or ""),
+                "media_status": str(sidecar.get("mediaStatus", "") or ""),
+                "media_count": int(sidecar.get("mediaCount", 0) or 0),
+                "localized_media_count": int(sidecar.get("localizedMediaCount", 0) or 0),
+                "media_dir": str(sidecar.get("mediaDir", "") or ""),
+                "quality_status": quality_status,
+                "quality_reason": quality_reason,
+            }
+        )
     return items
 
 
@@ -630,17 +636,14 @@ def _priority_inbox_items(items: list[dict], limit: int = 3) -> list[dict]:
 
 def _render_command_list(commands: list[str], empty_text: str) -> str:
     if not commands:
-        return "<div class='empty small'>{}</div>".format(escape(empty_text))
-    rows = [
-        "<pre class='command-pre'>{}</pre>".format(escape(command))
-        for command in commands
-    ]
+        return f"<div class='empty small'>{escape(empty_text)}</div>"
+    rows = [f"<pre class='command-pre'>{escape(command)}</pre>" for command in commands]
     return "\n".join(rows)
 
 
 def _render_page_list(items: list[dict], empty_text: str) -> str:
     if not items:
-        return "<div class='empty small'>{}</div>".format(escape(empty_text))
+        return f"<div class='empty small'>{escape(empty_text)}</div>"
     cards: list[str] = []
     for item in items:
         page_id = str(item.get("id", ""))
@@ -648,36 +651,27 @@ def _render_page_list(items: list[dict], empty_text: str) -> str:
         summary = str(item.get("summary", "") or "(no summary yet)")
         page_type = str(item.get("type", "page") or "page")
         updated = str(item.get("updated", "") or "n/a")
-        href = "viewer/index.html#page={}".format(escape(page_id, quote=True))
+        href = f"viewer/index.html#page={escape(page_id, quote=True)}"
         cards.append(
-            "<a class='mini-card' href='{href}' target='_blank' rel='noopener'>"
-            "<div class='mini-meta'><span class='mini-type'>{page_type}</span><span>{updated}</span></div>"
-            "<strong>{title}</strong>"
-            "<span>{summary}</span>"
-            "</a>".format(
-                href=href,
-                page_type=escape(page_type),
-                updated=escape(updated),
-                title=escape(title),
-                summary=escape(summary),
-            )
+            f"<a class='mini-card' href='{href}' target='_blank' rel='noopener'>"
+            f"<div class='mini-meta'><span class='mini-type'>{escape(page_type)}</span><span>{escape(updated)}</span></div>"
+            f"<strong>{escape(title)}</strong>"
+            f"<span>{escape(summary)}</span>"
+            "</a>"
         )
     return "\n".join(cards)
 
 
 def _render_bullet_list(items: list[str], empty_text: str) -> str:
     if not items:
-        return "<div class='empty small'>{}</div>".format(escape(empty_text))
-    rows = [
-        "<li>{}</li>".format(item)
-        for item in items
-    ]
+        return f"<div class='empty small'>{escape(empty_text)}</div>"
+    rows = [f"<li>{item}</li>" for item in items]
     return "<ul class='bullet-list'>{}</ul>".format("".join(rows))
 
 
 def _render_action_cards(items: list[dict], empty_text: str) -> str:
     if not items:
-        return "<div class='empty small'>{}</div>".format(escape(empty_text))
+        return f"<div class='empty small'>{escape(empty_text)}</div>"
     cards: list[str] = []
     for item in items:
         href = str(item.get("href", "") or "")
@@ -685,7 +679,7 @@ def _render_action_cards(items: list[dict], empty_text: str) -> str:
         summary = str(item.get("summary", "") or "")
         label = str(item.get("label", "") or "")
         target_attrs = " target='_blank' rel='noopener'" if href else ""
-        tag_html = "<span class='action-tag'>{}</span>".format(escape(label)) if label else ""
+        tag_html = f"<span class='action-tag'>{escape(label)}</span>" if label else ""
         cards.append(
             "<a class='action-card' href='{href}'{target_attrs}>"
             "{tag_html}"
@@ -704,7 +698,7 @@ def _render_action_cards(items: list[dict], empty_text: str) -> str:
 
 def _render_inbox_list(items: list[dict], empty_text: str) -> str:
     if not items:
-        return "<div class='empty small'>{}</div>".format(escape(empty_text))
+        return f"<div class='empty small'>{escape(empty_text)}</div>"
     cards: list[str] = []
     for item in items:
         kind = str(item.get("kind", "") or "")
@@ -715,7 +709,7 @@ def _render_inbox_list(items: list[dict], empty_text: str) -> str:
             str(item.get("author", "") or ""),
         ]
         detail_text = " · ".join(part for part in detail_parts if part)
-        detail_html = "<span>{}</span>".format(escape(detail_text)) if detail_text else ""
+        detail_html = f"<span>{escape(detail_text)}</span>" if detail_text else ""
         quality_status = str(item.get("quality_status", "") or "")
         quality_html = ""
         if quality_status:
@@ -802,13 +796,9 @@ def _render_inbox_review_cards(items: list[dict], inbox_dir: Path, root: Path) -
         attempts = int(item.get("capture_attempts", 0) or 0)
         elapsed = str(item.get("capture_elapsed_seconds", "") or "")
         if attempts:
-            meta_rows.append(
-                "<span class='fact'><strong>Attempts: </strong>{value}</span>".format(value=escape(str(attempts)))
-            )
+            meta_rows.append(f"<span class='fact'><strong>Attempts: </strong>{escape(str(attempts))}</span>")
         if elapsed:
-            meta_rows.append(
-                "<span class='fact'><strong>Elapsed: </strong>{value}s</span>".format(value=escape(elapsed))
-            )
+            meta_rows.append(f"<span class='fact'><strong>Elapsed: </strong>{escape(elapsed)}s</span>")
         media_count = int(item.get("media_count", 0) or 0)
         localized_media_count = int(item.get("localized_media_count", 0) or 0)
         if media_count:
@@ -819,16 +809,11 @@ def _render_inbox_review_cards(items: list[dict], inbox_dir: Path, root: Path) -
             )
         media_dir = str(item.get("media_dir", "") or "")
         if media_dir:
-            meta_rows.append(
-                "<span class='fact'><strong>Media dir: </strong>{value}</span>".format(value=escape(media_dir))
-            )
+            meta_rows.append(f"<span class='fact'><strong>Media dir: </strong>{escape(media_dir)}</span>")
         source_url = str(item.get("source_url", "") or "")
         if source_url:
             meta_rows.append(
-                "<a class='fact fact-link' href='{href}' target='_blank' rel='noopener'><strong>URL: </strong>{value}</a>".format(
-                    href=escape(source_url, quote=True),
-                    value=escape(source_url),
-                )
+                f"<a class='fact fact-link' href='{escape(source_url, quote=True)}' target='_blank' rel='noopener'><strong>URL: </strong>{escape(source_url)}</a>"
             )
         cards.append(
             "<article class='card'>"
@@ -859,9 +844,7 @@ def _render_inbox_review_cards(items: list[dict], inbox_dir: Path, root: Path) -
                 quality_reason=escape(str(item.get("quality_reason", "") or "")),
                 normalized_href=escape(normalized_href, quote=True),
                 metadata_link=(
-                    "<a href='{href}' target='_blank' rel='noopener'>Open metadata</a>".format(
-                        href=escape(metadata_href, quote=True)
-                    )
+                    f"<a href='{escape(metadata_href, quote=True)}' target='_blank' rel='noopener'>Open metadata</a>"
                     if metadata_href
                     else ""
                 ),
@@ -881,8 +864,14 @@ def _render_inbox_review_section(
     root: Path,
     empty_text: str,
 ) -> str:
-    cards_html = _render_inbox_review_cards(items, inbox_dir, root) if items else "<div class='empty'>{}</div>".format(escape(empty_text))
-    commands = [str(item.get("ingest_command", "") or "") for item in items[:3] if str(item.get("ingest_command", "") or "")]
+    cards_html = (
+        _render_inbox_review_cards(items, inbox_dir, root)
+        if items
+        else f"<div class='empty'>{escape(empty_text)}</div>"
+    )
+    commands = [
+        str(item.get("ingest_command", "") or "") for item in items[:3] if str(item.get("ingest_command", "") or "")
+    ]
     if anchor == "ready" and items:
         commands = [
             batch_ingest_command(root, quality="ready", dry_run=True),
@@ -891,24 +880,17 @@ def _render_inbox_review_section(
         ]
     command_html = _render_command_list(commands, "No recommended commands for this section yet.")
     return (
-        "<section class='group' id='{anchor}'>"
+        f"<section class='group' id='{escape(anchor, quote=True)}'>"
         "<div class='group-head'>"
-        "<div><h2>{title}</h2><p>{description}</p></div>"
-        "<span class='badge'>Items {count}</span>"
+        f"<div><h2>{escape(title)}</h2><p>{escape(description)}</p></div>"
+        f"<span class='badge'>Items {escape(str(len(items)))}</span>"
         "</div>"
         "<div class='group-commands'>"
         "<div class='command-label'>Recommended next commands</div>"
-        "{commands}"
+        f"{command_html}"
         "</div>"
-        "<div class='cards'>{cards}</div>"
+        f"<div class='cards'>{cards_html}</div>"
         "</section>"
-    ).format(
-        anchor=escape(anchor, quote=True),
-        title=escape(title),
-        description=escape(description),
-        count=escape(str(len(items))),
-        commands=command_html,
-        cards=cards_html,
     )
 
 
@@ -917,20 +899,12 @@ def _recent_pages(pages: list[dict], limit: int = 4) -> list[dict]:
 
 
 def _generated_pages(pages: list[dict], limit: int = 4) -> list[dict]:
-    generated = [
-        page
-        for page in pages
-        if str(page.get("type", "")) in {"concept", "decision", "synthesis", "query"}
-    ]
+    generated = [page for page in pages if str(page.get("type", "")) in {"concept", "decision", "synthesis", "query"}]
     return sorted(generated, key=_page_sort_key, reverse=True)[:limit]
 
 
 def _featured_pages(pages: list[dict], limit: int = 4) -> list[dict]:
-    featured = [
-        page
-        for page in pages
-        if str(page.get("type", "")) in {"concept", "decision", "synthesis", "source"}
-    ]
+    featured = [page for page in pages if str(page.get("type", "")) in {"concept", "decision", "synthesis", "source"}]
     return sorted(featured, key=_page_sort_key, reverse=True)[:limit]
 
 
@@ -940,9 +914,11 @@ def _attention_items(pages: list[dict], graph_insights: dict, graph_report: dict
     weak_pages = [item for item in isolated_nodes if str(item.get("severity", "")) == "weak"]
     isolated_pages = [item for item in isolated_nodes if str(item.get("severity", "")) == "isolated"]
     if isolated_pages:
-        items.append("There are <strong>{}</strong> isolated pages. Add links or source references first.".format(len(isolated_pages)))
+        items.append(
+            f"There are <strong>{len(isolated_pages)}</strong> isolated pages. Add links or source references first."
+        )
     if weak_pages:
-        items.append("There are <strong>{}</strong> weakly connected pages. They need more context.".format(len(weak_pages)))
+        items.append(f"There are <strong>{len(weak_pages)}</strong> weakly connected pages. They need more context.")
 
     report_stats = graph_report.get("stats", {}) if isinstance(graph_report.get("stats"), dict) else {}
     hub_stubs = int(report_stats.get("hubStubCount", 0) or 0)
@@ -950,27 +926,33 @@ def _attention_items(pages: list[dict], graph_insights: dict, graph_report: dict
     isolated_clusters = int(report_stats.get("isolatedClusterCount", 0) or 0)
     ambiguous_alias_groups = int(report_stats.get("ambiguousAliasGroupCount", 0) or 0)
     if hub_stubs:
-        items.append("There are <strong>{}</strong> high-degree thin pages. Improve their summaries and context first.".format(hub_stubs))
+        items.append(
+            f"There are <strong>{hub_stubs}</strong> high-degree thin pages. Improve their summaries and context first."
+        )
     if fragile_bridges:
-        items.append("There are <strong>{}</strong> fragile bridge pages. Strengthen cross-topic connections.".format(fragile_bridges))
+        items.append(
+            f"There are <strong>{fragile_bridges}</strong> fragile bridge pages. Strengthen cross-topic connections."
+        )
     if isolated_clusters:
-        items.append("There are <strong>{}</strong> page clusters disconnected from the main graph. Reconnect them soon.".format(isolated_clusters))
+        items.append(
+            f"There are <strong>{isolated_clusters}</strong> page clusters disconnected from the main graph. Reconnect them soon."
+        )
     if ambiguous_alias_groups:
-        items.append("There are <strong>{}</strong> ambiguous alias groups. Review whether those entities should be merged.".format(ambiguous_alias_groups))
+        items.append(
+            f"There are <strong>{ambiguous_alias_groups}</strong> ambiguous alias groups. Review whether those entities should be merged."
+        )
 
     missing_summary = [
-        page for page in pages
-        if str(page.get("summary", "") or "").strip() in {"", "(no summary)", "(no summary yet)"}
+        page for page in pages if str(page.get("summary", "") or "").strip() in {"", "(no summary)", "(no summary yet)"}
     ]
     if missing_summary:
-        items.append("There are <strong>{}</strong> pages without reliable summaries.".format(len(missing_summary)))
+        items.append(f"There are <strong>{len(missing_summary)}</strong> pages without reliable summaries.")
 
     missing_sources = [
-        page for page in pages
-        if not isinstance(page.get("sources"), list) or not list(page.get("sources") or [])
+        page for page in pages if not isinstance(page.get("sources"), list) or not list(page.get("sources") or [])
     ]
     if missing_sources:
-        items.append("There are <strong>{}</strong> pages without source references.".format(len(missing_sources)))
+        items.append(f"There are <strong>{len(missing_sources)}</strong> pages without source references.")
 
     return items[:4]
 
@@ -991,87 +973,115 @@ def _recommended_actions(
     actions: list[dict] = []
     ready_items = [item for item in inbox_items if str(item.get("quality_status", "") or "") == "ready"]
     if ready_items:
-        actions.append({
-            "label": "Ingest",
-            "title": "Prioritize Ready Inbox",
-            "summary": "There are {} inbox items ready for final review and formal ingest. Start with the Ready section.".format(len(ready_items)),
-            "href": "inbox/index.html#ready" if inbox_page_exists else str(ready_items[0].get("href", "") or "#"),
-        })
+        actions.append(
+            {
+                "label": "Ingest",
+                "title": "Prioritize Ready Inbox",
+                "summary": f"There are {len(ready_items)} inbox items ready for final review and formal ingest. Start with the Ready section.",
+                "href": "inbox/index.html#ready" if inbox_page_exists else str(ready_items[0].get("href", "") or "#"),
+            }
+        )
     if inbox_count:
-        actions.append({
-            "label": "Review",
-            "title": "Review Inbox Queue",
-            "summary": "There are {} captured items. Review the latest one before deciding whether to ingest it.".format(inbox_count),
-            "href": "inbox/index.html" if inbox_page_exists else str((inbox_items[0] if inbox_items else {}).get("href", "") or "#"),
-        })
+        actions.append(
+            {
+                "label": "Review",
+                "title": "Review Inbox Queue",
+                "summary": f"There are {inbox_count} captured items. Review the latest one before deciding whether to ingest it.",
+                "href": "inbox/index.html"
+                if inbox_page_exists
+                else str((inbox_items[0] if inbox_items else {}).get("href", "") or "#"),
+            }
+        )
     if viewer_exists:
-        actions.append({
-            "label": "Read",
-            "title": "Open Local Viewer",
-            "summary": "Browse the whole wiki by page type, status, and confidence.",
-            "href": "viewer/index.html",
-        })
+        actions.append(
+            {
+                "label": "Read",
+                "title": "Open Local Viewer",
+                "summary": "Browse the whole wiki by page type, status, and confidence.",
+                "href": "viewer/index.html",
+            }
+        )
     if graph_exists:
         summary = "Open the graph to inspect key pages, bridge pages, and suggested links."
-        actions.append({
-            "label": "Explore",
-            "title": "Open Knowledge Graph",
-            "summary": summary,
-            "href": "graph/index.html",
-        })
+        actions.append(
+            {
+                "label": "Explore",
+                "title": "Open Knowledge Graph",
+                "summary": summary,
+                "href": "graph/index.html",
+            }
+        )
     if graph_report_exists:
         report_actions = graph_report.get("topActions", []) if isinstance(graph_report.get("topActions"), list) else []
-        actions.append({
-            "label": "Govern",
-            "title": "Open Graph Governance Report",
-            "summary": str(report_actions[0]) if report_actions else "See the governance summary for isolated pages, fragile bridges, and suggested links.",
-            "href": "graph/report.html",
-        })
-    ambiguous_groups = int(graph_report.get("stats", {}).get("ambiguousAliasGroupCount", 0) or 0) if isinstance(graph_report.get("stats"), dict) else 0
+        actions.append(
+            {
+                "label": "Govern",
+                "title": "Open Graph Governance Report",
+                "summary": str(report_actions[0])
+                if report_actions
+                else "See the governance summary for isolated pages, fragile bridges, and suggested links.",
+                "href": "graph/report.html",
+            }
+        )
+    ambiguous_groups = (
+        int(graph_report.get("stats", {}).get("ambiguousAliasGroupCount", 0) or 0)
+        if isinstance(graph_report.get("stats"), dict)
+        else 0
+    )
     if entity_merge_review_exists and ambiguous_groups:
-        actions.append({
-            "label": "Review",
-            "title": "Review Entity Merge Candidates",
-            "summary": "There are {} ambiguous entity alias groups. Confirm the canonical entity page first.".format(ambiguous_groups),
-            "href": "graph/entity-merge-review.html",
-        })
+        actions.append(
+            {
+                "label": "Review",
+                "title": "Review Entity Merge Candidates",
+                "summary": f"There are {ambiguous_groups} ambiguous entity alias groups. Confirm the canonical entity page first.",
+                "href": "graph/entity-merge-review.html",
+            }
+        )
 
     stats = graph_insights.get("stats", {}) if isinstance(graph_insights, dict) else {}
     isolated_count = int(stats.get("isolatedCount", 0) or 0)
     if graph_exists and isolated_count:
-        actions.append({
-            "label": "Fix",
-            "title": "Fix Isolated Pages",
-            "summary": "There are {} isolated pages. Inspect them in the graph and add links first.".format(isolated_count),
-            "href": "graph/index.html",
-        })
+        actions.append(
+            {
+                "label": "Fix",
+                "title": "Fix Isolated Pages",
+                "summary": f"There are {isolated_count} isolated pages. Inspect them in the graph and add links first.",
+                "href": "graph/index.html",
+            }
+        )
 
     suggested_links = graph_insights.get("suggestedLinks", []) if isinstance(graph_insights, dict) else []
     if graph_exists and suggested_links:
-        actions.append({
-            "label": "Link",
-            "title": "Review Suggested Links",
-            "summary": "The graph identified {} high-confidence suggested links.".format(len(suggested_links)),
-            "href": "graph/index.html",
-        })
+        actions.append(
+            {
+                "label": "Link",
+                "title": "Review Suggested Links",
+                "summary": f"The graph identified {len(suggested_links)} high-confidence suggested links.",
+                "href": "graph/index.html",
+            }
+        )
 
     if recent_pages:
         page_id = str(recent_pages[0].get("id", "") or "")
         if page_id:
-            actions.append({
-                "label": "Latest",
-                "title": "Open Latest Page",
-                "summary": "Continue reading or refining the most recently updated page.",
-                "href": "viewer/index.html#page={}".format(escape(page_id, quote=True)),
-            })
+            actions.append(
+                {
+                    "label": "Latest",
+                    "title": "Open Latest Page",
+                    "summary": "Continue reading or refining the most recently updated page.",
+                    "href": f"viewer/index.html#page={escape(page_id, quote=True)}",
+                }
+            )
 
     if not actions:
-        actions.append({
-            "label": "Build",
-            "title": "Build Viewer and Graph",
-            "summary": "Run viewer and graph first so the workspace home can show the full workbench.",
-            "href": "",
-        })
+        actions.append(
+            {
+                "label": "Build",
+                "title": "Build Viewer and Graph",
+                "summary": "Run viewer and graph first so the workspace home can show the full workbench.",
+                "href": "",
+            }
+        )
     return actions[:4]
 
 
@@ -1097,33 +1107,64 @@ def write_output_home(root: Path) -> Path:
     graph_views = graph_data.get("views", {}) if isinstance(graph_data.get("views"), dict) else {}
     knowledge_view = graph_views.get("knowledge", {}) if isinstance(graph_views.get("knowledge"), dict) else {}
     suggested_view = graph_views.get("suggested", {}) if isinstance(graph_views.get("suggested"), dict) else {}
-    node_count = len(knowledge_view.get("nodes", [])) if isinstance(knowledge_view.get("nodes"), list) else len(graph_data.get("nodes", [])) if isinstance(graph_data.get("nodes"), list) else 0
-    edge_count = len(knowledge_view.get("edges", [])) if isinstance(knowledge_view.get("edges"), list) else len(graph_data.get("edges", [])) if isinstance(graph_data.get("edges"), list) else 0
+    node_count = (
+        len(knowledge_view.get("nodes", []))
+        if isinstance(knowledge_view.get("nodes"), list)
+        else len(graph_data.get("nodes", []))
+        if isinstance(graph_data.get("nodes"), list)
+        else 0
+    )
+    edge_count = (
+        len(knowledge_view.get("edges", []))
+        if isinstance(knowledge_view.get("edges"), list)
+        else len(graph_data.get("edges", []))
+        if isinstance(graph_data.get("edges"), list)
+        else 0
+    )
     graph_insights = graph_data.get("insights", {}) if isinstance(graph_data.get("insights"), dict) else {}
     graph_schema_version = str(graph_data.get("schema_version", "") or "1")
     graph_default_view = str(graph_data.get("default_view", "") or "legacy")
-    claim_count = sum(
-        1 for node in knowledge_view.get("nodes", [])
-        if isinstance(node, dict) and str(node.get("type", "") or "") == "claim"
-    ) if isinstance(knowledge_view.get("nodes"), list) else 0
-    entity_count = sum(
-        1 for node in knowledge_view.get("nodes", [])
-        if isinstance(node, dict) and str(node.get("type", "") or "") == "entity"
-    ) if isinstance(knowledge_view.get("nodes"), list) else 0
-    aliased_entity_count = sum(
-        1 for node in knowledge_view.get("nodes", [])
-        if isinstance(node, dict)
-        and str(node.get("type", "") or "") == "entity"
-        and isinstance(node.get("aliases"), list)
-        and any(str(item).strip() for item in node.get("aliases", []))
-    ) if isinstance(knowledge_view.get("nodes"), list) else 0
-    alias_count = sum(
-        len([str(item).strip() for item in node.get("aliases", []) if str(item).strip()])
-        for node in knowledge_view.get("nodes", [])
-        if isinstance(node, dict)
-        and str(node.get("type", "") or "") == "entity"
-        and isinstance(node.get("aliases"), list)
-    ) if isinstance(knowledge_view.get("nodes"), list) else 0
+    claim_count = (
+        sum(
+            1
+            for node in knowledge_view.get("nodes", [])
+            if isinstance(node, dict) and str(node.get("type", "") or "") == "claim"
+        )
+        if isinstance(knowledge_view.get("nodes"), list)
+        else 0
+    )
+    entity_count = (
+        sum(
+            1
+            for node in knowledge_view.get("nodes", [])
+            if isinstance(node, dict) and str(node.get("type", "") or "") == "entity"
+        )
+        if isinstance(knowledge_view.get("nodes"), list)
+        else 0
+    )
+    aliased_entity_count = (
+        sum(
+            1
+            for node in knowledge_view.get("nodes", [])
+            if isinstance(node, dict)
+            and str(node.get("type", "") or "") == "entity"
+            and isinstance(node.get("aliases"), list)
+            and any(str(item).strip() for item in node.get("aliases", []))
+        )
+        if isinstance(knowledge_view.get("nodes"), list)
+        else 0
+    )
+    alias_count = (
+        sum(
+            len([str(item).strip() for item in node.get("aliases", []) if str(item).strip()])
+            for node in knowledge_view.get("nodes", [])
+            if isinstance(node, dict)
+            and str(node.get("type", "") or "") == "entity"
+            and isinstance(node.get("aliases"), list)
+        )
+        if isinstance(knowledge_view.get("nodes"), list)
+        else 0
+    )
     suggested_edge_count = len(suggested_view.get("edges", [])) if isinstance(suggested_view.get("edges"), list) else 0
     ready_outputs = (
         int(viewer_path.exists())
@@ -1150,25 +1191,36 @@ def write_output_home(root: Path) -> Path:
     for title, path, summary in [
         ("Inbox Review", inbox_path, "Review inbox items and copy the next ingest commands"),
         ("Local Viewer", viewer_path, "Browse the entire wiki by page type, confidence, and status"),
-        ("Knowledge Graph", graph_path, "Switch between knowledge, document, and suggested views to inspect content relations and candidate edges"),
-        ("Graph Governance Report", graph_report_path, "Inspect isolated pages, fragile bridges, disconnected clusters, and governance actions"),
-        ("Entity Merge Review", entity_merge_review_path, "Review alias collision candidates and confirm which entity pages should be merged or downgraded to aliases"),
-        ("Entity Merge Plan", entity_merge_plan_path, "Preview the canonical merge plan before writing aliases, sources, and topics back"),
+        (
+            "Knowledge Graph",
+            graph_path,
+            "Switch between knowledge, document, and suggested views to inspect content relations and candidate edges",
+        ),
+        (
+            "Graph Governance Report",
+            graph_report_path,
+            "Inspect isolated pages, fragile bridges, disconnected clusters, and governance actions",
+        ),
+        (
+            "Entity Merge Review",
+            entity_merge_review_path,
+            "Review alias collision candidates and confirm which entity pages should be merged or downgraded to aliases",
+        ),
+        (
+            "Entity Merge Plan",
+            entity_merge_plan_path,
+            "Preview the canonical merge plan before writing aliases, sources, and topics back",
+        ),
     ]:
         if not path.exists():
             continue
         relative = path.relative_to(output_dir).as_posix()
         output_items.append(
-            "<a class='card' href='{href}' target='_blank' rel='noopener'>"
-            "<strong>{title}</strong>"
-            "<span>{summary}</span>"
-            "<code>{path}</code>"
-            "</a>".format(
-                href=escape(relative),
-                title=escape(title),
-                summary=escape(summary),
-                path=escape(relative),
-            )
+            f"<a class='card' href='{escape(relative)}' target='_blank' rel='noopener'>"
+            f"<strong>{escape(title)}</strong>"
+            f"<span>{escape(summary)}</span>"
+            f"<code>{escape(relative)}</code>"
+            "</a>"
         )
     if not output_items:
         output_items.append("<div class='empty'>No browsable outputs yet. Run viewer or graph first.</div>")
@@ -1184,14 +1236,13 @@ def write_output_home(root: Path) -> Path:
         ("Claims", claim_count),
         ("Entities", entity_count),
     ]:
-        stats.append(
-            "<div class='stat'><strong>{value}</strong><span>{label}</span></div>".format(
-                value=escape(str(value)),
-                label=escape(label),
-            )
-        )
-    recent_pages_html = _render_page_list(recent_pages, "No recent pages to recommend yet. Run viewer to generate browseable outputs first.")
-    generated_pages_html = _render_page_list(generated_pages, "No recently generated query, synthesis, decision, or concept pages yet.")
+        stats.append(f"<div class='stat'><strong>{escape(str(value))}</strong><span>{escape(label)}</span></div>")
+    recent_pages_html = _render_page_list(
+        recent_pages, "No recent pages to recommend yet. Run viewer to generate browseable outputs first."
+    )
+    generated_pages_html = _render_page_list(
+        generated_pages, "No recently generated query, synthesis, decision, or concept pages yet."
+    )
     featured_pages_html = _render_page_list(featured_pages, "No featured pages yet.")
     attention_html = _render_bullet_list(attention_items, "Nothing urgent needs attention right now.")
     actions_html = _render_action_cards(
@@ -1209,13 +1260,15 @@ def write_output_home(root: Path) -> Path:
         ),
         "No recommended next actions yet.",
     )
-    inbox_html = _render_inbox_list(inbox_items, "No inbox items yet. Run clip to collect webpages, text, or files first.")
+    inbox_html = _render_inbox_list(
+        inbox_items, "No inbox items yet. Run clip to collect webpages, text, or files first."
+    )
     graph_snapshot_items: list[str] = []
     report_summary = str(graph_report.get("summary", "") or "").strip()
     if report_summary:
-        graph_snapshot_items.append("<div class='snapshot-copy'>{}</div>".format(escape(report_summary)))
+        graph_snapshot_items.append(f"<div class='snapshot-copy'>{escape(report_summary)}</div>")
     elif graph_summary:
-        graph_snapshot_items.append("<div class='snapshot-copy'>{}</div>".format(escape(graph_summary)))
+        graph_snapshot_items.append(f"<div class='snapshot-copy'>{escape(graph_summary)}</div>")
     if key_pages:
         graph_snapshot_items.append(
             "<div class='snapshot-chip'>Current key page: <strong>{}</strong></div>".format(
@@ -1245,7 +1298,9 @@ def write_output_home(root: Path) -> Path:
             suggested_edges=escape(str(suggested_edge_count)),
         )
     )
-    suggested_count = len(graph_insights.get("suggestedLinks", [])) if isinstance(graph_insights.get("suggestedLinks"), list) else 0
+    suggested_count = (
+        len(graph_insights.get("suggestedLinks", [])) if isinstance(graph_insights.get("suggestedLinks"), list) else 0
+    )
     hub_stub_count = int(graph_report_stats.get("hubStubCount", 0) or 0)
     fragile_bridge_count = int(graph_report_stats.get("fragileBridgeCount", 0) or 0)
     isolated_cluster_count = int(graph_report_stats.get("isolatedClusterCount", 0) or 0)
@@ -1259,7 +1314,9 @@ def write_output_home(root: Path) -> Path:
         "<div class='snapshot-chip'>Hub Stubs {hub_stubs}</div>"
         "<div class='snapshot-chip'>Fragile Bridges {fragile}</div>"
         "<div class='snapshot-chip'>Isolated Clusters {clusters}</div>".format(
-            isolated=escape(str(int(graph_report_stats.get("isolatedPageCount", graph_stats.get("isolatedCount", 0)) or 0))),
+            isolated=escape(
+                str(int(graph_report_stats.get("isolatedPageCount", graph_stats.get("isolatedCount", 0)) or 0))
+            ),
             isolated_entities=escape(str(isolated_entity_count)),
             links=escape(str(suggested_count)),
             ambiguous_groups=escape(str(ambiguous_alias_group_count)),
@@ -1270,11 +1327,17 @@ def write_output_home(root: Path) -> Path:
     )
     report_actions = graph_report.get("topActions", []) if isinstance(graph_report.get("topActions"), list) else []
     if report_actions:
-        graph_snapshot_items.append(_render_bullet_list(
-            [escape(str(item)) for item in report_actions[:3]],
-            "No additional governance actions.",
-        ))
-    graph_snapshot_html = "\n".join(graph_snapshot_items) if graph_snapshot_items else "<div class='empty small'>Graph insights will appear after you build the graph.</div>"
+        graph_snapshot_items.append(
+            _render_bullet_list(
+                [escape(str(item)) for item in report_actions[:3]],
+                "No additional governance actions.",
+            )
+        )
+    graph_snapshot_html = (
+        "\n".join(graph_snapshot_items)
+        if graph_snapshot_items
+        else "<div class='empty small'>Graph insights will appear after you build the graph.</div>"
+    )
 
     html = """<!DOCTYPE html>
 <html lang="en">
@@ -1695,37 +1758,47 @@ def write_inbox_review(root: Path) -> Path:
     groups = _inbox_groups(items)
     summary = _inbox_quality_summary(items)
     priority_items = _priority_inbox_items(items)
-    priority_commands = [str(item.get("ingest_command", "") or "") for item in priority_items if str(item.get("ingest_command", "") or "")]
+    priority_commands = [
+        str(item.get("ingest_command", "") or "")
+        for item in priority_items
+        if str(item.get("ingest_command", "") or "")
+    ]
     priority_html = _render_inbox_list(priority_items, "No priority inbox items yet.")
-    sections_html = "\n".join([
-        _render_inbox_review_section(
-            anchor="ready",
-            title="Ready To Ingest",
-            description="These captures have strong metadata and article-body quality. They are usually ready for final review before formal ingest.",
-            items=groups.get("ready", []),
-            inbox_dir=inbox_dir,
-            root=root,
-            empty_text="There are no Ready items for ingest yet.",
-        ),
-        _render_inbox_review_section(
-            anchor="review",
-            title="Needs Review",
-            description="These captures are usually readable, but you should still verify the source, author, publish date, or article completeness.",
-            items=groups.get("review", []),
-            inbox_dir=inbox_dir,
-            root=root,
-            empty_text="There are no items in review right now.",
-        ),
-        _render_inbox_review_section(
-            anchor="weak",
-            title="Weak Captures",
-            description="Review these captures manually first to confirm they are not loading pages, summary-only pages, or low-information captures.",
-            items=groups.get("weak", []),
-            inbox_dir=inbox_dir,
-            root=root,
-            empty_text="There are no weak captures right now.",
-        ),
-    ]) if items else "<div class='empty'>There are no inbox items yet. Run `python scripts/migraph clip ...` to collect webpages, text, or files first.</div>"
+    sections_html = (
+        "\n".join(
+            [
+                _render_inbox_review_section(
+                    anchor="ready",
+                    title="Ready To Ingest",
+                    description="These captures have strong metadata and article-body quality. They are usually ready for final review before formal ingest.",
+                    items=groups.get("ready", []),
+                    inbox_dir=inbox_dir,
+                    root=root,
+                    empty_text="There are no Ready items for ingest yet.",
+                ),
+                _render_inbox_review_section(
+                    anchor="review",
+                    title="Needs Review",
+                    description="These captures are usually readable, but you should still verify the source, author, publish date, or article completeness.",
+                    items=groups.get("review", []),
+                    inbox_dir=inbox_dir,
+                    root=root,
+                    empty_text="There are no items in review right now.",
+                ),
+                _render_inbox_review_section(
+                    anchor="weak",
+                    title="Weak Captures",
+                    description="Review these captures manually first to confirm they are not loading pages, summary-only pages, or low-information captures.",
+                    items=groups.get("weak", []),
+                    inbox_dir=inbox_dir,
+                    root=root,
+                    empty_text="There are no weak captures right now.",
+                ),
+            ]
+        )
+        if items
+        else "<div class='empty'>There are no inbox items yet. Run `python scripts/migraph clip ...` to collect webpages, text, or files first.</div>"
+    )
     html = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2050,7 +2123,7 @@ def output_access_lines(root: Path) -> list[str]:
     return lines
 
 
-def render_template(template: str, values: Dict[str, str]) -> str:
+def render_template(template: str, values: dict[str, str]) -> str:
     for key, value in values.items():
         template = template.replace("{{" + key + "}}", value)
     return template
@@ -2086,7 +2159,7 @@ def classify_raw_dir(source_path: Path | None, is_text: bool = False) -> str:
     return "articles"
 
 
-def parse_frontmatter(text: str) -> Tuple[Dict[str, object], str]:
+def parse_frontmatter(text: str) -> tuple[dict[str, object], str]:
     if not text.startswith("---\n"):
         return {}, text
     parts = text.split("\n---\n", 1)
@@ -2094,7 +2167,7 @@ def parse_frontmatter(text: str) -> Tuple[Dict[str, object], str]:
         return {}, text
     frontmatter, body = parts
     lines = frontmatter.splitlines()[1:]
-    meta: Dict[str, object] = {}
+    meta: dict[str, object] = {}
     current_list_key = None
     for raw in lines:
         line = raw.rstrip()
@@ -2114,7 +2187,7 @@ def parse_frontmatter(text: str) -> Tuple[Dict[str, object], str]:
     return meta, body
 
 
-def extract_summary(meta: Dict[str, object], body: str) -> str:
+def extract_summary(meta: dict[str, object], body: str) -> str:
     if meta.get("summary"):
         return str(meta["summary"])
     lines = [line.strip() for line in body.splitlines()]
@@ -2125,7 +2198,7 @@ def extract_summary(meta: Dict[str, object], body: str) -> str:
     return "(no summary)"
 
 
-def markdown_links(text: str) -> List[str]:
+def markdown_links(text: str) -> list[str]:
     return re.findall(r"\[[^\]]+\]\(([^)]+)\)", text)
 
 
@@ -2133,8 +2206,8 @@ def is_external_link(target: str) -> bool:
     return target.startswith(("http://", "https://", "mailto:", "#"))
 
 
-def collect_wiki_pages(root: Path) -> List[Path]:
-    pages: List[Path] = []
+def collect_wiki_pages(root: Path) -> list[Path]:
+    pages: list[Path] = []
     for subdir in WIKI_DIRS:
         pages.extend(sorted((root / "wiki" / subdir).glob("*.md")))
     return pages

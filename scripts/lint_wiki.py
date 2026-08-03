@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: lint_wiki
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import re
@@ -20,7 +19,19 @@ from pathlib import Path
 from urllib import error, request
 
 import rebuild_index
-from utils import REQUIRED_FIELDS, append_log, collect_wiki_pages, extract_summary, find_repo_root, is_external_link, markdown_links, parse_frontmatter, read_text, today_str, write_text
+from utils import (
+    REQUIRED_FIELDS,
+    append_log,
+    collect_wiki_pages,
+    extract_summary,
+    find_repo_root,
+    is_external_link,
+    markdown_links,
+    parse_frontmatter,
+    read_text,
+    today_str,
+    write_text,
+)
 
 SUMMARY_PLACEHOLDERS = {
     "",
@@ -225,8 +236,12 @@ def main() -> int:
     parser.add_argument("--root", default=".", help="Wiki root path")
     parser.add_argument("--fix", action="store_true", help="Rebuild index before reporting")
     parser.add_argument("--stale-days", type=int, default=90, help="Age in days before a page is treated as stale")
-    parser.add_argument("--check-external-links", action="store_true", help="Validate external links with HTTP requests")
-    parser.add_argument("--external-timeout", type=float, default=5.0, help="Timeout in seconds for external link checks")
+    parser.add_argument(
+        "--check-external-links", action="store_true", help="Validate external links with HTTP requests"
+    )
+    parser.add_argument(
+        "--external-timeout", type=float, default=5.0, help="Timeout in seconds for external link checks"
+    )
     args = parser.parse_args()
 
     root = find_repo_root(Path(args.root))
@@ -267,7 +282,9 @@ def main() -> int:
             issues.append(f"[weak-source] {page.relative_to(root)} has no meaningful source paths")
         companion_path = companion_normalized_path(root, page, meta)
         if companion_path is not None and not companion_path.exists():
-            issues.append(f"[missing-normalized] {page.relative_to(root)} missing companion {companion_path.relative_to(root)}")
+            issues.append(
+                f"[missing-normalized] {page.relative_to(root)} missing companion {companion_path.relative_to(root)}"
+            )
         if has_placeholder_content(body):
             issues.append(f"[placeholder-content] {page.relative_to(root)} still contains placeholder text")
 
@@ -282,7 +299,9 @@ def main() -> int:
             if age_days > args.stale_days and status not in {"stale", "archived", "superseded"}:
                 issues.append(f"[stale] {page.relative_to(root)} has not been updated for {age_days} days")
             if age_days > args.stale_days * 2 and confidence in LOW_CONFIDENCE and status in ARCHIVEABLE_STATUS:
-                issues.append(f"[archive-candidate] {page.relative_to(root)} is old and low-confidence; consider archiving or revalidating")
+                issues.append(
+                    f"[archive-candidate] {page.relative_to(root)} is old and low-confidence; consider archiving or revalidating"
+                )
 
         for link in markdown_links(body):
             if is_external_link(link):
@@ -313,16 +332,17 @@ def main() -> int:
             links = markdown_links(stripped)
             if not links:
                 continue
-            target = links[0]
-            if is_external_link(target):
+            link_text = links[0]
+            if is_external_link(link_text):
                 continue
-            resolved = (page.parent / target).resolve().as_posix()
+            resolved = (page.parent / link_text).resolve().as_posix()
             key = (current_section, resolved)
             if key in section_seen:
-                issues.append(f"[duplicate-link] {page.relative_to(root)} repeats {target} in section {current_section or 'Overview'}")
+                issues.append(
+                    f"[duplicate-link] {page.relative_to(root)} repeats {link_text} in section {current_section or 'Overview'}"
+                )
                 continue
             section_seen.add(key)
-
     for page in pages:
         if inbound.get(page.resolve(), 0) == 0 and page.parent.name != "sources":
             issues.append(f"[orphan] {page.relative_to(root)} has no inbound wiki links")
@@ -341,7 +361,9 @@ def main() -> int:
 
     report_path = root / "output" / "exports" / "lint-report.md"
     write_text(report_path, "\n".join(report_lines))
-    append_log(root, f"[{today_str()}] lint | {len(issues)} issues", [f"- report: {report_path.relative_to(root).as_posix()}"])
+    append_log(
+        root, f"[{today_str()}] lint | {len(issues)} issues", [f"- report: {report_path.relative_to(root).as_posix()}"]
+    )
     print("\n".join(report_lines))
     return 0 if not issues else 1
 

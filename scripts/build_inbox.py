@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: build_inbox
 
@@ -12,15 +10,26 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 from pathlib import Path
 
-from utils import append_log, file_uri, find_repo_root, print_output_serve_hint, today_str, write_inbox_review, write_output_home
+from utils import (
+    append_log,
+    file_uri,
+    find_repo_root,
+    print_output_serve_hint,
+    today_str,
+    write_inbox_review,
+    write_output_home,
+)
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build a lightweight static HTML inbox review page for the current wiki.")
+    parser = argparse.ArgumentParser(
+        description="Build a lightweight static HTML inbox review page for the current wiki."
+    )
     parser.add_argument("--root", default=".", help="Wiki root path")
     args = parser.parse_args()
 

@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: build_graph
 
@@ -12,6 +10,7 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import json
@@ -31,8 +30,8 @@ from utils import (
     print_output_serve_hint,
     read_text,
     today_str,
-    write_text,
     write_output_home,
+    write_text,
 )
 
 TYPE_ORDER = {
@@ -207,7 +206,9 @@ def placeholder_node(node_id: str, label: str, node_type: str) -> dict[str, obje
     }
 
 
-def node_payload_for_page(root: Path, page: Path, meta: dict[str, object], body: str, page_type: str) -> dict[str, object]:
+def node_payload_for_page(
+    root: Path, page: Path, meta: dict[str, object], body: str, page_type: str
+) -> dict[str, object]:
     node_id = page.relative_to(root).as_posix()
     return {
         "id": node_id,
@@ -276,11 +277,11 @@ def build_page_lookups(records: list[dict[str, object]]) -> tuple[dict[str, str]
         status = str(meta.get("status") or "").strip().casefold() if isinstance(meta, dict) else ""
         canonical_entity = str(meta.get("canonical_entity") or "").strip() if isinstance(meta, dict) else ""
         aliases = normalize_str_list(meta.get("aliases", [])) if isinstance(meta, dict) else []
-        target_page_id = canonical_entity if (
-            str(record["page_type"]) == "entity"
-            and status == "merged"
-            and canonical_entity in page_ids
-        ) else page_id
+        target_page_id = (
+            canonical_entity
+            if (str(record["page_type"]) == "entity" and status == "merged" and canonical_entity in page_ids)
+            else page_id
+        )
         node_map[page_id] = {
             "id": page_id,
             "title": title,
@@ -290,13 +291,15 @@ def build_page_lookups(records: list[dict[str, object]]) -> tuple[dict[str, str]
         for alias in aliases:
             alias_keys.extend(entity_label_keys(alias))
         title_keys = entity_label_keys(title) if str(record["page_type"]) == "entity" else [title.strip().casefold()]
-        for key in ordered_unique([
-            page_id.casefold(),
-            Path(page_id).as_posix().casefold(),
-            Path(page_id).stem.casefold(),
-            *title_keys,
-            *alias_keys,
-        ]):
+        for key in ordered_unique(
+            [
+                page_id.casefold(),
+                Path(page_id).as_posix().casefold(),
+                Path(page_id).stem.casefold(),
+                *title_keys,
+                *alias_keys,
+            ]
+        ):
             lookup[key] = target_page_id
     return lookup, node_map
 
@@ -364,12 +367,14 @@ def extract_claims(meta: dict[str, object], body: str) -> list[dict[str, object]
                 text = str(row.get("text") or "").strip()
                 if not text:
                     continue
-                claims.append({
-                    "text": text,
-                    "confidence": str(row.get("confidence") or "").strip(),
-                    "supports": normalize_str_list(row.get("supports", [])),
-                    "contradicts": normalize_str_list(row.get("contradicts", [])),
-                })
+                claims.append(
+                    {
+                        "text": text,
+                        "confidence": str(row.get("confidence") or "").strip(),
+                        "supports": normalize_str_list(row.get("supports", [])),
+                        "contradicts": normalize_str_list(row.get("contradicts", [])),
+                    }
+                )
             else:
                 text = str(row).strip()
                 if text:
@@ -386,12 +391,14 @@ def extract_claims(meta: dict[str, object], body: str) -> list[dict[str, object]
         bullet = stripped[2:].strip()
         match = re.match(r"\[(?P<confidence>[^\]]+)\]\s*(?P<text>.+)", bullet)
         if match:
-            claims.append({
-                "text": match.group("text").strip(),
-                "confidence": match.group("confidence").strip(),
-                "supports": [],
-                "contradicts": [],
-            })
+            claims.append(
+                {
+                    "text": match.group("text").strip(),
+                    "confidence": match.group("confidence").strip(),
+                    "supports": [],
+                    "contradicts": [],
+                }
+            )
         elif bullet:
             claims.append({"text": bullet, "confidence": "", "supports": [], "contradicts": []})
 
@@ -421,10 +428,12 @@ def extract_connection_relations(body: str) -> list[dict[str, str]]:
         match = re.match(r"(?P<relation>[a-z_]+)\s*:\s*(?P<target>\[\[[^\]]+\]\]|[^-]+)", bullet)
         if not match:
             continue
-        relations.append({
-            "type": match.group("relation").strip(),
-            "target": match.group("target").strip(),
-        })
+        relations.append(
+            {
+                "type": match.group("relation").strip(),
+                "target": match.group("target").strip(),
+            }
+        )
     return relations
 
 
@@ -550,16 +559,20 @@ def add_node(nodes: dict[str, dict[str, object]], payload: dict[str, object]) ->
         if new_value and not old_value:
             existing[key] = new_value
 
-    merged_sources = ordered_unique([
-        *[str(item) for item in existing.get("sources", [])],
-        *[str(item) for item in payload.get("sources", [])],
-    ])
+    merged_sources = ordered_unique(
+        [
+            *[str(item) for item in existing.get("sources", [])],
+            *[str(item) for item in payload.get("sources", [])],
+        ]
+    )
     existing["sources"] = merged_sources
     for key in ("topics", "entities", "concepts", "aliases"):
-        existing[key] = ordered_unique([
-            *[str(item) for item in existing.get(key, [])],
-            *[str(item) for item in payload.get(key, [])],
-        ])
+        existing[key] = ordered_unique(
+            [
+                *[str(item) for item in existing.get(key, [])],
+                *[str(item) for item in payload.get(key, [])],
+            ]
+        )
 
 
 def add_edge(
@@ -572,12 +585,14 @@ def add_edge(
     edge_key = (source, target, edge_type)
     if edge_key not in seen_edges:
         seen_edges.add(edge_key)
-        edges.append({
-            "source": source,
-            "target": target,
-            "type": edge_type,
-            "relation": edge_type,
-        })
+        edges.append(
+            {
+                "source": source,
+                "target": target,
+                "type": edge_type,
+                "relation": edge_type,
+            }
+        )
 
 
 def node_type_for_path(node_id: str) -> str:
@@ -647,13 +662,8 @@ def compute_link_suggestions(
     excluded_types: set[str] | None = None,
 ) -> list[dict[str, object]]:
     excluded = excluded_types or {"raw", "file"}
-    undirected_edges = {
-        tuple(sorted((str(edge.get("source") or ""), str(edge.get("target") or ""))))
-        for edge in edges
-    }
-    candidates = [
-        node for node in nodes if str(node.get("type") or "page") not in excluded
-    ]
+    undirected_edges = {tuple(sorted((str(edge.get("source") or ""), str(edge.get("target") or "")))) for edge in edges}
+    candidates = [node for node in nodes if str(node.get("type") or "page") not in excluded]
     candidate_data = {
         str(node["id"]): {
             "label": str(node.get("label") or node["id"]),
@@ -675,9 +685,7 @@ def compute_link_suggestions(
             right_data = candidate_data[right_id]
             shared_tokens = sorted(left_data["tokens"] & right_data["tokens"])
             shared_sources = sorted(left_data["sources"] & right_data["sources"])
-            shared_neighbors = sorted(
-                set(metrics[left_id]["neighbor_ids"]) & set(metrics[right_id]["neighbor_ids"])
-            )
+            shared_neighbors = sorted(set(metrics[left_id]["neighbor_ids"]) & set(metrics[right_id]["neighbor_ids"]))
 
             score = 0
             reasons: list[str] = []
@@ -696,16 +704,18 @@ def compute_link_suggestions(
             if score < 5:
                 continue
 
-            suggestions.append({
-                "source": left_id,
-                "sourceLabel": left_data["label"],
-                "target": right_id,
-                "targetLabel": right_data["label"],
-                "score": score,
-                "reasons": reasons,
-                "sharedTokens": shared_tokens[:4],
-                "sharedSources": shared_sources[:3],
-            })
+            suggestions.append(
+                {
+                    "source": left_id,
+                    "sourceLabel": left_data["label"],
+                    "target": right_id,
+                    "targetLabel": right_data["label"],
+                    "score": score,
+                    "reasons": reasons,
+                    "sharedTokens": shared_tokens[:4],
+                    "sharedSources": shared_sources[:3],
+                }
+            )
 
     return sorted(
         suggestions,
@@ -724,10 +734,7 @@ def graph_summary_text(insights: dict[str, object]) -> str:
     suggestion_count = len(insights["suggestedLinks"])
     bridge_count = len(insights["bridgeNodes"])
     top_node = next(iter(insights["topNodes"]), None)
-    if top_node:
-        lead = f"The current key page is {top_node['title']}."
-    else:
-        lead = "The graph is still taking shape."
+    lead = f"The current key page is {top_node['title']}." if top_node else "The graph is still taking shape."
 
     if isolated_count:
         health = f"There are {isolated_count} isolated pages that need links first."
@@ -754,7 +761,8 @@ def compute_graph_insights(
     candidate_nodes = [node for node in nodes if str(node.get("type") or "page") not in excluded]
     candidate_ids = {str(node["id"]) for node in candidate_nodes}
     candidate_edges = [
-        edge for edge in edges
+        edge
+        for edge in edges
         if str(edge.get("source") or "") in candidate_ids and str(edge.get("target") or "") in candidate_ids
     ]
     metrics = node_metrics(candidate_nodes, candidate_edges)
@@ -788,30 +796,36 @@ def compute_graph_insights(
         node_items.append(node_item)
 
         if degree == 0:
-            isolated_nodes.append({
-                "id": node_id,
-                "title": node_item["title"],
-                "type": node_item["type"],
-                "severity": "isolated",
-                "reason": "No relationships with other pages yet",
-            })
+            isolated_nodes.append(
+                {
+                    "id": node_id,
+                    "title": node_item["title"],
+                    "type": node_item["type"],
+                    "severity": "isolated",
+                    "reason": "No relationships with other pages yet",
+                }
+            )
         elif degree == 1:
-            isolated_nodes.append({
-                "id": node_id,
-                "title": node_item["title"],
-                "type": node_item["type"],
-                "severity": "weak",
-                "reason": "Only one relationship so far. Add more links.",
-            })
+            isolated_nodes.append(
+                {
+                    "id": node_id,
+                    "title": node_item["title"],
+                    "type": node_item["type"],
+                    "severity": "weak",
+                    "reason": "Only one relationship so far. Add more links.",
+                }
+            )
 
         if degree >= 2 and len(neighbor_types) >= 2:
-            bridge_nodes.append({
-                "id": node_id,
-                "title": node_item["title"],
-                "type": node_item["type"],
-                "score": bridge_score,
-                "reason": f"Connects {len(neighbor_types)} page types and works well as a bridge.",
-            })
+            bridge_nodes.append(
+                {
+                    "id": node_id,
+                    "title": node_item["title"],
+                    "type": node_item["type"],
+                    "score": bridge_score,
+                    "reason": f"Connects {len(neighbor_types)} page types and works well as a bridge.",
+                }
+            )
 
     top_nodes = sorted(
         node_items,
@@ -834,7 +848,7 @@ def compute_graph_insights(
     )[:8]
     suggested_links = compute_link_suggestions(candidate_nodes, metrics, candidate_edges, excluded_types=excluded)
 
-    insights = {
+    insights: dict[str, object] = {
         "stats": {
             "nodeCount": len(candidate_nodes),
             "edgeCount": len(candidate_edges),
@@ -860,7 +874,9 @@ def compute_graph_insights(
     return insights
 
 
-def compute_layout(nodes: list[dict[str, object]], edges: list[dict[str, str]]) -> tuple[dict[str, dict[str, int]], int, int]:
+def compute_layout(
+    nodes: list[dict[str, object]], edges: list[dict[str, str]]
+) -> tuple[dict[str, dict[str, int]], int, int]:
     columns: dict[int, list[dict[str, object]]] = {}
     degrees: dict[str, int] = {str(node["id"]): 0 for node in nodes}
     for edge in edges:
@@ -942,24 +958,26 @@ def _render_view_payload(
         node_id = str(node["id"])
         pos = positions.get(node_id, {"x": 0, "y": 0})
         node_type = str(node.get("type") or "page")
-        rendered_nodes.append({
-            "id": node_id,
-            "label": str(node.get("label") or node_id),
-            "type": node_type,
-            "summary": str(node.get("summary") or ""),
-            "confidence": str(node.get("confidence") or ""),
-            "status": str(node.get("status") or ""),
-            "updated": str(node.get("updated") or ""),
-            "path": str(node.get("path") or node_id),
-            "sources": [str(item) for item in node.get("sources", [])],
-            "nodeType": str(node.get("nodeType") or "page"),
-            "pageType": str(node.get("pageType") or node_type),
-            "aliases": [str(item) for item in node.get("aliases", [])],
-            "maturity": str(node.get("maturity") or ""),
-            "x": pos["x"],
-            "y": pos["y"],
-            "color": TYPE_COLORS.get(node_type, "#3b82f6"),
-        })
+        rendered_nodes.append(
+            {
+                "id": node_id,
+                "label": str(node.get("label") or node_id),
+                "type": node_type,
+                "summary": str(node.get("summary") or ""),
+                "confidence": str(node.get("confidence") or ""),
+                "status": str(node.get("status") or ""),
+                "updated": str(node.get("updated") or ""),
+                "path": str(node.get("path") or node_id),
+                "sources": [str(item) for item in node.get("sources", [])],
+                "nodeType": str(node.get("nodeType") or "page"),
+                "pageType": str(node.get("pageType") or node_type),
+                "aliases": [str(item) for item in node.get("aliases", [])],
+                "maturity": str(node.get("maturity") or ""),
+                "x": pos["x"],
+                "y": pos["y"],
+                "color": TYPE_COLORS.get(node_type, "#3b82f6"),
+            }
+        )
 
     return {
         "nodeCount": len(rendered_nodes),
@@ -990,8 +1008,12 @@ def html_payload(root: Path, graph: dict[str, object]) -> dict[str, object]:
             view_insights = view.get("insights", {})
             if not isinstance(view_nodes, list) or not isinstance(view_edges, list):
                 continue
-            rendered_views[str(view_name)] = _render_view_payload(view_nodes, view_edges, view_insights if isinstance(view_insights, dict) else None)
-    active_payload = rendered_views.get(str(active_view.get("name") or ""), _render_view_payload(nodes, edges, insights))
+            rendered_views[str(view_name)] = _render_view_payload(
+                view_nodes, view_edges, view_insights if isinstance(view_insights, dict) else None
+            )
+    active_payload = rendered_views.get(
+        str(active_view.get("name") or ""), _render_view_payload(nodes, edges, insights)
+    )
 
     return {
         "generatedAt": graph.get("generated_at") or today_str(),
@@ -2133,13 +2155,11 @@ def build_suggested_view(
     knowledge_edges: list[dict[str, str]],
     knowledge_insights: dict[str, object],
 ) -> tuple[list[dict[str, object]], list[dict[str, str]], dict[str, object]]:
-    page_nodes = [
-        node for node in knowledge_nodes
-        if str(node.get("type") or "page") not in {"raw", "file", "claim"}
-    ]
+    page_nodes = [node for node in knowledge_nodes if str(node.get("type") or "page") not in {"raw", "file", "claim"}]
     page_node_ids = {str(node["id"]) for node in page_nodes}
     page_edges = [
-        edge for edge in knowledge_edges
+        edge
+        for edge in knowledge_edges
         if str(edge.get("source") or "") in page_node_ids and str(edge.get("target") or "") in page_node_ids
     ]
     metrics = node_metrics(page_nodes, page_edges)
@@ -2156,13 +2176,15 @@ def build_suggested_view(
         if edge_key in seen_edges:
             continue
         seen_edges.add(edge_key)
-        suggested_edges.append({
-            "source": str(item["source"]),
-            "target": str(item["target"]),
-            "type": "suggests_related_to",
-            "relation": "suggests_related_to",
-            "score": str(item["score"]),
-        })
+        suggested_edges.append(
+            {
+                "source": str(item["source"]),
+                "target": str(item["target"]),
+                "type": "suggests_related_to",
+                "relation": "suggests_related_to",
+                "score": str(item["score"]),
+            }
+        )
     insights = dict(knowledge_insights)
     insights["suggestedLinks"] = suggestions
     insights["summary"] = (
@@ -2173,7 +2195,9 @@ def build_suggested_view(
     return page_nodes, suggested_edges, insights
 
 
-def markdown_lines_for_graph(nodes: list[dict[str, object]], edges: list[dict[str, str]], insights: dict[str, object]) -> list[str]:
+def markdown_lines_for_graph(
+    nodes: list[dict[str, object]], edges: list[dict[str, str]], insights: dict[str, object]
+) -> list[str]:
     lines = [
         "# Knowledge Graph",
         "",
@@ -2215,15 +2239,17 @@ def main() -> int:
         meta, body = parse_frontmatter(raw_text)
         page_id = page.relative_to(root).as_posix()
         page_type = str(meta.get("type") or page.parent.name[:-1])
-        records.append({
-            "page": page,
-            "id": page_id,
-            "title": str(meta.get("title") or page.stem),
-            "page_type": page_type,
-            "meta": meta,
-            "body": body,
-            "raw_text": raw_text,
-        })
+        records.append(
+            {
+                "page": page,
+                "id": page_id,
+                "title": str(meta.get("title") or page.stem),
+                "page_type": page_type,
+                "meta": meta,
+                "body": body,
+                "raw_text": raw_text,
+            }
+        )
 
     active_records = [record for record in records if not is_merged_entity_record(record)]
     lookup, _node_map = build_page_lookups(records)
@@ -2234,13 +2260,11 @@ def main() -> int:
         knowledge_edges,
         knowledge_insights,
     )
-    legacy_nodes = [
-        node for node in knowledge_nodes
-        if str(node.get("type") or "page") != "claim"
-    ]
+    legacy_nodes = [node for node in knowledge_nodes if str(node.get("type") or "page") != "claim"]
     legacy_node_ids = {str(node["id"]) for node in legacy_nodes}
     legacy_edges = [
-        edge for edge in knowledge_edges
+        edge
+        for edge in knowledge_edges
         if str(edge.get("source") or "") in legacy_node_ids and str(edge.get("target") or "") in legacy_node_ids
     ]
     legacy_insights = compute_graph_insights(legacy_nodes, legacy_edges, excluded_types={"raw", "file", "claim"})
@@ -2285,12 +2309,16 @@ def main() -> int:
     write_text(graph_html_path, render_graph_html(html_payload(root, graph)))
     output_home = write_output_home(root)
 
-    append_log(root, f"[{today_str()}] graph | {len(knowledge_nodes)} nodes, {len(knowledge_edges)} edges", [
-        "- data: output/graph/graph.json",
-        "- summary: output/graph/graph.md",
-        "- viewer: output/graph/index.html",
-        "- hub: output/index.html",
-    ])
+    append_log(
+        root,
+        f"[{today_str()}] graph | {len(knowledge_nodes)} nodes, {len(knowledge_edges)} edges",
+        [
+            "- data: output/graph/graph.json",
+            "- summary: output/graph/graph.md",
+            "- viewer: output/graph/index.html",
+            "- hub: output/index.html",
+        ],
+    )
     print(f"Built graph with {len(knowledge_nodes)} nodes and {len(knowledge_edges)} edges")
     print("Graph data: output/graph/graph.json")
     print("Graph summary: output/graph/graph.md")

@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 migraph Script: ask
 
@@ -12,11 +10,12 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
+import re
 from datetime import date
 from pathlib import Path
-import re
 
 from crystallize import first_meaningful_line, text_tokens, write_page
 from utils import (
@@ -200,10 +199,7 @@ def is_placeholder_text(text: str) -> bool:
         return True
     if len(compact) <= 4:
         return True
-    for pattern in PLACEHOLDER_PATTERNS:
-        if pattern.search(compact):
-            return True
-    return False
+    return any(pattern.search(compact) for pattern in PLACEHOLDER_PATTERNS)
 
 
 def is_metadata_only_text(text: str) -> bool:
@@ -230,9 +226,7 @@ def is_table_like_text(text: str) -> bool:
     if compact.count("|") >= 4:
         return True
     lines = [line.strip() for line in compact.splitlines() if line.strip()]
-    if lines and sum(1 for line in lines if "|" in line) >= max(2, len(lines) // 2 + 1):
-        return True
-    return False
+    return bool(lines and sum(1 for line in lines if "|" in line) >= max(2, len(lines) // 2 + 1))
 
 
 def is_toc_like_text(text: str) -> bool:
@@ -241,9 +235,7 @@ def is_toc_like_text(text: str) -> bool:
         return False
     if compact.startswith(("1.", "1.1", "2.", "2.1")) and len(compact) <= 40:
         return True
-    if re.match(r"^\d+(?:\.\d+){0,3}\s*[\u4e00-\u9fffA-Za-z].*\d+$", compact):
-        return True
-    return False
+    return bool(re.match(r"^\d+(?:\.\d+){0,3}\s*[\u4e00-\u9fffA-Za-z].*\d+$", compact))
 
 
 def is_noise_line(line: str) -> bool:
@@ -258,9 +250,7 @@ def is_noise_line(line: str) -> bool:
         return True
     if is_toc_like_text(compact):
         return True
-    if compact.startswith(("**")) and any(marker in compact for marker in NOISE_MARKERS):
-        return True
-    return False
+    return bool(compact.startswith("**") and any(marker in compact for marker in NOISE_MARKERS))
 
 
 def cjk_ngrams(text: str, size: int = 2) -> set[str]:
@@ -305,9 +295,13 @@ def segment_quality_bonus(section: str, text: str, question: str) -> int:
         score -= 6
     if any(hint in normalized for hint in ANSWER_HINTS):
         score += 6
-    if any(hint in normalized for hint in DEFINITION_HINTS) and any(token in question for token in ("什么", "定义", "本质")):
+    if any(hint in normalized for hint in DEFINITION_HINTS) and any(
+        token in question for token in ("什么", "定义", "本质")
+    ):
         score += 8
-    if any(hint in normalized for hint in DECISION_HINTS) and any(token in question for token in ("为什么", "如何", "建议", "应")):
+    if any(hint in normalized for hint in DECISION_HINTS) and any(
+        token in question for token in ("为什么", "如何", "建议", "应")
+    ):
         score += 6
     return score
 
@@ -358,10 +352,12 @@ def body_segments(body: str) -> list[dict[str, str]]:
             return
         if is_noise_line(text_without_links):
             return
-        segments.append({
-            "section": current_section,
-            "snippet": text[:400],
-        })
+        segments.append(
+            {
+                "section": current_section,
+                "snippet": text[:400],
+            }
+        )
 
     for raw_line in body.replace("\r\n", "\n").splitlines():
         line = raw_line.rstrip()
@@ -426,7 +422,9 @@ def candidate_score(question: str, question_tokens: set[str], record: dict[str, 
     return score
 
 
-def evidence_score(question: str, question_tokens: set[str], record: dict[str, object], section: str, segment: str, page_score: int) -> int:
+def evidence_score(
+    question: str, question_tokens: set[str], record: dict[str, object], section: str, segment: str, page_score: int
+) -> int:
     if section in BLOCKED_SECTIONS or is_placeholder_text(segment) or is_metadata_only_text(segment):
         return 0
     score = text_match_score(question, question_tokens, " ".join([section, segment]))
@@ -448,7 +446,13 @@ def collect_candidate_records(root: Path) -> list[dict[str, object]]:
     return records
 
 
-def evidence_items(question: str, question_tokens: set[str], ranked: list[tuple[int, dict[str, object]]], per_page_limit: int = 2, total_limit: int = 5) -> list[dict[str, object]]:
+def evidence_items(
+    question: str,
+    question_tokens: set[str],
+    ranked: list[tuple[int, dict[str, object]]],
+    per_page_limit: int = 2,
+    total_limit: int = 5,
+) -> list[dict[str, object]]:
     items_by_key: dict[tuple[str, str], dict[str, object]] = {}
     for page_score, record in ranked:
         segments = body_segments(str(record["body"]))
@@ -490,7 +494,9 @@ def evidence_items(question: str, question_tokens: set[str], ranked: list[tuple[
     return items[:total_limit]
 
 
-def prioritize_evidence_for_best_record(evidence: list[dict[str, object]], best_record: dict[str, object]) -> list[dict[str, object]]:
+def prioritize_evidence_for_best_record(
+    evidence: list[dict[str, object]], best_record: dict[str, object]
+) -> list[dict[str, object]]:
     best_path = str(best_record["path"])
     best_title = str(best_record["title"]).casefold()
     prioritized = sorted(
@@ -527,7 +533,9 @@ def expanded_evidence_pool(
     return pool
 
 
-def fallback_evidence_items(ranked: list[tuple[int, dict[str, object]]], total_limit: int = 3) -> list[dict[str, object]]:
+def fallback_evidence_items(
+    ranked: list[tuple[int, dict[str, object]]], total_limit: int = 3
+) -> list[dict[str, object]]:
     items: list[dict[str, object]] = []
     seen_titles: set[tuple[str, str]] = set()
     type_priority = {"normalized": 0, "source": 1, "topic": 2, "concept": 3, "decision": 4, "synthesis": 5, "query": 6}
@@ -542,17 +550,19 @@ def fallback_evidence_items(ranked: list[tuple[int, dict[str, object]]], total_l
                 snippet = item["snippet"]
                 if is_placeholder_text(snippet):
                     continue
-                items.append({
-                    "page_title": str(record["title"]),
-                    "page_path": Path(str(record["path"])),
-                    "page_type": str(record["type"]),
-                    "section": item["section"],
-                    "section_anchor": slugify_section_name(item["section"]),
-                    "confidence": str(record["confidence"] or "n/a"),
-                    "status": str(record["status"] or "n/a"),
-                    "score": page_score,
-                    "snippet": snippet,
-                })
+                items.append(
+                    {
+                        "page_title": str(record["title"]),
+                        "page_path": Path(str(record["path"])),
+                        "page_type": str(record["type"]),
+                        "section": item["section"],
+                        "section_anchor": slugify_section_name(item["section"]),
+                        "confidence": str(record["confidence"] or "n/a"),
+                        "status": str(record["status"] or "n/a"),
+                        "score": page_score,
+                        "snippet": snippet,
+                    }
+                )
                 seen_titles.add(title_key)
                 break
             if len(items) >= total_limit:
@@ -600,26 +610,20 @@ def build_answer(question: str, ranked: list[tuple[int, dict[str, object]]], evi
     answer_lines.append(f"- 该页摘要：{best['summary']}")
     if evidence:
         top = evidence[0]
-        answer_lines.append(
-            f"- 最直接的证据摘录来自《{top['page_title']}》的“{top['section']}”部分：{top['snippet']}"
-        )
+        answer_lines.append(f"- 最直接的证据摘录来自《{top['page_title']}》的“{top['section']}”部分：{top['snippet']}")
 
     if len(ranked) > 1:
         other_titles = "；".join(f"《{record['title']}》" for _score, record in ranked[1:4])
         answer_lines.append(f"- 其他可交叉参考的页面有：{other_titles}。")
 
     low_confidence = [
-        record["title"]
-        for _score, record in ranked
-        if str(record["confidence"]) in {"mixed", "inferred", ""}
+        record["title"] for _score, record in ranked if str(record["confidence"]) in {"mixed", "inferred", ""}
     ]
     if low_confidence:
         answer_lines.append(f"- 需要额外验证的页面包括：{'；'.join(f'《{title}》' for title in low_confidence[:3])}。")
 
     stale_pages = [
-        record["title"]
-        for _score, record in ranked
-        if str(record["status"]) in {"stale", "archived", "superseded"}
+        record["title"] for _score, record in ranked if str(record["status"]) in {"stale", "archived", "superseded"}
     ]
     if stale_pages:
         answer_lines.append(f"- 其中有较旧或已降权的内容：{'；'.join(f'《{title}》' for title in stale_pages[:3])}。")
@@ -697,7 +701,12 @@ def main() -> int:
     parser.add_argument("--follow-up", action="append", default=[], help="Optional follow-up item when --save is used")
     parser.add_argument("--slug", default="", help="Explicit query page slug when --save is used")
     parser.add_argument("--update", action="store_true", help="Update an existing query page when --save is used")
-    parser.add_argument("--merge-mode", choices=["append", "replace", "dedupe"], default="replace", help="How to merge fields when --save is used")
+    parser.add_argument(
+        "--merge-mode",
+        choices=["append", "replace", "dedupe"],
+        default="replace",
+        help="How to merge fields when --save is used",
+    )
     args = parser.parse_args()
 
     root = find_repo_root(Path(args.root))
@@ -743,11 +752,13 @@ def main() -> int:
     else:
         lines.append("- No matching evidence snippets found")
 
-    lines.extend([
-        "",
-        "## Consulted Pages",
-        "",
-    ])
+    lines.extend(
+        [
+            "",
+            "## Consulted Pages",
+            "",
+        ]
+    )
 
     if limited:
         lines.extend(bullet_label(record, score, root) for score, record in limited)
@@ -776,22 +787,26 @@ def main() -> int:
             merge_mode=args.merge_mode,
         )
         sanitize_saved_query_page(page_path, root)
-        lines.extend([
-            "",
-            "## Query Page",
-            "",
-            f"- {action}: {page_path.relative_to(root).as_posix()}",
-        ])
+        lines.extend(
+            [
+                "",
+                "## Query Page",
+                "",
+                f"- {action}: {page_path.relative_to(root).as_posix()}",
+            ]
+        )
 
     output_home = refresh_output_home_if_present(root)
     if output_home is not None:
-        lines.extend([
-            "",
-            "## Output Pages",
-            "",
-            "- Open output/index.html to quickly access the local viewer and graph pages.",
-            f"- file URI: {file_uri(output_home)}",
-        ])
+        lines.extend(
+            [
+                "",
+                "## Output Pages",
+                "",
+                "- Open output/index.html to quickly access the local viewer and graph pages.",
+                f"- file URI: {file_uri(output_home)}",
+            ]
+        )
 
     print("\n".join(lines))
     return 0

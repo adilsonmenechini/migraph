@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 """
 MiGraph Script: digest
 
@@ -12,16 +10,25 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import argparse
 import re
 import sys
 from pathlib import Path
 
-from crystallize import first_meaningful_line, write_page
 from ai_config import llm_is_configured, resolve_llm_config
+from crystallize import first_meaningful_line, write_page
 from llm_client import llm_digest
-from utils import file_uri, find_repo_root, normalize_repo_path, parse_frontmatter, read_text, refresh_output_home_if_present
+from utils import (
+    file_uri,
+    find_repo_root,
+    normalize_repo_path,
+    parse_frontmatter,
+    read_text,
+    refresh_output_home_if_present,
+)
+
 
 def ordered_unique(items: list[str]) -> list[str]:
     seen: set[str] = set()
@@ -131,7 +138,21 @@ _HEURISTIC_LOW_VALUE_SUMMARY_PATTERNS = (
     "点击查看",
     "原文链接",
 )
-_HEURISTIC_TENSION_HINTS = ("但", "不过", "仍", "需要", "风险", "问题", "挑战", "难", "冲突", "取舍", "边界", "验证", "确认")
+_HEURISTIC_TENSION_HINTS = (
+    "但",
+    "不过",
+    "仍",
+    "需要",
+    "风险",
+    "问题",
+    "挑战",
+    "难",
+    "冲突",
+    "取舍",
+    "边界",
+    "验证",
+    "确认",
+)
 _HEURISTIC_LOW_VALUE_LINE_HINTS = (
     "本报告旨在回答",
     "研究问题",
@@ -204,7 +225,9 @@ def _heuristic_low_value_summary(text: str) -> bool:
     if _heuristic_is_metadata_line(clean) or _heuristic_is_link_only(clean):
         return True
     lowered = clean.lower()
-    return any(clean.startswith(prefix) for prefix in _HEURISTIC_LOW_VALUE_SUMMARY_PATTERNS) or any(hint in lowered for hint in _HEURISTIC_LOW_VALUE_LINE_HINTS)
+    return any(clean.startswith(prefix) for prefix in _HEURISTIC_LOW_VALUE_SUMMARY_PATTERNS) or any(
+        hint in lowered for hint in _HEURISTIC_LOW_VALUE_LINE_HINTS
+    )
 
 
 def _heuristic_split_sentences(text: str) -> list[str]:
@@ -246,9 +269,7 @@ def _heuristic_looks_incomplete_sentence(text: str) -> bool:
         return True
     if clean[-1] in _HEURISTIC_CONTINUATION_ENDINGS:
         return True
-    if len(clean) < 30:
-        return True
-    return False
+    return len(clean) < 30
 
 
 def _heuristic_is_low_value_sentence(text: str) -> bool:
@@ -262,9 +283,7 @@ def _heuristic_is_low_value_sentence(text: str) -> bool:
         return True
     if any(hint in lowered for hint in _HEURISTIC_LOW_VALUE_LINE_HINTS):
         return True
-    if clean.endswith(("：", ":")):
-        return True
-    return False
+    return bool(clean.endswith(("：", ":")))
 
 
 def _heuristic_sentence_priority(text: str) -> int:
@@ -335,8 +354,10 @@ def _heuristic_kind_summary_score(text: str, kind: str, title: str = "") -> int:
             score += 12
         if title_clean and (clean.startswith(title_clean) or clean.startswith(f"{title_clean}（")):
             score += 14
-        if title_clean and title_clean in clean and any(
-            hint in clean for hint in ("定义为", "本质上是", "指的是", "意味着", "首先是一种")
+        if (
+            title_clean
+            and title_clean in clean
+            and any(hint in clean for hint in ("定义为", "本质上是", "指的是", "意味着", "首先是一种"))
         ):
             score += 8
         if clean.startswith("本报告不将") or "并列的独立概念来讨论" in clean:
@@ -418,7 +439,10 @@ def _heuristic_choose_best_summary(summary: str, primary_body: str, title: str, 
     if not candidates:
         return title
     scored = sorted(
-        ((_heuristic_kind_summary_score(candidate, summary_kind, title), index, candidate) for index, candidate in enumerate(candidates)),
+        (
+            (_heuristic_kind_summary_score(candidate, summary_kind, title), index, candidate)
+            for index, candidate in enumerate(candidates)
+        ),
         key=lambda item: (-item[0], item[1], item[2]),
     )
     return scored[0][2]
@@ -533,8 +557,16 @@ def _heuristic_source_record(root: Path, raw_path: Path, summary_kind: str = "sy
 
     key_sentences = _heuristic_meaningful_sentences(primary_body, limit=10)
     if not tension_texts:
-        tension_texts.extend([item for item in _heuristic_meaningful_sentences(primary_body, limit=12) if _heuristic_likely_tension(item)][:3])
-    summary = _heuristic_short_text(_heuristic_choose_best_summary(summary or companion_summary, primary_body, title, summary_kind))
+        tension_texts.extend(
+            [
+                item
+                for item in _heuristic_meaningful_sentences(primary_body, limit=12)
+                if _heuristic_likely_tension(item)
+            ][:3]
+        )
+    summary = _heuristic_short_text(
+        _heuristic_choose_best_summary(summary or companion_summary, primary_body, title, summary_kind)
+    )
 
     return {
         "path": raw_path,
@@ -543,7 +575,9 @@ def _heuristic_source_record(root: Path, raw_path: Path, summary_kind: str = "sy
         "type": record_type,
         "source_paths": ordered_unique(source_paths),
         "related_paths": ordered_unique(related_paths),
-        "findings": ordered_unique([item for _score, item in sorted(key_texts, key=lambda value: (-value[0], value[1]))] + key_sentences),
+        "findings": ordered_unique(
+            [item for _score, item in sorted(key_texts, key=lambda value: (-value[0], value[1]))] + key_sentences
+        ),
         "tensions": ordered_unique(tension_texts),
     }
 
@@ -556,7 +590,10 @@ def _heuristic_auto_summary(records: list[dict[str, object]], fallback: str, sum
     if len(parts) == 1:
         return _heuristic_short_text(parts[0], limit=220)
     ranked = sorted(
-        ((_heuristic_kind_summary_score(part, summary_kind, fallback), index, part) for index, part in enumerate(parts)),
+        (
+            (_heuristic_kind_summary_score(part, summary_kind, fallback), index, part)
+            for index, part in enumerate(parts)
+        ),
         key=lambda item: (-item[0], item[1], item[2]),
     )
     lead = ranked[0][2]
@@ -582,7 +619,9 @@ def _heuristic_auto_summary(records: list[dict[str, object]], fallback: str, sum
             lead = preferred
     support = next((part for _score, _index, part in ranked[1:] if part != lead), "")
     if support:
-        return _heuristic_short_text(f"{lead} 这一判断也得到其他来源的补充支持，说明相关组织结论具有跨材料一致性。", limit=220)
+        return _heuristic_short_text(
+            f"{lead} 这一判断也得到其他来源的补充支持，说明相关组织结论具有跨材料一致性。", limit=220
+        )
     return _heuristic_short_text(lead, limit=220)
 
 
@@ -668,8 +707,15 @@ def main() -> int:
     parser.add_argument("--finding", action="append", default=[], help="Key finding")
     parser.add_argument("--tension", action="append", default=[], help="Open tension or conflict")
     parser.add_argument("--slug", default="", help="Explicit target slug")
-    parser.add_argument("--update", action="store_true", help="Update an existing digest page with the same title or slug")
-    parser.add_argument("--merge-mode", choices=["append", "replace", "dedupe"], default="dedupe", help="How to merge fields when --update is used")
+    parser.add_argument(
+        "--update", action="store_true", help="Update an existing digest page with the same title or slug"
+    )
+    parser.add_argument(
+        "--merge-mode",
+        choices=["append", "replace", "dedupe"],
+        default="dedupe",
+        help="How to merge fields when --update is used",
+    )
     args = parser.parse_args()
 
     root = find_repo_root(Path(args.root))
@@ -681,19 +727,21 @@ def main() -> int:
                 raise SystemExit(f"Source path not found: {raw}")
             records.append(source_record(root, path, summary_kind="synthesis"))
 
-    auto_source_paths = ordered_unique([
-        source_path
-        for record in records
-        for source_path in list(record["source_paths"]) or ([record["path"].relative_to(root).as_posix()] if Path(record["path"]).is_relative_to(root) else [])
-    ])
+    auto_source_paths = ordered_unique(
+        [
+            source_path
+            for record in records
+            for source_path in list(record["source_paths"])
+            or ([record["path"].relative_to(root).as_posix()] if Path(record["path"]).is_relative_to(root) else [])
+        ]
+    )
     auto_related_paths = ordered_unique([item for record in records for item in list(record["related_paths"])])
 
     source_data_list = [record["source_data"] for record in records]
     if llm_is_configured():
         llm_config = resolve_llm_config()
         print(
-            f"Notice: sending source content to configured LLM at {llm_config.base_url} "
-            f"(model: {llm_config.model}).",
+            f"Notice: sending source content to configured LLM at {llm_config.base_url} (model: {llm_config.model}).",
             file=sys.stderr,
         )
         try:

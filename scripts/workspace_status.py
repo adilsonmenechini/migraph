@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 """
 MiGraph Module: workspace_status
 
@@ -11,12 +9,20 @@ Usage:
 - Run `python scripts/<script> --help` for direct CLI details when the file exposes its own arguments.
 """
 
+from __future__ import annotations
 
 import json
 from datetime import datetime
 from pathlib import Path
 
-from utils import REQUIRED_FIELDS, ambiguous_entity_merge_candidates, collect_inbox_items, collect_wiki_pages, parse_frontmatter, read_text
+from utils import (
+    REQUIRED_FIELDS,
+    ambiguous_entity_merge_candidates,
+    collect_inbox_items,
+    collect_wiki_pages,
+    parse_frontmatter,
+    read_text,
+)
 
 REQUIRED_WORKSPACE_PATHS = [
     ".wiki-schema.md",
@@ -88,17 +94,15 @@ def _page_snapshot(root: Path) -> dict[str, object]:
                 missing_fields.append(field)
                 continue
             value = meta.get(field)
-            if value is None:
-                missing_fields.append(field)
-            elif isinstance(value, list) and not value:
-                missing_fields.append(field)
-            elif isinstance(value, str) and not value.strip():
+            if value is None or isinstance(value, list) and not value or isinstance(value, str) and not value.strip():
                 missing_fields.append(field)
         if missing_fields:
-            invalid_pages.append({
-                "path": page.relative_to(root).as_posix(),
-                "missing": missing_fields,
-            })
+            invalid_pages.append(
+                {
+                    "path": page.relative_to(root).as_posix(),
+                    "missing": missing_fields,
+                }
+            )
     return {
         "total": len(pages),
         "counts": counts,
@@ -124,14 +128,12 @@ def _inbox_snapshot(root: Path) -> dict[str, object]:
             metadata_errors.append(f"[invalid-inbox-metadata] {metadata_path.relative_to(root).as_posix()} ({error})")
             continue
         if not companion_note.exists():
-            metadata_errors.append(f"[orphan-inbox-metadata] {metadata_path.relative_to(root).as_posix()} has no matching markdown item")
+            metadata_errors.append(
+                f"[orphan-inbox-metadata] {metadata_path.relative_to(root).as_posix()} has no matching markdown item"
+            )
         kind = str(payload.get("kind", "") or "")
         if kind == "web":
-            missing = [
-                field
-                for field in ("title", "url", "adapter")
-                if not str(payload.get(field, "") or "").strip()
-            ]
+            missing = [field for field in ("title", "url", "adapter") if not str(payload.get(field, "") or "").strip()]
             if missing:
                 metadata_errors.append(
                     "[incomplete-web-metadata] {} is missing {}".format(
@@ -175,8 +177,7 @@ def _output_snapshot(root: Path) -> dict[str, object]:
     suggested_edges = suggested_view.get("edges", []) if isinstance(suggested_view.get("edges"), list) else []
     report_stats = graph_report_payload.get("stats", {}) if isinstance(graph_report_payload.get("stats"), dict) else {}
     entity_nodes = [
-        node for node in knowledge_nodes
-        if isinstance(node, dict) and str(node.get("type", "") or "") == "entity"
+        node for node in knowledge_nodes if isinstance(node, dict) and str(node.get("type", "") or "") == "entity"
     ]
     ambiguous_merge_candidates, ambiguous_entity_count = ambiguous_entity_merge_candidates(entity_nodes)
 
@@ -202,7 +203,9 @@ def _output_snapshot(root: Path) -> dict[str, object]:
             "default_view": str(graph_payload.get("default_view", "") or ""),
             "node_count": len(graph_payload.get("nodes", [])) if isinstance(graph_payload.get("nodes"), list) else 0,
             "edge_count": len(graph_payload.get("edges", [])) if isinstance(graph_payload.get("edges"), list) else 0,
-            "suggested_links": len(insights.get("suggestedLinks", [])) if isinstance(insights.get("suggestedLinks"), list) else 0,
+            "suggested_links": len(insights.get("suggestedLinks", []))
+            if isinstance(insights.get("suggestedLinks"), list)
+            else 0,
             "knowledge_node_count": len(knowledge_nodes),
             "knowledge_edge_count": len(knowledge_edges),
             "claim_count": sum(1 for node in knowledge_nodes if str(node.get("type", "") or "") == "claim"),
@@ -226,7 +229,9 @@ def _output_snapshot(root: Path) -> dict[str, object]:
             "report_mtime": _mtime(graph_report_html) or _mtime(graph_report_json) or _mtime(graph_report_md),
             "report_generated_at": str(graph_report_payload.get("generated_at", "") or ""),
             "report_summary": str(graph_report_payload.get("summary", "") or ""),
-            "report_top_actions": len(graph_report_payload.get("topActions", [])) if isinstance(graph_report_payload.get("topActions"), list) else 0,
+            "report_top_actions": len(graph_report_payload.get("topActions", []))
+            if isinstance(graph_report_payload.get("topActions"), list)
+            else 0,
             "report_isolated_pages": int(report_stats.get("isolatedPageCount", 0) or 0),
             "report_weak_pages": int(report_stats.get("weakPageCount", 0) or 0),
             "report_hub_stubs": int(report_stats.get("hubStubCount", 0) or 0),
@@ -296,15 +301,23 @@ def collect_health_issues(root: Path, snapshot: dict[str, object]) -> tuple[list
     assert isinstance(hub, dict)
 
     if viewer.get("html_exists") and not viewer.get("json_exists"):
-        errors.append("[viewer-metadata-missing] output/viewer/index.html exists but output/viewer/viewer.json is missing")
+        errors.append(
+            "[viewer-metadata-missing] output/viewer/index.html exists but output/viewer/viewer.json is missing"
+        )
     if graph.get("html_exists") and not graph.get("json_exists"):
         errors.append("[graph-data-missing] output/graph/index.html exists but output/graph/graph.json is missing")
     if graph.get("json_exists") and not graph.get("report_exists"):
         warnings.append("[graph-report-missing] output/graph/graph.json exists but output/graph/report.json is missing")
-    if graph.get("json_exists") and str(graph.get("schema_version", "") or "") == "2" and not int(graph.get("knowledge_node_count", 0) or 0):
+    if (
+        graph.get("json_exists")
+        and str(graph.get("schema_version", "") or "") == "2"
+        and not int(graph.get("knowledge_node_count", 0) or 0)
+    ):
         warnings.append("[knowledge-graph-empty] graph.json v2 exists but knowledge view has no nodes")
     if graph.get("report_exists") and not graph.get("report_html_exists"):
-        warnings.append("[graph-report-html-missing] output/graph/report.json exists but output/graph/report.html is missing")
+        warnings.append(
+            "[graph-report-html-missing] output/graph/report.json exists but output/graph/report.html is missing"
+        )
     if graph.get("report_exists") and str(graph.get("report_error", "") or "").strip():
         warnings.append("[invalid-graph-report] output/graph/report.json could not be read")
 
@@ -320,11 +333,15 @@ def collect_health_issues(root: Path, snapshot: dict[str, object]) -> tuple[list
         if isinstance(graph_report_mtime, (int, float)) and graph_report_mtime < latest_wiki_mtime:
             warnings.append("[stale-graph-report] output/graph/report.json is older than the latest wiki page")
         if pages.get("total", 0) and not viewer.get("html_exists"):
-            warnings.append("[viewer-not-built] wiki pages exist but output/viewer/index.html has not been generated yet")
+            warnings.append(
+                "[viewer-not-built] wiki pages exist but output/viewer/index.html has not been generated yet"
+            )
         if pages.get("total", 0) and not graph.get("html_exists"):
             warnings.append("[graph-not-built] wiki pages exist but output/graph/index.html has not been generated yet")
         if pages.get("total", 0) and graph.get("json_exists") and not graph.get("report_exists"):
-            warnings.append("[graph-report-not-built] graph data exists but the graph governance report has not been generated yet")
+            warnings.append(
+                "[graph-report-not-built] graph data exists but the graph governance report has not been generated yet"
+            )
 
     if (
         isinstance(graph_mtime, (int, float))
@@ -337,7 +354,9 @@ def collect_health_issues(root: Path, snapshot: dict[str, object]) -> tuple[list
     latest_inbox_mtime = inbox.get("latest_mtime")
     inbox_mtime = inbox_output.get("mtime")
     if inbox.get("total", 0) and not inbox_output.get("html_exists"):
-        warnings.append("[inbox-review-missing] inbox items exist but output/inbox/index.html has not been generated yet")
+        warnings.append(
+            "[inbox-review-missing] inbox items exist but output/inbox/index.html has not been generated yet"
+        )
     if (
         isinstance(latest_inbox_mtime, (int, float))
         and latest_inbox_mtime > 0
@@ -348,16 +367,22 @@ def collect_health_issues(root: Path, snapshot: dict[str, object]) -> tuple[list
 
     if hub.get("exists"):
         hub_mtime = hub.get("mtime")
-        freshest_output = max(
-            value
-            for value in [viewer_mtime, graph_mtime, inbox_mtime]
-            if isinstance(value, (int, float))
-        ) if any(isinstance(value, (int, float)) for value in [viewer_mtime, graph_mtime, inbox_mtime]) else None
-        if isinstance(hub_mtime, (int, float)) and isinstance(freshest_output, (int, float)) and hub_mtime < freshest_output:
+        freshest_output = (
+            max(value for value in [viewer_mtime, graph_mtime, inbox_mtime] if isinstance(value, (int, float)))
+            if any(isinstance(value, (int, float)) for value in [viewer_mtime, graph_mtime, inbox_mtime])
+            else None
+        )
+        if (
+            isinstance(hub_mtime, (int, float))
+            and isinstance(freshest_output, (int, float))
+            and hub_mtime < freshest_output
+        ):
             warnings.append("[stale-output-home] output/index.html is older than one of the generated output pages")
 
     if viewer.get("json_exists") and int(viewer.get("page_count", 0) or 0) != int(pages.get("total", 0) or 0):
-        warnings.append("[viewer-page-count-mismatch] output/viewer/viewer.json pageCount does not match current wiki page count")
+        warnings.append(
+            "[viewer-page-count-mismatch] output/viewer/viewer.json pageCount does not match current wiki page count"
+        )
 
     return errors, warnings
 
@@ -380,10 +405,13 @@ def format_status_lines(snapshot: dict[str, object]) -> list[str]:
 
     page_counts = pages.get("counts", {})
     assert isinstance(page_counts, dict)
-    page_breakdown = ", ".join(
-        "{}={}".format(page_type, count)
-        for page_type, count in sorted((str(key), int(value)) for key, value in page_counts.items())
-    ) or "none"
+    page_breakdown = (
+        ", ".join(
+            f"{page_type}={count}"
+            for page_type, count in sorted((str(key), int(value)) for key, value in page_counts.items())
+        )
+        or "none"
+    )
     quality_counts = inbox.get("quality_counts", {})
     assert isinstance(quality_counts, dict)
 
@@ -440,7 +468,9 @@ def format_status_lines(snapshot: dict[str, object]) -> list[str]:
             state="ready" if graph.get("report_html_exists") else "missing",
             detail=(
                 " (generated {generated}, isolatedPages={isolated}, isolatedEntities={isolated_entities}, aliasedEntities={aliased_entities}, aliases={aliases}, ambiguousAliasGroups={ambiguous_groups}, ambiguousEntities={ambiguous_entities}, hubStubs={hub_stubs}, fragileBridges={fragile}, clusters={clusters})".format(
-                    generated=str(graph.get("report_generated_at", "") or _format_timestamp(graph.get("report_mtime")) or "n/a"),
+                    generated=str(
+                        graph.get("report_generated_at", "") or _format_timestamp(graph.get("report_mtime")) or "n/a"
+                    ),
                     isolated=int(graph.get("report_isolated_pages", 0) or 0),
                     isolated_entities=int(graph.get("report_isolated_entities", 0) or 0),
                     aliased_entities=int(graph.get("report_aliased_entities", 0) or 0),
@@ -457,7 +487,9 @@ def format_status_lines(snapshot: dict[str, object]) -> list[str]:
         ),
         "- Inbox Review: {state}{detail}".format(
             state="ready" if inbox_output.get("html_exists") else "missing",
-            detail=f" (updated {_format_timestamp(inbox_output.get('mtime'))})" if inbox_output.get("html_exists") else "",
+            detail=f" (updated {_format_timestamp(inbox_output.get('mtime'))})"
+            if inbox_output.get("html_exists")
+            else "",
         ),
     ]
     return lines
