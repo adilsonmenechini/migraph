@@ -1,8 +1,14 @@
 ---
 title: AI Native Team
 type: concept
+category: DevOps
+domain: team
 created: 2026-06-19
 updated: 2026-06-19
+id: team.concept.ai-native-team
+version: "1.0.0"
+confidence: verified
+source: docs
 summary: A team model that treats models, context, and workflow as one operating system for delivery.
 sources:
   - wiki/sources/platform-spec.md
@@ -11,7 +17,6 @@ sources:
 tags:
   - concept
   - team
-confidence: verified
 status: active
 ---
 

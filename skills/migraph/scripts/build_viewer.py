@@ -45,6 +45,9 @@ SECTION_TITLES = {
     "pattern": "Patterns",
     "runbook": "Runbooks",
     "architecture": "Architectures",
+    "guide": "Guides",
+    "reference": "References",
+    "example": "Examples",
 }
 
 

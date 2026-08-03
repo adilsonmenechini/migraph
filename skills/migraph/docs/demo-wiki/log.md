@@ -1,11 +1,11 @@
 # Log
 
-## [2026-08-03] viewer | 11 pages
+## [2026-08-03] viewer | 17 pages
 - output: output/viewer/index.html
 - metadata: output/viewer/viewer.json
 - hub: output/index.html
 
-## [2026-08-03] graph | 11 nodes, 41 edges
+## [2026-08-03] graph | 17 nodes, 41 edges
 - data: output/graph/graph.json
 - summary: output/graph/graph.md
 - viewer: output/graph/index.html
@@ -15,28 +15,7 @@
 - review: output/inbox/index.html
 - hub: output/index.html
 
-## [2026-08-03] graph-report | 11 pages
-- report html: output/graph/report.html
-- report: output/graph/report.md
-- data: output/graph/report.json
-- hub: output/index.html
-
-## [2026-08-03] viewer | 15 pages
-- output: output/viewer/index.html
-- metadata: output/viewer/viewer.json
-- hub: output/index.html
-
-## [2026-08-03] graph | 15 nodes, 41 edges
-- data: output/graph/graph.json
-- summary: output/graph/graph.md
-- viewer: output/graph/index.html
-- hub: output/index.html
-
-## [2026-08-03] inbox | review page
-- review: output/inbox/index.html
-- hub: output/index.html
-
-## [2026-08-03] graph-report | 15 pages
+## [2026-08-03] graph-report | 17 pages
 - report html: output/graph/report.html
 - report: output/graph/report.md
 - data: output/graph/report.json

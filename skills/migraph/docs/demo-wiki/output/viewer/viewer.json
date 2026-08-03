@@ -1,14 +1,15 @@
 {
   "generatedAt": "2026-08-03",
   "rootName": "demo-wiki",
-  "pageCount": 15,
+  "pageCount": 17,
   "counts": {
     "concept": 5,
     "topic": 3,
     "source": 3,
     "synthesis": 1,
     "query": 1,
-    "decision": 2
+    "decision": 2,
+    "reference": 2
   },
   "pages": [
     {
@@ -638,6 +639,252 @@
               "href": ""
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "wiki/references/argocd.md",
+      "title": "ArgoCD",
+      "type": "reference",
+      "section": "References",
+      "summary": "ArgoCD é o controlador GitOps declarativo para Kubernetes — o Git é a fonte da verdade e o cluster converge para o estado desejado.",
+      "excerpt": "Argo CD é um controlador Kubernetes declarativo que segue o padrão **GitOps**: o repositório Git é a fonte da verdade do estado desejado, e o Argo CD monitora continuamente as aplicações, comparando o estado atual (live) com o desejado (target). Desvios são reportados como `OutOf",
+      "updated": "2026-08-03",
+      "confidence": "high",
+      "status": "active",
+      "sources": [],
+      "tags": [
+        "gitops",
+        "kubernetes",
+        "argocd",
+        "cd"
+      ],
+      "links": [],
+      "sections": [
+        {
+          "title": "🧠 Definition",
+          "anchor": "definition",
+          "content": "Argo CD é um controlador Kubernetes declarativo que segue o padrão **GitOps**: o repositório Git é a fonte da verdade do estado desejado, e o Argo CD monitora continuamente as aplicações, comparando o estado atual (live) com o desejado (target). Desvios são reportados como `OutOfSync` e podem ser sincronizados automática ou manualmente.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Modelo GitOps",
+          "anchor": "modelo-gitops",
+          "content": "- **Git como fonte da verdade**: manifests (Kustomize, Helm, Jsonnet, plain YAML) vivem no repo.\n- **Controller loop**: o Argo CD reconcilia continuamente — se o live state diverge do target, marca `OutOfSync`.\n- **Rollback**: qualquer configuração commitada no Git pode ser restaurada (roll-anywhere).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Recursos principais",
+          "anchor": "recursos-principais",
+          "content": "| Recurso | Função |\n|---------|--------|\n| `Application` | Declara source (repo + path + revision), destination (cluster + namespace) e syncPolicy |\n| `AppProject` | Multi-tenancy e RBAC: restringe repos, clusters, namespaces e recursos |\n| `ApplicationSet` | Gera Applications programaticamente via generators (list, cluster, git) |",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "ApplicationSet generators",
+          "anchor": "applicationset-generators",
+          "content": "- **List generator**: elementos estáticos com `{{param}}` → múltiplas Applications.\n- **Cluster generator**: usa os clusters definidos no Argo CD para gerar Applications.\n- **Git generator**: usa arquivos/diretórios do próprio repo para template (via `directories` ou `files` com JSON).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Sync Phases e Waves",
+          "anchor": "sync-phases-e-waves",
+          "content": "Ordenação de aplicação dos recursos:\n1. **Phase**: `PreSync` → `Sync` → `PostSync` (hooks: PreSync, Sync, Skip, PostSync, SyncFail, PreDelete, PostDelete).\n2. **Wave**: anotação `argocd.argoproj.io/sync-wave` (inteiro, default 0, pode ser negativo).\n3. **Kind**: namespaces primeiro, depois outros recursos.\n4. **Name**.\nAtraso entre waves: 2s por default (`ARGOCD_SYNC_WAVE_DELAY`).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Sync options comuns",
+          "anchor": "sync-options-comuns",
+          "content": "- `CreateNamespace=true` — cria namespace automaticamente\n- `PruneLast=true` — pruning como wave final implícita\n- `ApplyOutOfSyncOnly=true` — aplica só o que está out-of-sync\n- `Replace=true` — usa `kubectl replace/create`\n- `Validate=false` — desabilita validação (equivalente a `kubectl apply --validate=false`)",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "syncPolicy.automated",
+          "anchor": "syncpolicy-automated",
+          "content": "```yaml\nsyncPolicy:\n  automated:\n    prune: true      # remove recursos que não existem mais no Git\n    selfHeal: true   # corrige drift no cluster mesmo sem mudança no Git\n    allowEmpty: false\n  retry:\n    limit: 5\n    backoff:\n      duration: 5s\n      factor: 2\n      maxDuration: 3m\n```",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Progressive Syncs (beta v3.3+)",
+          "anchor": "progressive-syncs-beta-v3-3",
+          "content": "ApplicationSet com `strategy.type: RollingSync` — agrupa Applications por labels (`matchExpressions`), sincroniza grupo por grupo, esperando `Healthy` antes de avançar. `maxUpdate` controla % simultâneo; `deletionOrder: Reverse` para teardown ordenado.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔗 Related",
+          "anchor": "related",
+          "content": "- [[Kubernetes]]\n- [[GitOps]]\n- [[Helm]]",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🧩 Key Insights",
+          "anchor": "key-insights",
+          "content": "- Argo CD é implementado como um controller Kubernetes que roda em loop de reconciliação.\n- Suporte nativo a multi-cluster, SSO (OIDC, OAuth2, LDAP, SAML, GitHub, GitLab, Microsoft), RBAC multi-tenant.\n- Hooks PreSync/Sync/PostSync permitem blue/green e canary.\n- Métricas Prometheus + audit trail de eventos/API.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "⚠️ Trade-offs",
+          "anchor": "trade-offs",
+          "content": "- Complexidade operacional do próprio Argo CD (RBAC, SSO, multi-cluster).\n- Git como fonte da verdade exige disciplina de processo.\n- Progressive Syncs ainda beta.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📊 Observability",
+          "anchor": "observability",
+          "content": "- **SLIs**: sync status, health status, reconciliation frequency\n- **SLOs**: target 99.9%\n- **Metrics**: `argocd_app_info`, `argocd_app_sync_status`, Prometheus metrics built-in",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔐 Security Considerations",
+          "anchor": "security-considerations",
+          "content": "- RBAC via AppProject (repos, clusters, namespaces restritos).\n- SSO com OIDC/OAuth2/LDAP/SAML.\n- Access tokens para automação/CI.\n- Credenciais de repo/cluster gerenciadas via secrets.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🏗️ Usage Context",
+          "anchor": "usage-context",
+          "content": "- Quando usar: deploy GitOps em Kubernetes, multi-cluster, rollback confiável, compliance.\n- Quando NÃO usar: workloads fora de Kubernetes, sem repo Git central.\n- Pré-requisitos: cluster Kubernetes, repo Git com manifests.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 References",
+          "anchor": "references",
+          "content": "- [Argo CD Docs](https://argo-cd.readthedocs.io/)\n- [Sync Phases and Waves](https://argo-cd.readthedocs.io/en/stable/user-guide/sync-waves/)\n- [ApplicationSet](https://argo-cd.readthedocs.io/en/stable/user-guide/application-set/)\n- [Progressive Syncs](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Progressive-Syncs/)\n- [Application Specification](https://argo-cd.readthedocs.io/en/stable/user-guide/application-specification/)",
+          "refs": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "id": "wiki/references/graphrag.md",
+      "title": "GraphRAG",
+      "type": "reference",
+      "section": "References",
+      "summary": "GraphRAG é uma abordagem hierárquica e baseada em grafos para RAG (Retrieval-Augmented Generation) que extrai um knowledge graph do texto bruto, constrói hierarquia de comunidades via Leiden, gera sumários em bottom-up e usa essas estruturas para queries globais (map-reduce sobre community reports) e locais (fan-out no grafo).",
+      "excerpt": "GraphRAG é uma abordagem **estruturada e hierárquica para RAG (Retrieval-Augmented Generation)** que difere fundamentalmente de métodos baseados em busca semântica pura (vector search). Em vez de snippets de texto isolados, o GraphRAG: 1. Extrai um **knowledge graph** do texto br",
+      "updated": "2026-08-03",
+      "confidence": "high",
+      "status": "active",
+      "sources": [],
+      "tags": [
+        "graphrag",
+        "rag",
+        "knowledge-graph",
+        "microsoft",
+        "leiden"
+      ],
+      "links": [],
+      "sections": [
+        {
+          "title": "🧠 Definition",
+          "anchor": "definition",
+          "content": "GraphRAG é uma abordagem **estruturada e hierárquica para RAG (Retrieval-Augmented Generation)** que difere fundamentalmente de métodos baseados em busca semântica pura (vector search). Em vez de snippets de texto isolados, o GraphRAG:\n1. Extrai um **knowledge graph** do texto bruto (entidades, relacionamentos, claims)\n2. Constrói hierarquia de **comunidades** via algoritmo **Leiden** recursivo\n3. Gera **sumários de comunidade (community reports)** em bottom-up\n4. Usa essas estruturas para queries: **Global Search** (map-reduce sobre community reports), **Local Search** (fan-out no grafo), **DRIFT Search** (híbrido), **Basic Search** (vector search clássico)",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Pipeline de Indexação",
+          "anchor": "pipeline-de-indexa-o",
+          "content": "```\nDocuments → Chunk (1200 tokens default) → TextUnits\n    → Entity/Relationship/Claim Extraction (LLM)\n    → Graph Construction\n    → Hierarchical Leiden Clustering (recursive, max_cluster_size=10)\n    → Community Summarization (bottom-up, LLM-generated)\n    → Text Embeddings (entities, text units, community reports) → Vector Store\n```",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Data Model (Parquet tables default)",
+          "anchor": "data-model-parquet-tables-default",
+          "content": "| Entity Type | Description |\n|---|---|\n| `Document` | Input files (CSV rows ou .txt files) |\n| `TextUnit` | Chunks analisáveis (default 1200 tokens, configurável) |\n| `Entity` | Pessoas, lugares, organizações, eventos — com tipo e descrição |\n| `Relationship` | Conexões entre entidades com contexto descritivo |\n| `Covariate` | Claims time-bound sobre entidades (opcional) |\n| `Community` | Clusters hierárquicos do Leiden (level 0 = leaf, level N = root) |\n| `Community Report` | Sumário LLM-gerado de cada comunidade (executive overview + key entities/relationships/claims) |",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Hierarchical Leiden Clustering",
+          "anchor": "hierarchical-leiden-clustering",
+          "content": "- **Algoritmo**: Leiden (melhor que Louvain — connected communities, eficiente em grafos grandes, suporte nativo a multi-level hierarchy, reproducible seed 0xDEADBEEF).\n- **Parâmetros chave**:\n  - `max_cluster_size` (default 10): entidades máximas por leaf community. Menor = mais níveis, mais relatórios, mais custo LLM. Maior = menos níveis, sumários mais amplos.\n  - `use_lcc` (default true): restringe ao maior connected component.\n  - `resolution` (1.0): preferência tamanho comunidade.\n  - `randomness` (0.001), `use_modularity` (true), `iterations` (1).\n- **Hierarchy**: recursivo até todos os leaf communities < `max_cluster_size`. Cria parent communities agregando children.\n- **Output**: tree structure de comunidades com `Community Report` por nível.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Query Strategies",
+          "anchor": "query-strategies",
+          "content": "| Strategy | Best For | Mechanism |\n|---|---|---|\n| **Global Search** | Questões globais/holísticas (\"Quais os temas principais?\") | Map-reduce sobre community reports em nível escolhido (root/mid/leaf). Map: intermediate answers per chunk. Reduce: aggregate. |\n| **Local Search** | Perguntas sobre entidades específicas (\"O que cura a camomila?\") | Fan-out: entity → neighbors + relationships + text units. Combina graph + raw text. |\n| **DRIFT Search** | Exploração balanceada | Primer com community reports (global) + refinamento local via fan-out. Gera follow-up questions. |\n| **Basic Search** | Similaridade semântica simples | Standard top-k vector search. |",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Dynamic Community Selection (otimização recente)",
+          "anchor": "dynamic-community-selection-otimiza-o-recente",
+          "content": "Em vez de map-reduce estático em nível fixo: **rater LLM** (GPT-4o-mini) classifica relevância de community reports **top-down**. Irrelevantes = poda sub-árvore. Relevantes = traverse down. Só reports relevantes → map-reduce.\n- **Benefícios**: ~77% redução custo token (level 1), ~58-60% win rate vs static. Level 3 → mais detalhes, +34% custo.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Cost Comparison",
+          "anchor": "cost-comparison",
+          "content": "| Approach | Token Use per Query | Comprehensiveness |\n|---|---|---|\n| Baseline RAG | 100% (baseline) | Baseline |\n| GraphRAG (intermediate/low) | 20–70% | 70-80% win rate |\n| GraphRAG (high-level) | 2-3% | Competitive |\n| GraphRAG (source text summarization) | 100%+ | Lower |",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔗 Related",
+          "anchor": "related",
+          "content": "- [[RAG]]\n- [[Knowledge Graph]]\n- [[Leiden Algorithm]]\n- [[Loop Engineering]]\n- [[System Driver]]",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🧩 Key Insights",
+          "anchor": "key-insights",
+          "content": "- **Estrutura explícita**: entities/relationships como first-class objects → traversal multi-hop, entity importance via graph metrics, relationship-aware retrieval.\n- **Community detection + bottom-up summarization** → multi-level understanding, pre-computed summaries reduzem custo query-time, reasoning sobre estrutura do dataset.\n- **Provenance**: cada fato mantém links para source text units, documentos originais, entities/relationships relacionados, community memberships.\n- **Global queries** (ex: \"Quais os temas principais?\") são o killer feature — baseline RAG falha porque top-k snippets não cobrem o todo.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "⚠️ Trade-offs",
+          "anchor": "trade-offs",
+          "content": "- **Upfront cost**: indexação pesada (LLM extraction + Leiden + community summarization). Custos podem ser altos para datasets grandes.\n- **Complexidade**: pipeline multi-phase, múltiplas chamadas LLM, Leiden config, vector store.\n- **Quando NÃO usar**: datasets pequenos, queries simples, custo de indexação não justificado.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📊 Observability",
+          "anchor": "observability",
+          "content": "- **SLIs**: answer quality (comprehensiveness, diversity, empowerment), token cost/query, latency\n- **SLOs**: win rate > 70% vs baseline RAG\n- **Metrics**: token cost/query, latency, win rate (LLM evaluator), community detection quality",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔐 Security Considerations",
+          "anchor": "security-considerations",
+          "content": "- Dados privados nunca saem do ambiente (local LLM ou endpoint controlado).\n- Covariates opcionais para claims time-bound (compliance).\n- Provenance links permitem auditoria completa.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🏗️ Usage Context",
+          "anchor": "usage-context",
+          "content": "- Quando usar: datasets complexos, queries globais, necessidade de provenance, sumarização cross-document.\n- Quando NÃO usar: datasets pequenos/simples, queries apenas locais/semelhantes, budget apertado.\n- Pré-requisitos: LLM para extraction + summarization, vector store (LanceDB default, Qdrant, etc.), Leiden (graspologic_native).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 References",
+          "anchor": "references",
+          "content": "- [GraphRAG Official](https://microsoft.github.io/graphrag/)\n- [microsoft/GraphRAG (GitHub)](https://github.com/microsoft/GraphRAG)\n- [GraphRAG: Unlocking LLM Discovery on Narrative Private Data](https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/)\n- [GraphRAG: Improving Global Search via Dynamic Community Selection](https://www.microsoft.com/en-us/research/blog/graphrag-improving-global-search-via-dynamic-community-selection/)\n- [Core Concepts Overview](https://microsoft-graphrag.mintlify.app/concepts/overview)\n- [Community Detection (Leiden)](https://microsoft-graphrag.mintlify.app/concepts/community-detection)\n- [Global Search](https://github.com/microsoft/graphrag/blob/main/docs/query/global_search.md)\n- [GraphRAG Project (Microsoft Research)](https://www.microsoft.com/en-us/research/project/graphrag/)",
+          "refs": [],
+          "links": []
         }
       ]
     },

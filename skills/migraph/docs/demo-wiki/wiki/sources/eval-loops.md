@@ -1,15 +1,20 @@
 ---
 title: Eval Loop Notes
 type: source
+category: DevOps
+domain: eval
 created: 2026-06-19
 updated: 2026-06-19
+id: eval.source.eval-loops
+version: "1.0.0"
+confidence: extracted
+source: docs
 summary: Notes from an internal workshop on evaluation loops, review lanes, and release confidence.
 sources:
   - raw/articles/eval-loops.md
 tags:
   - source
   - eval
-confidence: extracted
 status: active
 ---
 

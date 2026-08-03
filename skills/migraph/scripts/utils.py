@@ -36,6 +36,9 @@ WIKI_DIRS = [
     "patterns",
     "runbooks",
     "architectures",
+    "guides",
+    "references",
+    "examples",
 ]
 GENERIC_ENTITY_SUFFIXES = {
     "agent",
@@ -63,6 +66,9 @@ PAGE_TYPE_TO_DIR = {
     "pattern": "patterns",
     "runbook": "runbooks",
     "architecture": "architectures",
+    "guide": "guides",
+    "reference": "references",
+    "example": "examples",
 }
 SECTION_ORDER = [
     ("Topics", "topic"),
@@ -75,6 +81,9 @@ SECTION_ORDER = [
     ("Patterns", "pattern"),
     ("Runbooks", "runbook"),
     ("Architectures", "architecture"),
+    ("Guides", "guide"),
+    ("References", "reference"),
+    ("Examples", "example"),
 ]
 REQUIRED_FIELDS = ["title", "type", "created", "updated", "sources", "tags", "confidence", "status"]
 

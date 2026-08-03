@@ -1,8 +1,14 @@
 ---
 title: Delivery System Synthesis
 type: synthesis
+category: DevOps
+domain: delivery
 created: 2026-06-19
 updated: 2026-06-19
+id: delivery.synthesis.delivery-system
+version: "1.0.0"
+confidence: mixed
+source: docs
 summary: Synthesis page summarizing how source, topic, concept, and decision pages reinforce one another.
 sources:
   - wiki/sources/platform-spec.md
@@ -11,7 +17,6 @@ sources:
   - wiki/decisions/execution-policy.md
 tags:
   - synthesis
-confidence: mixed
 status: active
 ---
 

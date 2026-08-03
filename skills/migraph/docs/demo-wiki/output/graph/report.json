@@ -2,10 +2,10 @@
   "generated_at": "2026-08-03",
   "schemaVersion": "2",
   "view": "knowledge",
-  "summary": "The current key page is AI Native Team. There are 4 isolated pages that need links. There are 1 high-degree thin pages worth strengthening first. There are 8 suggested links ready for review.",
+  "summary": "The current key page is AI Native Team. There are 6 isolated pages that need links. There are 1 high-degree thin pages worth strengthening first. There are 8 suggested links ready for review.",
   "stats": {
     "view": "knowledge",
-    "nodeCount": 15,
+    "nodeCount": 17,
     "edgeCount": 41,
     "entityCount": 0,
     "aliasCount": 0,
@@ -13,15 +13,15 @@
     "ambiguousAliasGroupCount": 0,
     "ambiguousEntityCount": 0,
     "isolatedEntityCount": 0,
-    "isolatedPageCount": 4,
+    "isolatedPageCount": 6,
     "weakPageCount": 0,
     "bridgePageCount": 5,
     "suggestedLinkCount": 8,
     "hubStubCount": 1,
     "fragileBridgeCount": 0,
     "isolatedClusterCount": 0,
-    "componentCount": 5,
-    "averageDegree": 5.47
+    "componentCount": 7,
+    "averageDegree": 4.82
   },
   "topActions": [
     "Fix isolated pages first by adding `links_to` edges or source references.",
@@ -119,9 +119,25 @@
       "reason": "No page-level relationships yet."
     },
     {
+      "id": "wiki/references/argocd.md",
+      "title": "ArgoCD",
+      "type": "reference",
+      "severity": "isolated",
+      "degree": 0,
+      "reason": "No page-level relationships yet."
+    },
+    {
       "id": "wiki/concepts/gitops.md",
       "title": "GitOps",
       "type": "concept",
+      "severity": "isolated",
+      "degree": 0,
+      "reason": "No page-level relationships yet."
+    },
+    {
+      "id": "wiki/references/graphrag.md",
+      "title": "GraphRAG",
+      "type": "reference",
       "severity": "isolated",
       "degree": 0,
       "reason": "No page-level relationships yet."

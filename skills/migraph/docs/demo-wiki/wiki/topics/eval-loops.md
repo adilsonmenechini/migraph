@@ -1,8 +1,14 @@
 ---
 title: Eval Loops
 type: topic
+category: DevOps
+domain: eval
 created: 2026-06-19
 updated: 2026-06-19
+id: eval.topic.eval-loops
+version: "1.0.0"
+confidence: mixed
+source: docs
 summary: Topic page about review lanes, regression checks, and feedback loops for model releases.
 sources:
   - wiki/sources/eval-loops.md
@@ -10,7 +16,6 @@ sources:
 tags:
   - topic
   - eval
-confidence: mixed
 status: active
 ---
 

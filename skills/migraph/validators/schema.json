@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Knowledge Note Metadata Schema",
-  "description": "Schema for validating knowledge note frontmatter (7 types)",
+  "title": "MiGraph Page Metadata Schema",
+  "description": "Schema for validating MiGraph wiki page frontmatter (13 types)",
   "type": "object",
   "required": ["id", "type", "domain", "tags", "summary"],
   "properties": {
@@ -13,8 +13,8 @@
     },
     "type": {
       "type": "string",
-      "enum": ["concept", "guide", "reference", "example", "pattern", "runbook", "architecture"],
-      "description": "Knowledge type (7 unified types)"
+      "enum": ["source", "topic", "concept", "decision", "query", "synthesis", "entity", "pattern", "runbook", "architecture", "guide", "reference", "example"],
+      "description": "Page type (13 unified types)"
     },
     "domain": {
       "type": "string",

@@ -2660,6 +2660,9 @@ class TestNewPageTypes(unittest.TestCase):
         self.assertIn("patterns", WIKI_DIRS)
         self.assertIn("runbooks", WIKI_DIRS)
         self.assertIn("architectures", WIKI_DIRS)
+        self.assertIn("guides", WIKI_DIRS)
+        self.assertIn("references", WIKI_DIRS)
+        self.assertIn("examples", WIKI_DIRS)
 
     def test_page_type_to_dir_includes_new_types(self) -> None:
         from utils import PAGE_TYPE_TO_DIR
@@ -2667,6 +2670,9 @@ class TestNewPageTypes(unittest.TestCase):
         self.assertEqual(PAGE_TYPE_TO_DIR["pattern"], "patterns")
         self.assertEqual(PAGE_TYPE_TO_DIR["runbook"], "runbooks")
         self.assertEqual(PAGE_TYPE_TO_DIR["architecture"], "architectures")
+        self.assertEqual(PAGE_TYPE_TO_DIR["guide"], "guides")
+        self.assertEqual(PAGE_TYPE_TO_DIR["reference"], "references")
+        self.assertEqual(PAGE_TYPE_TO_DIR["example"], "examples")
 
     def test_section_order_includes_new_types(self) -> None:
         from utils import SECTION_ORDER
@@ -2675,6 +2681,57 @@ class TestNewPageTypes(unittest.TestCase):
         self.assertIn("pattern", type_names)
         self.assertIn("runbook", type_names)
         self.assertIn("architecture", type_names)
+        self.assertIn("guide", type_names)
+        self.assertIn("reference", type_names)
+        self.assertIn("example", type_names)
+
+    def test_update_schema_backfills_unified_fields(self) -> None:
+        import tempfile
+        from pathlib import Path
+
+        from update_schema import process_file
+
+        with tempfile.TemporaryDirectory() as tmp:
+            page = Path(tmp) / "guides" / "ci-cd.md"
+            page.parent.mkdir()
+            page.write_text(
+                "---\n"
+                "title: CI/CD\n"
+                "type: guide\n"
+                "category: DevOps\n"
+                "domain: cicd\n"
+                "created: 2026-01-01\n"
+                "updated: 2026-01-01\n"
+                "tags:\n"
+                "  - cicd\n"
+                "status: active\n"
+                "summary: Pipeline setup.\n"
+                "---\n"
+                "\n"
+                "# CI/CD\n",
+                encoding="utf-8",
+            )
+            self.assertTrue(process_file(page, "guide"))
+            content = page.read_text(encoding="utf-8")
+            self.assertIn("id: cicd.guide.ci-cd", content)
+            self.assertIn('version: "1.0.0"', content)
+            self.assertIn("confidence: high", content)
+            self.assertIn("source: docs", content)
+            self.assertFalse(process_file(page, "guide"))
+
+    def test_evals_and_schema_json_are_valid(self) -> None:
+        import json
+        from pathlib import Path
+
+        skill_root = Path(__file__).resolve().parents[1] / "skills" / "migraph"
+        evals = json.loads((skill_root / "evals" / "evals.json").read_text(encoding="utf-8"))
+        schema = json.loads((skill_root / "validators" / "schema.json").read_text(encoding="utf-8"))
+
+        self.assertEqual(evals["skill_name"], "migraph")
+        type_enum = schema["properties"]["type"]["enum"]
+        self.assertEqual(len(type_enum), 13)
+        for expected in ("source", "topic", "concept", "decision", "query", "synthesis", "entity", "pattern", "runbook", "architecture", "guide", "reference", "example"):
+            self.assertIn(expected, type_enum)
 
 
 class TestDedupeBugFix(unittest.TestCase):

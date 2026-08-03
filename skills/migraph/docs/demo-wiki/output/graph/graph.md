@@ -1,8 +1,8 @@
 # Knowledge Graph
 
-- Nodes: 15
+- Nodes: 17
 - Edges: 41
-- Summary: The current key page is AI Native Team. There are 4 isolated pages that need links first. You can review 8 suggested links next.
+- Summary: The current key page is AI Native Team. There are 6 isolated pages that need links first. You can review 8 suggested links next.
 
 ## Key Pages
 - AI Native Team (concept) | score=70 | Degree 14, inbound 7, spanning 6 neighbor types.
@@ -31,6 +31,8 @@
 - decision: Context Budget (wiki/decisions/context-budget.md)
 - decision: Execution Policy (wiki/decisions/execution-policy.md)
 - query: What Makes an AI Native Team (wiki/queries/what-makes-ai-native-team.md)
+- reference: ArgoCD (wiki/references/argocd.md)
+- reference: GraphRAG (wiki/references/graphrag.md)
 - source: Eval Loop Notes (wiki/sources/eval-loops.md)
 - source: Platform Spec (wiki/sources/platform-spec.md)
 - source: Review Checklist (wiki/sources/review-checklist.md)

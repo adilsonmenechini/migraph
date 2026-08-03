@@ -66,15 +66,20 @@ WIKI_FILES = {
     ---
     title: Platform Spec
     type: source
+    category: DevOps
+    domain: platform
     created: 2026-06-19
     updated: 2026-06-19
+    id: platform.source.platform-spec
+    version: "1.0.0"
+    confidence: extracted
+    source: docs
     summary: A source page describing why execution specs and context must be treated as one delivery system.
     sources:
       - raw/articles/platform-spec.md
     tags:
       - source
       - platform
-    confidence: extracted
     status: active
     ---
 
@@ -94,15 +99,20 @@ WIKI_FILES = {
     ---
     title: Eval Loop Notes
     type: source
+    category: DevOps
+    domain: eval
     created: 2026-06-19
     updated: 2026-06-19
+    id: eval.source.eval-loops
+    version: "1.0.0"
+    confidence: extracted
+    source: docs
     summary: Notes from an internal workshop on evaluation loops, review lanes, and release confidence.
     sources:
       - raw/articles/eval-loops.md
     tags:
       - source
       - eval
-    confidence: extracted
     status: active
     ---
 
@@ -121,15 +131,20 @@ WIKI_FILES = {
     ---
     title: Review Checklist
     type: source
+    category: DevOps
+    domain: review
     created: 2026-06-19
     updated: 2026-06-19
+    id: review.source.review-checklist
+    version: "1.0.0"
+    confidence: extracted
+    source: docs
     summary: A source page explaining how human review, acceptance criteria, and escalation paths fit together.
     sources:
       - raw/articles/review-checklist.md
     tags:
       - source
       - review
-    confidence: extracted
     status: active
     ---
 
@@ -148,8 +163,14 @@ WIKI_FILES = {
     ---
     title: Model Platform
     type: topic
+    category: DevOps
+    domain: platform
     created: 2026-06-19
     updated: 2026-06-19
+    id: platform.topic.model-platform
+    version: "1.0.0"
+    confidence: mixed
+    source: docs
     summary: Topic page for reusable context, evaluation workflows, and internal tooling.
     sources:
       - wiki/sources/platform-spec.md
@@ -157,7 +178,6 @@ WIKI_FILES = {
     tags:
       - topic
       - platform
-    confidence: mixed
     status: active
     ---
 
@@ -177,8 +197,14 @@ WIKI_FILES = {
     ---
     title: Eval Loops
     type: topic
+    category: DevOps
+    domain: eval
     created: 2026-06-19
     updated: 2026-06-19
+    id: eval.topic.eval-loops
+    version: "1.0.0"
+    confidence: mixed
+    source: docs
     summary: Topic page about review lanes, regression checks, and feedback loops for model releases.
     sources:
       - wiki/sources/eval-loops.md
@@ -186,7 +212,6 @@ WIKI_FILES = {
     tags:
       - topic
       - eval
-    confidence: mixed
     status: active
     ---
 
@@ -206,8 +231,14 @@ WIKI_FILES = {
     ---
     title: AI Native Team
     type: concept
+    category: DevOps
+    domain: team
     created: 2026-06-19
     updated: 2026-06-19
+    id: team.concept.ai-native-team
+    version: "1.0.0"
+    confidence: verified
+    source: docs
     summary: A team model that treats models, context, and workflow as one operating system for delivery.
     sources:
       - wiki/sources/platform-spec.md
@@ -216,7 +247,6 @@ WIKI_FILES = {
     tags:
       - concept
       - team
-    confidence: verified
     status: active
     ---
 
@@ -241,8 +271,14 @@ WIKI_FILES = {
     ---
     title: Execution Spec
     type: concept
+    category: DevOps
+    domain: execution
     created: 2026-06-19
     updated: 2026-06-19
+    id: execution.concept.execution-spec
+    version: "1.0.0"
+    confidence: verified
+    source: docs
     summary: A reusable specification that binds task framing, context, policy, and review expectations together.
     sources:
       - wiki/sources/platform-spec.md
@@ -250,7 +286,6 @@ WIKI_FILES = {
     tags:
       - concept
       - spec
-    confidence: verified
     status: active
     ---
 
@@ -270,15 +305,20 @@ WIKI_FILES = {
     ---
     title: Execution Policy
     type: decision
+    category: DevOps
+    domain: execution
     created: 2026-06-19
     updated: 2026-06-19
+    id: execution.decision.execution-policy
+    version: "1.0.0"
+    confidence: verified
+    source: docs
     summary: Decision page that recommends treating context and execution as first-class platform capabilities.
     sources:
       - wiki/concepts/ai-native-team.md
       - wiki/concepts/execution-spec.md
     tags:
       - decision
-    confidence: verified
     status: active
     ---
 
@@ -296,8 +336,14 @@ WIKI_FILES = {
     ---
     title: Context Budget
     type: decision
+    category: DevOps
+    domain: context
     created: 2026-06-19
     updated: 2026-06-19
+    id: context.decision.context-budget
+    version: "1.0.0"
+    confidence: verified
+    source: docs
     summary: Decision page that limits context sprawl and requires explicit budget ownership in prompts and tools.
     sources:
       - wiki/sources/eval-loops.md
@@ -305,7 +351,6 @@ WIKI_FILES = {
     tags:
       - decision
       - context
-    confidence: verified
     status: active
     ---
 
@@ -319,8 +364,14 @@ WIKI_FILES = {
     ---
     title: Delivery System Synthesis
     type: synthesis
+    category: DevOps
+    domain: delivery
     created: 2026-06-19
     updated: 2026-06-19
+    id: delivery.synthesis.delivery-system
+    version: "1.0.0"
+    confidence: mixed
+    source: docs
     summary: Synthesis page summarizing how source, topic, concept, and decision pages reinforce one another.
     sources:
       - wiki/sources/platform-spec.md
@@ -329,7 +380,6 @@ WIKI_FILES = {
       - wiki/decisions/execution-policy.md
     tags:
       - synthesis
-    confidence: mixed
     status: active
     ---
 
@@ -344,15 +394,20 @@ WIKI_FILES = {
     ---
     title: What Makes an AI Native Team
     type: query
+    category: DevOps
+    domain: team
     created: 2026-06-19
     updated: 2026-06-19
+    id: team.query.what-makes-ai-native-team
+    version: "1.0.0"
+    confidence: mixed
+    source: docs
     summary: Saved query summarizing the defining traits of an AI native delivery team.
     sources:
       - wiki/concepts/ai-native-team.md
       - wiki/decisions/execution-policy.md
     tags:
       - query
-    confidence: mixed
     status: active
     ---
 

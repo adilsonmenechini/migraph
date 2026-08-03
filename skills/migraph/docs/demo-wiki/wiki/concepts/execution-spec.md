@@ -1,8 +1,14 @@
 ---
 title: Execution Spec
 type: concept
+category: DevOps
+domain: execution
 created: 2026-06-19
 updated: 2026-06-19
+id: execution.concept.execution-spec
+version: "1.0.0"
+confidence: verified
+source: docs
 summary: A reusable specification that binds task framing, context, policy, and review expectations together.
 sources:
   - wiki/sources/platform-spec.md
@@ -10,7 +16,6 @@ sources:
 tags:
   - concept
   - spec
-confidence: verified
 status: active
 ---
 

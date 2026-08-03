@@ -3,9 +3,9 @@
   "schema_version": "2",
   "default_view": "knowledge",
   "catalog": {
-    "pageCount": 15,
+    "pageCount": 17,
     "claimCount": 0,
-    "nodeCount": 15,
+    "nodeCount": 17,
     "edgeCount": 41
   },
   "nodes": [
@@ -176,6 +176,44 @@
       ],
       "nodeType": "page",
       "pageType": "query",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/references/argocd.md",
+      "label": "ArgoCD",
+      "type": "reference",
+      "summary": "ArgoCD é o controlador GitOps declarativo para Kubernetes — o Git é a fonte da verdade e o cluster converge para o estado desejado.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/references/argocd.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "reference",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/references/graphrag.md",
+      "label": "GraphRAG",
+      "type": "reference",
+      "summary": "GraphRAG é uma abordagem hierárquica e baseada em grafos para RAG (Retrieval-Augmented Generation) que extrai um knowledge graph do texto bruto, constrói hierarquia de comunidades via Leiden, gera sumários em bottom-up e usa essas estruturas para queries globais (map-reduce sobre community reports) e locais (fan-out no grafo).",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/references/graphrag.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "reference",
       "topics": [],
       "entities": [],
       "concepts": [],
@@ -586,11 +624,11 @@
   ],
   "insights": {
     "stats": {
-      "nodeCount": 15,
+      "nodeCount": 17,
       "edgeCount": 41,
-      "isolatedCount": 4,
+      "isolatedCount": 6,
       "weakCount": 0,
-      "averageDegree": 5.47
+      "averageDegree": 4.82
     },
     "topNodes": [
       {
@@ -682,9 +720,23 @@
         "reason": "No relationships with other pages yet"
       },
       {
+        "id": "wiki/references/argocd.md",
+        "title": "ArgoCD",
+        "type": "reference",
+        "severity": "isolated",
+        "reason": "No relationships with other pages yet"
+      },
+      {
         "id": "wiki/concepts/gitops.md",
         "title": "GitOps",
         "type": "concept",
+        "severity": "isolated",
+        "reason": "No relationships with other pages yet"
+      },
+      {
+        "id": "wiki/references/graphrag.md",
+        "title": "GraphRAG",
+        "type": "reference",
         "severity": "isolated",
         "reason": "No relationships with other pages yet"
       },
@@ -862,7 +914,7 @@
         "sharedSources": []
       }
     ],
-    "summary": "The current key page is AI Native Team. There are 4 isolated pages that need links first. You can review 8 suggested links next."
+    "summary": "The current key page is AI Native Team. There are 6 isolated pages that need links first. You can review 8 suggested links next."
   },
   "views": {
     "document": {
@@ -1065,6 +1117,44 @@
           ],
           "nodeType": "page",
           "pageType": "query",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/argocd.md",
+          "label": "ArgoCD",
+          "type": "reference",
+          "summary": "ArgoCD é o controlador GitOps declarativo para Kubernetes — o Git é a fonte da verdade e o cluster converge para o estado desejado.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/argocd.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/graphrag.md",
+          "label": "GraphRAG",
+          "type": "reference",
+          "summary": "GraphRAG é uma abordagem hierárquica e baseada em grafos para RAG (Retrieval-Augmented Generation) que extrai um knowledge graph do texto bruto, constrói hierarquia de comunidades via Leiden, gera sumários em bottom-up e usa essas estruturas para queries globais (map-reduce sobre community reports) e locais (fan-out no grafo).",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/graphrag.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
           "topics": [],
           "entities": [],
           "concepts": [],
@@ -1483,11 +1573,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 15,
+          "nodeCount": 17,
           "edgeCount": 41,
-          "isolatedCount": 4,
+          "isolatedCount": 6,
           "weakCount": 0,
-          "averageDegree": 5.47
+          "averageDegree": 4.82
         },
         "topNodes": [
           {
@@ -1579,9 +1669,23 @@
             "reason": "No relationships with other pages yet"
           },
           {
+            "id": "wiki/references/argocd.md",
+            "title": "ArgoCD",
+            "type": "reference",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
             "id": "wiki/concepts/gitops.md",
             "title": "GitOps",
             "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/references/graphrag.md",
+            "title": "GraphRAG",
+            "type": "reference",
             "severity": "isolated",
             "reason": "No relationships with other pages yet"
           },
@@ -1759,7 +1863,7 @@
             "sharedSources": []
           }
         ],
-        "summary": "The current key page is AI Native Team. There are 4 isolated pages that need links first. You can review 8 suggested links next."
+        "summary": "The current key page is AI Native Team. There are 6 isolated pages that need links first. You can review 8 suggested links next."
       }
     },
     "knowledge": {
@@ -1931,6 +2035,44 @@
           ],
           "nodeType": "page",
           "pageType": "query",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/argocd.md",
+          "label": "ArgoCD",
+          "type": "reference",
+          "summary": "ArgoCD é o controlador GitOps declarativo para Kubernetes — o Git é a fonte da verdade e o cluster converge para o estado desejado.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/argocd.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/graphrag.md",
+          "label": "GraphRAG",
+          "type": "reference",
+          "summary": "GraphRAG é uma abordagem hierárquica e baseada em grafos para RAG (Retrieval-Augmented Generation) que extrai um knowledge graph do texto bruto, constrói hierarquia de comunidades via Leiden, gera sumários em bottom-up e usa essas estruturas para queries globais (map-reduce sobre community reports) e locais (fan-out no grafo).",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/graphrag.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
           "topics": [],
           "entities": [],
           "concepts": [],
@@ -2341,11 +2483,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 15,
+          "nodeCount": 17,
           "edgeCount": 41,
-          "isolatedCount": 4,
+          "isolatedCount": 6,
           "weakCount": 0,
-          "averageDegree": 5.47
+          "averageDegree": 4.82
         },
         "topNodes": [
           {
@@ -2437,9 +2579,23 @@
             "reason": "No relationships with other pages yet"
           },
           {
+            "id": "wiki/references/argocd.md",
+            "title": "ArgoCD",
+            "type": "reference",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
             "id": "wiki/concepts/gitops.md",
             "title": "GitOps",
             "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/references/graphrag.md",
+            "title": "GraphRAG",
+            "type": "reference",
             "severity": "isolated",
             "reason": "No relationships with other pages yet"
           },
@@ -2617,7 +2773,7 @@
             "sharedSources": []
           }
         ],
-        "summary": "The current key page is AI Native Team. There are 4 isolated pages that need links first. You can review 8 suggested links next."
+        "summary": "The current key page is AI Native Team. There are 6 isolated pages that need links first. You can review 8 suggested links next."
       }
     },
     "suggested": {
@@ -2789,6 +2945,44 @@
           ],
           "nodeType": "page",
           "pageType": "query",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/argocd.md",
+          "label": "ArgoCD",
+          "type": "reference",
+          "summary": "ArgoCD é o controlador GitOps declarativo para Kubernetes — o Git é a fonte da verdade e o cluster converge para o estado desejado.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/argocd.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/graphrag.md",
+          "label": "GraphRAG",
+          "type": "reference",
+          "summary": "GraphRAG é uma abordagem hierárquica e baseada em grafos para RAG (Retrieval-Augmented Generation) que extrai um knowledge graph do texto bruto, constrói hierarquia de comunidades via Leiden, gera sumários em bottom-up e usa essas estruturas para queries globais (map-reduce sobre community reports) e locais (fan-out no grafo).",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/graphrag.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
           "topics": [],
           "entities": [],
           "concepts": [],
@@ -3009,11 +3203,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 15,
+          "nodeCount": 17,
           "edgeCount": 41,
-          "isolatedCount": 4,
+          "isolatedCount": 6,
           "weakCount": 0,
-          "averageDegree": 5.47
+          "averageDegree": 4.82
         },
         "topNodes": [
           {
@@ -3105,9 +3299,23 @@
             "reason": "No relationships with other pages yet"
           },
           {
+            "id": "wiki/references/argocd.md",
+            "title": "ArgoCD",
+            "type": "reference",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
             "id": "wiki/concepts/gitops.md",
             "title": "GitOps",
             "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/references/graphrag.md",
+            "title": "GraphRAG",
+            "type": "reference",
             "severity": "isolated",
             "reason": "No relationships with other pages yet"
           },

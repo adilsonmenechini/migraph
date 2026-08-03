@@ -1,15 +1,20 @@
 ---
 title: Review Checklist
 type: source
+category: DevOps
+domain: review
 created: 2026-06-19
 updated: 2026-06-19
+id: review.source.review-checklist
+version: "1.0.0"
+confidence: extracted
+source: docs
 summary: A source page explaining how human review, acceptance criteria, and escalation paths fit together.
 sources:
   - raw/articles/review-checklist.md
 tags:
   - source
   - review
-confidence: extracted
 status: active
 ---
 

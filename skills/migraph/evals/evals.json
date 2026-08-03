@@ -1,17 +1,17 @@
 {
-  "skill_name": "knowledge",
-  "description": "Complete knowledge base management - create, organize, and maintain Obsidian-style knowledge notes across 7 types (concept, guide, reference, example, pattern, runbook, architecture) with RAG compatibility, validation, deduplication, and cross-linking",
+  "skill_name": "migraph",
+  "description": "Complete knowledge base management - create, maintain, query, and visualize a local Markdown knowledge base across 13 page types (source, topic, concept, decision, query, synthesis, entity, pattern, runbook, architecture, guide, reference, example) with RAG compatibility, validation, deduplication, and cross-linking",
   "evals": [
     {
       "id": 1,
       "prompt": "Create a knowledge note about incident response for SRE",
-      "expected_output": "Creates examples/knowledge/sre/runbooks/incident-response.md with valid frontmatter, type=runbook, proper structure",
+      "expected_output": "Creates wiki/runbooks/incident-response.md with valid frontmatter, type=runbook, proper structure",
       "files": [],
       "assertions": [
         {
           "text": "File created in correct path",
           "passed": true,
-          "evidence": "File exists at examples/knowledge/sre/runbooks/"
+          "evidence": "File exists at wiki/runbooks/"
         },
         {
           "text": "Frontmatter has required fields",
@@ -28,7 +28,7 @@
     {
       "id": 2,
       "prompt": "Document a pattern for blue-green deployment in kubernetes",
-      "expected_output": "Creates examples/knowledge/patterns/blue-green-deployment.md with type=pattern, problem/solution structure",
+      "expected_output": "Creates wiki/patterns/blue-green-deployment.md with type=pattern, problem/solution structure",
       "files": [],
       "assertions": [
         {
@@ -46,7 +46,7 @@
     {
       "id": 3,
       "prompt": "Create a concept note explaining service mesh architecture",
-      "expected_output": "Creates examples/knowledge/<domain>/concepts/service-mesh.md with type=concept",
+      "expected_output": "Creates wiki/concepts/service-mesh.md with type=concept",
       "files": [],
       "assertions": [
         {
@@ -59,7 +59,7 @@
     {
       "id": 4,
       "prompt": "Document a microservices architecture for e-commerce",
-      "expected_output": "Creates examples/knowledge/architectures/ecommerce.md with type=architecture, components, data flow",
+      "expected_output": "Creates wiki/architectures/ecommerce.md with type=architecture, components, data flow",
       "files": [],
       "assertions": [
         {
@@ -72,7 +72,7 @@
     {
       "id": 5,
       "prompt": "Create knowledge note but check for duplicates first",
-      "expected_output": "Searches existing knowledge, reports if similar exists",
+      "expected_output": "Searches existing wiki pages, reports if similar exists",
       "files": [],
       "assertions": [
         {
@@ -85,13 +85,13 @@
     {
       "id": 6,
       "prompt": "Add a note about docker",
-      "expected_output": "Creates examples/knowledge/docker/concepts/docker-architecture.md with folder structure (concepts/guides/references/examples), proper frontmatter, all sections, and INDEX.md",
+      "expected_output": "Creates wiki/concepts/docker.md with folder structure (concepts/guides/references/examples), proper frontmatter, all sections, and INDEX.md",
       "files": []
     },
     {
       "id": 7,
       "prompt": "Find duplicates in my knowledge base",
-      "expected_output": "Scans examples/knowledge/**/*.md, produces duplicate report grouped by HIGH/MEDIUM/LOW similarity, suggests actions",
+      "expected_output": "Scans wiki/**/*.md, produces duplicate report grouped by HIGH/MEDIUM/LOW similarity, suggests actions",
       "files": [],
       "assertions": [
         {
@@ -109,7 +109,7 @@
     {
       "id": 8,
       "prompt": "Document how to set up CI/CD pipeline",
-      "expected_output": "Creates examples/knowledge/<category>/guides/<topic>.md with guide type, folder structure, proper frontmatter",
+      "expected_output": "Creates wiki/guides/ci-cd-pipeline.md with guide type, folder structure, proper frontmatter",
       "files": []
     },
     {
@@ -121,8 +121,8 @@
     {
       "id": 10,
       "prompt": "Check for duplicates using the deduplicate script",
-      "expected_output": "Runs skills/knowledge/scripts/deduplicate.py, outputs JSON report with similarity scores",
-      "files": ["skills/knowledge/scripts/deduplicate.py"],
+      "expected_output": "Runs skills/migraph/scripts/deduplicate.py, outputs JSON report with similarity scores",
+      "files": ["skills/migraph/scripts/deduplicate.py"],
       "assertions": [
         {
           "text": "Script runs without error",
@@ -143,9 +143,9 @@
     },
     {
       "id": 11,
-      "prompt": "Run deduplicate on examples/knowledge/ and save report",
+      "prompt": "Run deduplicate on wiki/ and save report",
       "expected_output": "Generates duplicate_report.md with HIGH/MEDIUM sections and recommendations",
-      "files": ["skills/knowledge/scripts/deduplicate.py"],
+      "files": ["skills/migraph/scripts/deduplicate.py"],
       "assertions": [
         {
           "text": "Report file created",
@@ -162,7 +162,7 @@
     {
       "id": 12,
       "prompt": "Create a quick reference for kubectl commands",
-      "expected_output": "Creates examples/knowledge/DevOps/kubernetes/references/kubectl.md with type=reference, quick reference table",
+      "expected_output": "Creates wiki/references/kubectl.md with type=reference, quick reference table",
       "files": [],
       "assertions": [
         {
@@ -175,7 +175,7 @@
     {
       "id": 13,
       "prompt": "Create an example for terraform from official docs",
-      "expected_output": "Creates examples/knowledge/IaC/terraform/examples/terraform-example.md with type=example, fetched from official documentation",
+      "expected_output": "Creates wiki/examples/terraform-example.md with type=example, fetched from official documentation",
       "files": [],
       "assertions": [
         {

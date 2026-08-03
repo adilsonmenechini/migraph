@@ -3,22 +3,30 @@
 ## Structure Quality
 
 ### Frontmatter Requirements
-Every note MUST have:
-- `type`: guide | concept | reference
+Every page MUST have:
+- `type`: one of the 13 page types (source, topic, concept, decision, query, synthesis, entity, pattern, runbook, architecture, guide, reference, example)
 - `category`: folder name (from topic)
-- `tags`: array of relevant keywords
-- `status`: active | deprecated
-- `created`: YYYY-MM-DD
+- `domain`: knowledge domain/category
+- `tags`: array of relevant keywords (min 1)
+- `status`: draft | active | deprecated | archived
+- `summary`: 1-2 sentence summary
+- `created` / `updated`: YYYY-MM-DD
+- `id`: `{domain}.{type}.{slug}` (e.g., `sre.runbook.incident-response`)
 
 ### Section Requirements
-All 7 sections required:
-- Overview (required)
-- Purpose (required)
-- Content (required)
-- Usage (required)
-- Relationships (required - at least one link)
-- Notes (required)
-- References (required)
+Sections vary by page type — use the matching template in `templates/pages/`:
+
+- `concept`: Definition, Explanation, Key Insights, Trade-offs, Usage Context
+- `guide`: How-to steps with prerequisites
+- `reference`: Quick reference tables
+- `example`: Code samples with explanation
+- `pattern`: Problem, Solution, Architecture, Implementation, Trade-offs
+- `runbook`: Context, Detection, Steps, Recovery, Validation
+- `architecture`: Overview, Components, Data Flow, Observability
+- `decision`: Context, Options, Decision, Consequences
+- `source` / `topic` / `query` / `synthesis` / `entity`: follow the corresponding template
+
+Every page MUST have at least one `## 🔗 Related` link (or equivalent Connections section).
 
 ## Content Quality
 

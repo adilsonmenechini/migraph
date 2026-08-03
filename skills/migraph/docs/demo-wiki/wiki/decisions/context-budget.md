@@ -1,8 +1,14 @@
 ---
 title: Context Budget
 type: decision
+category: DevOps
+domain: context
 created: 2026-06-19
 updated: 2026-06-19
+id: context.decision.context-budget
+version: "1.0.0"
+confidence: verified
+source: docs
 summary: Decision page that limits context sprawl and requires explicit budget ownership in prompts and tools.
 sources:
   - wiki/sources/eval-loops.md
@@ -10,7 +16,6 @@ sources:
 tags:
   - decision
   - context
-confidence: verified
 status: active
 ---
 

@@ -1,10 +1,10 @@
 # Post-Creation Hook
 
-Run these actions after creating a new knowledge note.
+Run these actions after creating a new wiki page.
 
 ## 1. Update Index Files
 
-After creating a new note, update the relevant INDEX.md:
+After creating a new page, update the relevant INDEX.md:
 
 ```bash
 # Add entry to category INDEX.md
@@ -14,7 +14,7 @@ After creating a new note, update the relevant INDEX.md:
 
 ## 2. Suggest Backlinks
 
-Check for potential backlinks (notes that might reference this new note):
+Check for potential backlinks (pages that might reference this new page):
 
 ```bash
 # Search for mentions of title or keywords
@@ -64,7 +64,7 @@ For automation systems:
 
 ```json
 {
-  "event": "knowledge.created",
+  "event": "migraph.note.created",
   "id": "{{note_id}}",
   "type": "{{type}}",
   "domain": "{{domain}}",
@@ -77,9 +77,7 @@ For automation systems:
 Send to relevant systems:
 
 - **Obsidian**: Automatic graph update
-- **Qdrant**: Trigger embedding generation
-- **Neo4j**: Create node with relationships
-- **Slack**: Notify #knowledge channel (optional)
+- **MiGraph outputs**: Trigger `graph` / `viewer` / `graph-report` rebuild
 
 ## Checklist
 
