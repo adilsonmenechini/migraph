@@ -1,8 +1,8 @@
 # Knowledge Graph
 
-- Nodes: 17
+- Nodes: 21
 - Edges: 41
-- Summary: The current key page is AI Native Team. There are 6 isolated pages that need links first. You can review 8 suggested links next.
+- Summary: The current key page is AI Native Team. There are 8 isolated pages that need links first. You can review 8 suggested links next.
 
 ## Key Pages
 - AI Native Team (concept) | score=70 | Degree 14, inbound 7, spanning 6 neighbor types.
@@ -24,6 +24,7 @@
 
 ## Nodes
 - concept: AI Native Team (wiki/concepts/ai-native-team.md)
+- concept: Domain-Driven Design (wiki/concepts/domain-driven-design.md)
 - concept: Execution Spec (wiki/concepts/execution-spec.md)
 - concept: GitOps (wiki/concepts/gitops.md)
 - concept: Loop Engineering (wiki/concepts/loop-engineering.md)
@@ -33,6 +34,9 @@
 - query: What Makes an AI Native Team (wiki/queries/what-makes-ai-native-team.md)
 - reference: ArgoCD (wiki/references/argocd.md)
 - reference: GraphRAG (wiki/references/graphrag.md)
+- reference: Kubernetes (wiki/references/kubernetes.md)
+- reference: LangChain (wiki/references/langchain.md)
+- reference: LangGraph (wiki/references/langgraph.md)
 - source: Eval Loop Notes (wiki/sources/eval-loops.md)
 - source: Platform Spec (wiki/sources/platform-spec.md)
 - source: Review Checklist (wiki/sources/review-checklist.md)

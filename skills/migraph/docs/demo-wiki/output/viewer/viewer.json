@@ -1,15 +1,15 @@
 {
   "generatedAt": "2026-08-03",
   "rootName": "demo-wiki",
-  "pageCount": 17,
+  "pageCount": 21,
   "counts": {
-    "concept": 5,
+    "concept": 6,
     "topic": 3,
     "source": 3,
     "synthesis": 1,
     "query": 1,
     "decision": 2,
-    "reference": 2
+    "reference": 5
   },
   "pages": [
     {
@@ -103,6 +103,104 @@
               "href": ""
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "wiki/concepts/domain-driven-design.md",
+      "title": "Domain-Driven Design",
+      "type": "concept",
+      "section": "Concepts",
+      "summary": "Domain-Driven Design é uma abordagem de modelagem de software onde o domínio do negócio é o coração do sistema — via ubiquitous language, bounded contexts e context mapping no nível estratégico, e entities/value objects/aggregates no nível tático.",
+      "excerpt": "**Domain-Driven Design (DDD)** é uma abordagem para modelar software complexo colocando o **domínio do negócio** no centro. Proposto por Eric Evans (Blue Book), foca em colaboração entre *domain practitioners* e *software practitioners* para construir um modelo de domínio que ref",
+      "updated": "2026-08-03",
+      "confidence": "high",
+      "status": "active",
+      "sources": [],
+      "tags": [
+        "ddd",
+        "architecture",
+        "bounded-context",
+        "domain-model"
+      ],
+      "links": [],
+      "sections": [
+        {
+          "title": "🧠 Definition",
+          "anchor": "definition",
+          "content": "**Domain-Driven Design (DDD)** é uma abordagem para modelar software complexo colocando o **domínio do negócio** no centro. Proposto por Eric Evans (Blue Book), foca em colaboração entre *domain practitioners* e *software practitioners* para construir um modelo de domínio que reflita a realidade do negócio — usando **ubiquitous language**, **bounded contexts** e **context mapping** (estratégico) e **entities, value objects, aggregates** (tático).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Nível Estratégico",
+          "anchor": "n-vel-estrat-gico",
+          "content": "**Bounded Context**: fronteira explícita onde um modelo de domínio se aplica. Cada contexto tem sua própria ubiquitous language e modelo — o mesmo termo pode significar coisas diferentes em contextos diferentes.\n**Ubiquitous Language**: vocabulário comum entre domínio e código — termos do negócio usados consistentemente em conversas, documentação e código.\n**Core Domain vs Subdomains**: o Core Domain é onde a empresa diferencia-se (maior investimento); os demais são *Generic Subdomains* (supporting/generic, frequentemente comprados ou terceirizados).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Context Mapping",
+          "anchor": "context-mapping",
+          "content": "Padrões de integração entre bounded contexts:\n| Padrão | Quando usar |\n|--------|-------------|\n| **Partnership** | duas equipes coordenam juntas para atingir objetivos compartilhados |\n| **Shared Kernel** | parte do modelo compartilhada entre contextos (com cuidado) |\n| **Customer/Supplier** | upstream define o contrato; downstream consome |\n| **Conformist** | downstream aceita o modelo do upstream sem tradução |\n| **Anticorruption Layer (ACL)** | downstream protege seu modelo com uma camada de tradução |\n| **Open-host Service** | upstream publica uma API formal para downstreams |\n| **Published Language** | formato/documentação bem definido do contrato |\n| **Separate Ways** | contextos operam isolados, sem integração |\n| **Big Ball of Mud** | anti-padrão: modelo único sem fronteiras claras |",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Nível Tático",
+          "anchor": "n-vel-t-tico",
+          "content": "- **Entity**: objeto com identidade contínua (id) e ciclo de vida (ex.: Order).\n- **Value Object**: objeto imutável descrito por atributos, sem identidade (ex.: Money).\n- **Aggregate**: cluster de entidades com consistência transacional; uma **Aggregate Root** é a única porta de entrada.\n- **Repository**: abstração de persistência para aggregates.\n- **Domain Service**: lógica de negócio que não pertence naturalmente a uma entity/value object.\n- **Domain Event**: fato do domínio ocorrido (OrderPlaced) para integração/efeitos colaterais.\n- **Factory**: criação de objetos complexos mantendo invariantes.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔗 Related",
+          "anchor": "related",
+          "content": "- [[Kubernetes]]\n- [[ArgoCD]]",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🧩 Key Insights",
+          "anchor": "key-insights",
+          "content": "- Bounded contexts = fronteiras de modelo; sem eles, o modelo vira Big Ball of Mud.\n- Anticorruption Layer permite que sistemas legados coexistam sem contaminar o domínio.\n- Core Domain justifica investimento; subdomínios genéricos devem ser comprados/reusados.\n- DDD é colaborativo: requer *domain practitioners* + *software practitioners* no mesmo processo.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "⚠️ Trade-offs",
+          "anchor": "trade-offs",
+          "content": "- Alto custo de modelagem inicial e comunicação contínua com especialistas de domínio.\n- Overkill para sistemas CRUD simples sem complexidade de negócio.\n- Tático sem estratégico (ou vice-versa) gera resultados incompletos.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📊 Observability",
+          "anchor": "observability",
+          "content": "- **SLIs**: bounded contexts mapeados, cobertura de tests por aggregate\n- **SLOs**: invariantes de aggregate sempre válidos\n- **Metrics**: event stream por domain event, error rate por bounded context",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔐 Security Considerations",
+          "anchor": "security-considerations",
+          "content": "- ACL isola e protege dados entre contextos.\n- Domain events podem expor dados sensíveis — anonimização no event stream.\n- Validação de autorização por contexto (multi-tenant).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🏗️ Usage Context",
+          "anchor": "usage-context",
+          "content": "- Quando usar: domínio de negócio complexo, equipes grandes, microsserviços por bounded context, legacy com novas fronteiras.\n- Quando NÃO usar: CRUD simples, protótipos, domínio sem regras de negócio complexas.\n- Pré-requisitos: acesso a especialistas de domínio, cultura colaborativa.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 References",
+          "anchor": "references",
+          "content": "- [DDD Reference (Eric Evans)](https://www.domainlanguage.com/wp-content/uploads/2016/05/DDD_Reference_2015-03.pdf)\n- [Domain Language — Eric Evans](https://www.domainlanguage.com/)\n- [Microsoft — DDD patterns](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/ddd-oriented-microservice)",
+          "refs": [],
+          "links": []
         }
       ]
     },
@@ -883,6 +981,342 @@
           "title": "📚 References",
           "anchor": "references",
           "content": "- [GraphRAG Official](https://microsoft.github.io/graphrag/)\n- [microsoft/GraphRAG (GitHub)](https://github.com/microsoft/GraphRAG)\n- [GraphRAG: Unlocking LLM Discovery on Narrative Private Data](https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/)\n- [GraphRAG: Improving Global Search via Dynamic Community Selection](https://www.microsoft.com/en-us/research/blog/graphrag-improving-global-search-via-dynamic-community-selection/)\n- [Core Concepts Overview](https://microsoft-graphrag.mintlify.app/concepts/overview)\n- [Community Detection (Leiden)](https://microsoft-graphrag.mintlify.app/concepts/community-detection)\n- [Global Search](https://github.com/microsoft/graphrag/blob/main/docs/query/global_search.md)\n- [GraphRAG Project (Microsoft Research)](https://www.microsoft.com/en-us/research/project/graphrag/)",
+          "refs": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "id": "wiki/references/kubernetes.md",
+      "title": "Kubernetes",
+      "type": "reference",
+      "section": "References",
+      "summary": "Kubernetes é o sistema de orquestração de containers de código aberto que automatiza deployment, scaling e operação de aplicações containerizadas — declarativo, self-healing e baseado em control plane + worker nodes.",
+      "excerpt": "Kubernetes (K8s) é uma plataforma de **orquestração de containers** que automatiza deployment, scaling e operação de workloads containerizados. O usuário declara o **estado desejado** (Pods, Deployments, Services...) e o control plane reconcilia continuamente o cluster com esse e",
+      "updated": "2026-08-03",
+      "confidence": "high",
+      "status": "active",
+      "sources": [],
+      "tags": [
+        "kubernetes",
+        "containers",
+        "orchestration",
+        "devops"
+      ],
+      "links": [],
+      "sections": [
+        {
+          "title": "🧠 Definition",
+          "anchor": "definition",
+          "content": "Kubernetes (K8s) é uma plataforma de **orquestração de containers** que automatiza deployment, scaling e operação de workloads containerizados. O usuário declara o **estado desejado** (Pods, Deployments, Services...) e o control plane reconcilia continuamente o cluster com esse estado — self-healing, rollout/rollback automatizados e descoberta de serviço.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Arquitetura: Control Plane + Worker Nodes",
+          "anchor": "arquitetura-control-plane-worker-nodes",
+          "content": "```\n┌──────────────────── Control Plane ────────────────────┐\n│ kube-apiserver    → front-end da API (escalável horizontalmente)│\n│ etcd              → backing store (source of truth, backup plane)│\n│ kube-scheduler    → escolhe node para cada novo Pod         │\n│ kube-controller-manager → control loops (Deployment, ReplicaSet...)│\n└──────────────────────────────────────────────────────────┘\n┌───────────────────── Worker Node ──────────────────────┐\n│ kubelet            → agente que garante containers rodando│\n│ kube-proxy         → network rules (opcional se CNI provê) │\n│ container runtime  → containerd / CRI-O (via CRI)        │\n└──────────────────────────────────────────────────────────┘\n```\n- **kube-apiserver**: única porta de entrada (REST + kubectl), autentica/autoriza, escala horizontalmente.\n- **etcd**: armazena o estado completo do cluster (chave-valor); exige plano de backup.\n- **kube-scheduler**: filtra/aponta Pods sem node para o node mais adequado (resources, taints, affinity).\n- **kube-controller-manager**: roda control loops; ex.: Deployment cria ReplicaSets quando o número de réplicas desejado não é satisfeito.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Workloads",
+          "anchor": "workloads",
+          "content": "| Workload | Uso |\n|----------|-----|\n| Pod | unidade mínima — 1+ containers com storage/rede compartilhados |\n| Deployment | apps stateless: réplicas, rollout, rollback, auto-healing |\n| StatefulSet | apps stateful: identidade estável, storage persistente por réplica |\n| DaemonSet | um Pod por node (monitoring, logs, CNI) |\n| Job / CronJob | tarefas batch / agendadas |",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Serviços e Ingress",
+          "anchor": "servi-os-e-ingress",
+          "content": "- **Service** (ClusterIP, NodePort, LoadBalancer): descoberta e balanceamento estáveis.\n- **Ingress / Gateway API**: entrada HTTP(S) com TLS, routing por host/path.\n- **DNS interno**: `my-svc.namespace.svc.cluster.local`.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Storage",
+          "anchor": "storage",
+          "content": "- **PersistentVolume (PV)** + **PersistentVolumeClaim (PVC)**: storage desacoplado do Pod.\n- **StorageClass**: provisionamento dinâmico (EBS, GCE PD, NFS, CSI).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Configuração",
+          "anchor": "configura-o",
+          "content": "- **ConfigMap**: configuração não sensível.\n- **Secret**: dados sensíveis (base64; idealmente cifrados + External Secrets/SOPS).\n- **RBAC**: Role/ClusterRole + RoleBinding/ClusterRoleBinding.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔗 Related",
+          "anchor": "related",
+          "content": "- [[ArgoCD]]\n- [[GitOps]]\n- [[Helm]]",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🧩 Key Insights",
+          "anchor": "key-insights",
+          "content": "- Declarativo: `kubectl apply -f manifest.yaml` → control plane converge o cluster.\n- Control plane escala horizontalmente; etcd é o único estado central (backup é mandatório).\n- kube-proxy é opcional se a CNI já provê service proxy.\n- Controller loop é o coração: o sistema compara desired vs actual continuamente.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "⚠️ Trade-offs",
+          "anchor": "trade-offs",
+          "content": "- Complexidade operacional alta (control plane, networking, upgrades).\n- Curva de aprendizado íngreme (abstrações: Pod, Deployment, Service, Ingress).\n- Overhead de recursos; para workloads pequenos pode ser excesso.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📊 Observability",
+          "anchor": "observability",
+          "content": "- **SLIs**: pod readiness, rollout progress, node health, API latency\n- **SLOs**: API availability 99.9%, deploy time < 5min\n- **Metrics**: `kube_pod_status_ready`, `kube_deployment_status_replicas_available`, kube-state-metrics + Prometheus",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔐 Security Considerations",
+          "anchor": "security-considerations",
+          "content": "- RBAC mínimo privilégio; namespaces para isolamento.\n- Secrets cifrados (KMS) + External Secrets Operator/SOPS.\n- NetworkPolicies para microsegmentação; Pod Security Standards.\n- Atualização regular do cluster e images scanning.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🏗️ Usage Context",
+          "anchor": "usage-context",
+          "content": "- Quando usar: aplicações containerizadas em escala, microsserviços, GitOps, multi-tenant workloads.\n- Quando NÃO usar: aplicação única simples (Docker basta), sem equipe para operar.\n- Pré-requisitos: containers, YAML, entendimento de redes/volumes.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 References",
+          "anchor": "references",
+          "content": "- [Kubernetes Architecture](https://kubernetes.io/docs/concepts/architecture/)\n- [Kubernetes Documentation](https://kubernetes.io/docs/)\n- [Kubernetes Concepts](https://kubernetes.io/docs/concepts/)\n- [kubectl Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)",
+          "refs": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "id": "wiki/references/langchain.md",
+      "title": "LangChain",
+      "type": "reference",
+      "section": "References",
+      "summary": "LangChain é o framework para construir aplicações com LLMs — create_agent combina model + tools + prompt + middleware em um agente executável, com ecossistema de integrações e composição via Runnable.",
+      "excerpt": "LangChain é um framework para construir aplicações com **LLMs** (agentes, RAG, chatbots, workflows). O conceito central moderno é o **Agent**: `Agent = Model + Harness`. O **harness** (create_agent) junta model + tools + system prompt + middleware em um executável único com loop ",
+      "updated": "2026-08-03",
+      "confidence": "high",
+      "status": "active",
+      "sources": [],
+      "tags": [
+        "langchain",
+        "llm",
+        "agents",
+        "python"
+      ],
+      "links": [],
+      "sections": [
+        {
+          "title": "🧠 Definition",
+          "anchor": "definition",
+          "content": "LangChain é um framework para construir aplicações com **LLMs** (agentes, RAG, chatbots, workflows). O conceito central moderno é o **Agent**: `Agent = Model + Harness`. O **harness** (create_agent) junta model + tools + system prompt + middleware em um executável único com loop de tool calls embutido.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "create_agent (o harness)",
+          "anchor": "create-agent-o-harness",
+          "content": "```python\nfrom langchain.agents import create_agent\nfrom langchain.tools import tool\n@tool\ndef get_weather(city: str) -> str:\n    \"\"\"Retorna o clima atual de uma cidade.\"\"\"\n    return f\"Sunny, 25°C in {city}\"\nagent = create_agent(\n    model=\"gpt-5.5\",                     # ou ChatModel instance\n    tools=[get_weather],                 # lista de tools\n    system_prompt=\"You are a helpful weather assistant.\",\n    middleware=[],                        # error handling, HITL, retry\n)\nresult = agent.invoke({\"messages\": [{\"role\": \"user\", \"content\": \"Weather in Berlin?\"}]})\nprint(result[\"messages\"][-1].content_blocks)\n```\n- `create_agent` constrói o **AgentExecutor** com loop de tool calls: model → tool call → executa → observa → repete.\n- O resultado final é a última mensagem (`content_blocks` para conteúdo estruturado).\n- Middleware pode interceptar (human-in-the-loop, retries, logging).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "LangChain vs LangGraph vs Deep Agents",
+          "anchor": "langchain-vs-langgraph-vs-deep-agents",
+          "content": "| Camada | Foco | Uso |\n|--------|------|-----|\n| **LangChain** | `create_agent` + componentes (tools, models, RAG) | agentes com batteries-included, customizáveis |\n| **LangGraph** | orquestração low-level com StateGraph | controle fino de estado, loops, branching |\n| **Deep Agents** | agentes prontos com tooling (playwright, browser) | autonomia full-stack, integração IDE |",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Estrutura de pacotes",
+          "anchor": "estrutura-de-pacotes",
+          "content": "- `langchain-core`: abstrações base — BaseChatModel, BaseTool, Runnable, prompts, output parsers.\n- `langchain`: components — agents, chains, document loaders, retrievers.\n- `langchain-community`: integrações da comunidade (vector stores, tools, memory).\n- `langchain-openai` / `langchain-anthropic` / etc.: wrappers oficiais de providers.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Padrões comuns",
+          "anchor": "padr-es-comuns",
+          "content": "- **Tool decorator**: `@tool` transforma função Python com docstring em tool executável.\n- **init_chat_model**: carrega qualquer modelo por string (`init_chat_model(\"gpt-5.5\")`).\n- **Runnable composition**: `prompt | model | parser` (LCEL) — pipeline composável e streamable.\n- **with_structured_output**: modelo retorna Pydantic/Zod schema validado.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔗 Related",
+          "anchor": "related",
+          "content": "- [[LangGraph]]\n- [[AI Agents]]\n- [[GraphRAG]]",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🧩 Key Insights",
+          "anchor": "key-insights",
+          "content": "- `create_agent` = \"agent out of the box\": model + tools + prompt + middleware em uma linha.\n- LCEL (`|`) torna pipelines testáveis e streamable.\n- LangChain e LangGraph são complementares: comece com LangChain, desça para LangGraph quando precisar de controle.\n- Middleware é o ponto de extensão para HITL e error handling.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "⚠️ Trade-offs",
+          "anchor": "trade-offs",
+          "content": "- Abstrações mudam rápido — seguir a documentação da versão instalada.\n- \"Agent out of the box\" pode esconder o loop; para controle fino use LangGraph.\n- Muitas integrações (community) variam em maturidade.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📊 Observability",
+          "anchor": "observability",
+          "content": "- **SLIs**: agent turn count, tool call success rate, latency per step\n- **SLOs**: task completion > 95%, tool success > 99%\n- **Metrics**: LangSmith traces, token usage, step duration",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔐 Security Considerations",
+          "anchor": "security-considerations",
+          "content": "- API keys via env vars / secret manager (nunca no código).\n- Validação de tool inputs; allowlist de tools perigrosas.\n- Prompt injection: sanear input do usuário; separar system prompt de user content.\n- Middleware de approval para tool calls destrutivas.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🏗️ Usage Context",
+          "anchor": "usage-context",
+          "content": "- Quando usar: agentes com tools, RAG, chatbots, pipelines LLM com integrações.\n- Quando NÃO usar: orquestração complexa com branches/loops explícitos (use LangGraph); agentes full-autonomy (use Deep Agents).\n- Pré-requisitos: Python 3.9+, API key de um provider.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 References",
+          "anchor": "references",
+          "content": "- [LangChain Overview](https://docs.langchain.com/oss/python/langchain/overview)\n- [LangChain Docs](https://docs.langchain.com/)\n- [LangChain vs LangGraph vs Deep Agents](https://docs.langchain.com/oss/python/langchain/overview)\n- [Agents concepts](https://docs.langchain.com/oss/python/langchain/agents)",
+          "refs": [],
+          "links": []
+        }
+      ]
+    },
+    {
+      "id": "wiki/references/langgraph.md",
+      "title": "LangGraph",
+      "type": "reference",
+      "section": "References",
+      "summary": "LangGraph é a camada de orquestração low-level do ecossistema LangChain — modela agentes como grafos de estado (StateGraph) com nós, arestas, branches e loops, checkpointing e controle fino de fluxo.",
+      "excerpt": "LangGraph é um framework para **orquestração de agentes como grafos de estado**. Você define um **State** tipado, **nós** (funções) que o processam e **arestas** que conectam os nós — com suporte a branches, loops, **Send API** (map-reduce) e **Command API** (controle de fluxo di",
+      "updated": "2026-08-03",
+      "confidence": "high",
+      "status": "active",
+      "sources": [],
+      "tags": [
+        "langgraph",
+        "langchain",
+        "state-machine",
+        "agents"
+      ],
+      "links": [],
+      "sections": [
+        {
+          "title": "🧠 Definition",
+          "anchor": "definition",
+          "content": "LangGraph é um framework para **orquestração de agentes como grafos de estado**. Você define um **State** tipado, **nós** (funções) que o processam e **arestas** que conectam os nós — com suporte a branches, loops, **Send API** (map-reduce) e **Command API** (controle de fluxo dinâmico). Persistência via checkpointers habilita time travel e memória.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "State (o coração do grafo)",
+          "anchor": "state-o-cora-o-do-grafo",
+          "content": "```python\nfrom typing import TypedDict, Annotated\nfrom operator import add\nclass State(TypedDict):\n    messages: Annotated[list, add]   # reducer: concatena\n    query: str\n```\n- State pode ser `TypedDict`, Pydantic model ou dataclass.\n- **Reducers** (`Annotated[list, operator.add]`) definem como updates se acumulam.\n- Cada nó recebe o state e retorna um **update parcial** (`{\"messages\": [new_msg]}`).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "StateGraph",
+          "anchor": "stategraph",
+          "content": "```python\nfrom langgraph.graph import StateGraph\ngraph = StateGraph(State)\ngraph.add_node(\"agent\", agent_node)\ngraph.add_node(\"tools\", tools_node)\ngraph.add_edge(\"agent\", \"tools\")            # aresta fixa\ngraph.add_conditional_edges(\"tools\", should_continue,\n    {\"continue\": \"agent\", \"end\": END})      # branch\napp = graph.compile(checkpointer=memory)\n```\n- `add_node`: registra função de nó.\n- `add_edge` / `add_conditional_edges`: conectam nós; `END` encerra.\n- Loops: aresta de volta a um nó anterior.\n- `compile()`: gera o executável; checkpointer opcional.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Command API (controle dinâmico)",
+          "anchor": "command-api-controle-din-mico",
+          "content": "```python\nreturn Command(\n    update={\"messages\": [msg]},   # state update\n    goto=\"tools\",                 # próximo nó (pode ser condicional)\n)\n```\n- Combina **state update** com **\"hop\" para outro nó** em um único retorno.\n- Permite roteamento dinâmico sem conditional edges explícitas.\n- `Command(resume=...)` para retomar após `interrupt()`.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Send API (map-reduce / paralelismo)",
+          "anchor": "send-api-map-reduce-paralelismo",
+          "content": "```python\nfrom langgraph.types import Send\nreturn [Send(\"analyze_chunk\", {\"chunk\": c}) for c in chunks]\n```\n- Dispara **múltiplas invocações paralelas** do mesmo nó com inputs diferentes.\n- Padrão para fan-out (ex.: processar N documentos) seguido de agregação.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Checkpointing e memória",
+          "anchor": "checkpointing-e-mem-ria",
+          "content": "- **Checkpointer** (ex.: `InMemorySaver`, `SqliteSaver`) persiste o state por `thread_id`.\n- **Time travel**: `get_state_history()` / `update_state()` para navegar/ramificar execuções.\n- **interrupt()**: pausa para human-in-the-loop; `Command(resume=...)` retoma.\n- Subgraphs: grafos aninhados com escopo de checkpointer configurável.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Streaming",
+          "anchor": "streaming",
+          "content": "```python\nfor event in app.stream(input, stream_mode=\"messages\"):\n    print(event)\n```\n- `stream_mode=\"values\"` (state a cada passo), `\"updates\"` (deltas), `\"messages\"` (tokens streaming).",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔗 Related",
+          "anchor": "related",
+          "content": "- [[LangChain]]\n- [[AI Agents]]",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🧩 Key Insights",
+          "anchor": "key-insights",
+          "content": "- LangGraph é a camada de orquestração: para controle fino de estado/fluxo, não agente \"out of the box\".\n- Reducers definem a semântica de acumulação de state — essencial para `messages`.\n- `Send` habilita paralelismo explícito; `Command` dá roteamento dinâmico.\n- Checkpointer + `thread_id` = conversas multi-turn com memória; time travel para debugging.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "⚠️ Trade-offs",
+          "anchor": "trade-offs",
+          "content": "- API de mais baixo nível: mais código e responsabilidade que `create_agent`.\n- Grafo explícito exige design prévio do fluxo.\n- Reducers mal definidos causam bugs sutis de state.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📊 Observability",
+          "anchor": "observability",
+          "content": "- **SLIs**: node execution time, loop iterations, checkpointer ops\n- **SLOs**: graph completion > 95%, time travel recoverable\n- **Metrics**: LangSmith traces por node, stream events, checkpoint size",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔐 Security Considerations",
+          "anchor": "security-considerations",
+          "content": "- Checkpointers persistem dados sensíveis — criptografar em repouso.\n- `interrupt()` para approval de ações destrutivas.\n- Validar inputs de nós que executam tools externas.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🏗️ Usage Context",
+          "anchor": "usage-context",
+          "content": "- Quando usar: agentes com fluxo complexo (branches, loops, paralelo), HITL, memória multi-turn.\n- Quando NÃO usar: agentes simples com tools (LangChain `create_agent` basta).\n- Pré-requisitos: LangChain + um provider de modelo; entendimento de state machines.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 References",
+          "anchor": "references",
+          "content": "- [LangGraph Graph API](https://docs.langchain.com/oss/python/langgraph/use-graph-api)\n- [LangGraph Docs](https://docs.langchain.com/oss/python/langgraph/)\n- [LangGraph concepts](https://docs.langchain.com/oss/python/langgraph/concepts)",
           "refs": [],
           "links": []
         }

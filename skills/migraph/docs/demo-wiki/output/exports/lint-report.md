@@ -1,0 +1,39 @@
+# Lint Report
+
+- Date: 2026-08-03
+- Issues: 34
+
+- [frontmatter] wiki/concepts/domain-driven-design.md missing: sources
+- [weak-source] wiki/concepts/domain-driven-design.md has no meaningful source paths
+- [frontmatter] wiki/concepts/gitops.md missing: sources
+- [weak-source] wiki/concepts/gitops.md has no meaningful source paths
+- [placeholder-content] wiki/concepts/gitops.md still contains placeholder text
+- [frontmatter] wiki/concepts/loop-engineering.md missing: sources
+- [weak-source] wiki/concepts/loop-engineering.md has no meaningful source paths
+- [frontmatter] wiki/concepts/system-driver.md missing: sources
+- [weak-source] wiki/concepts/system-driver.md has no meaningful source paths
+- [frontmatter] wiki/topics/ai-agents.md missing: sources
+- [weak-source] wiki/topics/ai-agents.md has no meaningful source paths
+- [frontmatter] wiki/references/argocd.md missing: sources
+- [weak-source] wiki/references/argocd.md has no meaningful source paths
+- [frontmatter] wiki/references/graphrag.md missing: sources
+- [weak-source] wiki/references/graphrag.md has no meaningful source paths
+- [placeholder-content] wiki/references/graphrag.md still contains placeholder text
+- [frontmatter] wiki/references/kubernetes.md missing: sources
+- [weak-source] wiki/references/kubernetes.md has no meaningful source paths
+- [frontmatter] wiki/references/langchain.md missing: sources
+- [weak-source] wiki/references/langchain.md has no meaningful source paths
+- [frontmatter] wiki/references/langgraph.md missing: sources
+- [weak-source] wiki/references/langgraph.md has no meaningful source paths
+- [orphan] wiki/concepts/domain-driven-design.md has no inbound wiki links
+- [orphan] wiki/concepts/gitops.md has no inbound wiki links
+- [orphan] wiki/concepts/loop-engineering.md has no inbound wiki links
+- [orphan] wiki/concepts/system-driver.md has no inbound wiki links
+- [orphan] wiki/topics/ai-agents.md has no inbound wiki links
+- [orphan] wiki/syntheses/delivery-system.md has no inbound wiki links
+- [orphan] wiki/queries/what-makes-ai-native-team.md has no inbound wiki links
+- [orphan] wiki/references/argocd.md has no inbound wiki links
+- [orphan] wiki/references/graphrag.md has no inbound wiki links
+- [orphan] wiki/references/kubernetes.md has no inbound wiki links
+- [orphan] wiki/references/langchain.md has no inbound wiki links
+- [orphan] wiki/references/langgraph.md has no inbound wiki links

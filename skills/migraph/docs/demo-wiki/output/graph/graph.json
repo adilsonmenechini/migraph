@@ -3,9 +3,9 @@
   "schema_version": "2",
   "default_view": "knowledge",
   "catalog": {
-    "pageCount": 17,
+    "pageCount": 21,
     "claimCount": 0,
-    "nodeCount": 17,
+    "nodeCount": 21,
     "edgeCount": 41
   },
   "nodes": [
@@ -29,6 +29,27 @@
       "entities": [],
       "concepts": [],
       "aliases": [],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/concepts/domain-driven-design.md",
+      "label": "Domain-Driven Design",
+      "type": "concept",
+      "summary": "Domain-Driven Design é uma abordagem de modelagem de software onde o domínio do negócio é o coração do sistema — via ubiquitous language, bounded contexts e context mapping no nível estratégico, e entities/value objects/aggregates no nível tático.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/concepts/domain-driven-design.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "concept",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [
+        "[ddd]"
+      ],
       "maturity": "",
       "canonicalEntity": ""
     },
@@ -218,6 +239,69 @@
       "entities": [],
       "concepts": [],
       "aliases": [],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/references/kubernetes.md",
+      "label": "Kubernetes",
+      "type": "reference",
+      "summary": "Kubernetes é o sistema de orquestração de containers de código aberto que automatiza deployment, scaling e operação de aplicações containerizadas — declarativo, self-healing e baseado em control plane + worker nodes.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/references/kubernetes.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "reference",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [
+        "[k8s]"
+      ],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/references/langchain.md",
+      "label": "LangChain",
+      "type": "reference",
+      "summary": "LangChain é o framework para construir aplicações com LLMs — create_agent combina model + tools + prompt + middleware em um agente executável, com ecossistema de integrações e composição via Runnable.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/references/langchain.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "reference",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [
+        "[langchain framework]"
+      ],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/references/langgraph.md",
+      "label": "LangGraph",
+      "type": "reference",
+      "summary": "LangGraph é a camada de orquestração low-level do ecossistema LangChain — modela agentes como grafos de estado (StateGraph) com nós, arestas, branches e loops, checkpointing e controle fino de fluxo.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/references/langgraph.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "reference",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [
+        "[langgraph framework]"
+      ],
       "maturity": "",
       "canonicalEntity": ""
     },
@@ -624,11 +708,11 @@
   ],
   "insights": {
     "stats": {
-      "nodeCount": 17,
+      "nodeCount": 21,
       "edgeCount": 41,
-      "isolatedCount": 6,
+      "isolatedCount": 8,
       "weakCount": 0,
-      "averageDegree": 4.82
+      "averageDegree": 3.9
     },
     "topNodes": [
       {
@@ -727,6 +811,13 @@
         "reason": "No relationships with other pages yet"
       },
       {
+        "id": "wiki/concepts/domain-driven-design.md",
+        "title": "Domain-Driven Design",
+        "type": "concept",
+        "severity": "isolated",
+        "reason": "No relationships with other pages yet"
+      },
+      {
         "id": "wiki/concepts/gitops.md",
         "title": "GitOps",
         "type": "concept",
@@ -741,16 +832,23 @@
         "reason": "No relationships with other pages yet"
       },
       {
-        "id": "wiki/concepts/loop-engineering.md",
-        "title": "Loop Engineering",
-        "type": "concept",
+        "id": "wiki/references/kubernetes.md",
+        "title": "Kubernetes",
+        "type": "reference",
         "severity": "isolated",
         "reason": "No relationships with other pages yet"
       },
       {
-        "id": "wiki/concepts/system-driver.md",
-        "title": "System Driver",
-        "type": "concept",
+        "id": "wiki/references/langchain.md",
+        "title": "LangChain",
+        "type": "reference",
+        "severity": "isolated",
+        "reason": "No relationships with other pages yet"
+      },
+      {
+        "id": "wiki/references/langgraph.md",
+        "title": "LangGraph",
+        "type": "reference",
         "severity": "isolated",
         "reason": "No relationships with other pages yet"
       }
@@ -914,7 +1012,7 @@
         "sharedSources": []
       }
     ],
-    "summary": "The current key page is AI Native Team. There are 6 isolated pages that need links first. You can review 8 suggested links next."
+    "summary": "The current key page is AI Native Team. There are 8 isolated pages that need links first. You can review 8 suggested links next."
   },
   "views": {
     "document": {
@@ -972,6 +1070,27 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/domain-driven-design.md",
+          "label": "Domain-Driven Design",
+          "type": "concept",
+          "summary": "Domain-Driven Design é uma abordagem de modelagem de software onde o domínio do negócio é o coração do sistema — via ubiquitous language, bounded contexts e context mapping no nível estratégico, e entities/value objects/aggregates no nível tático.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/domain-driven-design.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[ddd]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -1159,6 +1278,69 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/kubernetes.md",
+          "label": "Kubernetes",
+          "type": "reference",
+          "summary": "Kubernetes é o sistema de orquestração de containers de código aberto que automatiza deployment, scaling e operação de aplicações containerizadas — declarativo, self-healing e baseado em control plane + worker nodes.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/kubernetes.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[k8s]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/langchain.md",
+          "label": "LangChain",
+          "type": "reference",
+          "summary": "LangChain é o framework para construir aplicações com LLMs — create_agent combina model + tools + prompt + middleware em um agente executável, com ecossistema de integrações e composição via Runnable.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/langchain.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[langchain framework]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/langgraph.md",
+          "label": "LangGraph",
+          "type": "reference",
+          "summary": "LangGraph é a camada de orquestração low-level do ecossistema LangChain — modela agentes como grafos de estado (StateGraph) com nós, arestas, branches e loops, checkpointing e controle fino de fluxo.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/langgraph.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[langgraph framework]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -1573,11 +1755,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 17,
+          "nodeCount": 21,
           "edgeCount": 41,
-          "isolatedCount": 6,
+          "isolatedCount": 8,
           "weakCount": 0,
-          "averageDegree": 4.82
+          "averageDegree": 3.9
         },
         "topNodes": [
           {
@@ -1676,6 +1858,13 @@
             "reason": "No relationships with other pages yet"
           },
           {
+            "id": "wiki/concepts/domain-driven-design.md",
+            "title": "Domain-Driven Design",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
             "id": "wiki/concepts/gitops.md",
             "title": "GitOps",
             "type": "concept",
@@ -1690,16 +1879,23 @@
             "reason": "No relationships with other pages yet"
           },
           {
-            "id": "wiki/concepts/loop-engineering.md",
-            "title": "Loop Engineering",
-            "type": "concept",
+            "id": "wiki/references/kubernetes.md",
+            "title": "Kubernetes",
+            "type": "reference",
             "severity": "isolated",
             "reason": "No relationships with other pages yet"
           },
           {
-            "id": "wiki/concepts/system-driver.md",
-            "title": "System Driver",
-            "type": "concept",
+            "id": "wiki/references/langchain.md",
+            "title": "LangChain",
+            "type": "reference",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/references/langgraph.md",
+            "title": "LangGraph",
+            "type": "reference",
             "severity": "isolated",
             "reason": "No relationships with other pages yet"
           }
@@ -1863,7 +2059,7 @@
             "sharedSources": []
           }
         ],
-        "summary": "The current key page is AI Native Team. There are 6 isolated pages that need links first. You can review 8 suggested links next."
+        "summary": "The current key page is AI Native Team. There are 8 isolated pages that need links first. You can review 8 suggested links next."
       }
     },
     "knowledge": {
@@ -1888,6 +2084,27 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/domain-driven-design.md",
+          "label": "Domain-Driven Design",
+          "type": "concept",
+          "summary": "Domain-Driven Design é uma abordagem de modelagem de software onde o domínio do negócio é o coração do sistema — via ubiquitous language, bounded contexts e context mapping no nível estratégico, e entities/value objects/aggregates no nível tático.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/domain-driven-design.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[ddd]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -2077,6 +2294,69 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/kubernetes.md",
+          "label": "Kubernetes",
+          "type": "reference",
+          "summary": "Kubernetes é o sistema de orquestração de containers de código aberto que automatiza deployment, scaling e operação de aplicações containerizadas — declarativo, self-healing e baseado em control plane + worker nodes.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/kubernetes.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[k8s]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/langchain.md",
+          "label": "LangChain",
+          "type": "reference",
+          "summary": "LangChain é o framework para construir aplicações com LLMs — create_agent combina model + tools + prompt + middleware em um agente executável, com ecossistema de integrações e composição via Runnable.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/langchain.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[langchain framework]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/langgraph.md",
+          "label": "LangGraph",
+          "type": "reference",
+          "summary": "LangGraph é a camada de orquestração low-level do ecossistema LangChain — modela agentes como grafos de estado (StateGraph) com nós, arestas, branches e loops, checkpointing e controle fino de fluxo.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/langgraph.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[langgraph framework]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -2483,11 +2763,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 17,
+          "nodeCount": 21,
           "edgeCount": 41,
-          "isolatedCount": 6,
+          "isolatedCount": 8,
           "weakCount": 0,
-          "averageDegree": 4.82
+          "averageDegree": 3.9
         },
         "topNodes": [
           {
@@ -2586,6 +2866,13 @@
             "reason": "No relationships with other pages yet"
           },
           {
+            "id": "wiki/concepts/domain-driven-design.md",
+            "title": "Domain-Driven Design",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
             "id": "wiki/concepts/gitops.md",
             "title": "GitOps",
             "type": "concept",
@@ -2600,16 +2887,23 @@
             "reason": "No relationships with other pages yet"
           },
           {
-            "id": "wiki/concepts/loop-engineering.md",
-            "title": "Loop Engineering",
-            "type": "concept",
+            "id": "wiki/references/kubernetes.md",
+            "title": "Kubernetes",
+            "type": "reference",
             "severity": "isolated",
             "reason": "No relationships with other pages yet"
           },
           {
-            "id": "wiki/concepts/system-driver.md",
-            "title": "System Driver",
-            "type": "concept",
+            "id": "wiki/references/langchain.md",
+            "title": "LangChain",
+            "type": "reference",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/references/langgraph.md",
+            "title": "LangGraph",
+            "type": "reference",
             "severity": "isolated",
             "reason": "No relationships with other pages yet"
           }
@@ -2773,7 +3067,7 @@
             "sharedSources": []
           }
         ],
-        "summary": "The current key page is AI Native Team. There are 6 isolated pages that need links first. You can review 8 suggested links next."
+        "summary": "The current key page is AI Native Team. There are 8 isolated pages that need links first. You can review 8 suggested links next."
       }
     },
     "suggested": {
@@ -2798,6 +3092,27 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/concepts/domain-driven-design.md",
+          "label": "Domain-Driven Design",
+          "type": "concept",
+          "summary": "Domain-Driven Design é uma abordagem de modelagem de software onde o domínio do negócio é o coração do sistema — via ubiquitous language, bounded contexts e context mapping no nível estratégico, e entities/value objects/aggregates no nível tático.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/concepts/domain-driven-design.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "concept",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[ddd]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -2987,6 +3302,69 @@
           "entities": [],
           "concepts": [],
           "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/kubernetes.md",
+          "label": "Kubernetes",
+          "type": "reference",
+          "summary": "Kubernetes é o sistema de orquestração de containers de código aberto que automatiza deployment, scaling e operação de aplicações containerizadas — declarativo, self-healing e baseado em control plane + worker nodes.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/kubernetes.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[k8s]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/langchain.md",
+          "label": "LangChain",
+          "type": "reference",
+          "summary": "LangChain é o framework para construir aplicações com LLMs — create_agent combina model + tools + prompt + middleware em um agente executável, com ecossistema de integrações e composição via Runnable.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/langchain.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[langchain framework]"
+          ],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/langgraph.md",
+          "label": "LangGraph",
+          "type": "reference",
+          "summary": "LangGraph é a camada de orquestração low-level do ecossistema LangChain — modela agentes como grafos de estado (StateGraph) com nós, arestas, branches e loops, checkpointing e controle fino de fluxo.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/langgraph.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [
+            "[langgraph framework]"
+          ],
           "maturity": "",
           "canonicalEntity": ""
         },
@@ -3203,11 +3581,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 17,
+          "nodeCount": 21,
           "edgeCount": 41,
-          "isolatedCount": 6,
+          "isolatedCount": 8,
           "weakCount": 0,
-          "averageDegree": 4.82
+          "averageDegree": 3.9
         },
         "topNodes": [
           {
@@ -3306,6 +3684,13 @@
             "reason": "No relationships with other pages yet"
           },
           {
+            "id": "wiki/concepts/domain-driven-design.md",
+            "title": "Domain-Driven Design",
+            "type": "concept",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
             "id": "wiki/concepts/gitops.md",
             "title": "GitOps",
             "type": "concept",
@@ -3320,16 +3705,23 @@
             "reason": "No relationships with other pages yet"
           },
           {
-            "id": "wiki/concepts/loop-engineering.md",
-            "title": "Loop Engineering",
-            "type": "concept",
+            "id": "wiki/references/kubernetes.md",
+            "title": "Kubernetes",
+            "type": "reference",
             "severity": "isolated",
             "reason": "No relationships with other pages yet"
           },
           {
-            "id": "wiki/concepts/system-driver.md",
-            "title": "System Driver",
-            "type": "concept",
+            "id": "wiki/references/langchain.md",
+            "title": "LangChain",
+            "type": "reference",
+            "severity": "isolated",
+            "reason": "No relationships with other pages yet"
+          },
+          {
+            "id": "wiki/references/langgraph.md",
+            "title": "LangGraph",
+            "type": "reference",
             "severity": "isolated",
             "reason": "No relationships with other pages yet"
           }
