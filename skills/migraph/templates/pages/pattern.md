@@ -1,48 +1,84 @@
 ---
-title: "{{TITLE}}"
+title: {{title}}
 type: pattern
-created: "{{DATE}}"
-updated: "{{UPDATED}}"
-summary: "{{SUMMARY}}"
-sources: []
-tags: []
-confidence: medium
+category: {{category}}
+domain: {{domain}}
+created: {{date}}
+updated: {{date}}
+tags:
+  - {{tag1}}
 status: active
+id: {{domain}}.pattern.{{slug}}
+version: "1.0.0"
+confidence: high
+source: {{source}}
+inputs: []
+outputs: []
+dependencies: []
+quality_score: 0
+aliases: []
+summary: {{summary}}
 ---
 
-# {{TITLE}}
+# {{title}}
 
-## Problem
+## 🎯 Problem
 
-[What recurring problem does this pattern solve?]
+{{summary}}
 
-## Solution
+## 🧩 Solution
 
-[Describe the proven approach. Include context on when to apply it.]
+{{content}}
 
-## When to Use
+## 🏗️ Architecture
 
-- [Condition 1]
-- [Condition 2]
+### Components
 
-## When NOT to Use
+- Component 1: Description
+- Component 2: Description
 
-- [Anti-pattern 1]
-- [Anti-pattern 2]
-
-## Example
+### Flow
 
 ```
-[Concrete example showing the pattern in action]
+User → API → Service → Database
 ```
 
-## Trade-offs
+## ⚙️ Implementation
 
-| Aspect | Impact |
-|---|---|
-| [Aspect 1] | [Impact] |
-| [Aspect 2] | [Impact] |
+### Tools
 
-## References
+- Tool 1
+- Tool 2
 
-{{SOURCE_LINKS}}
+### Steps
+
+1. Step one
+2. Step two
+3. Step three
+
+## 📊 Observability
+
+### Metrics
+
+- metric_name: description
+- metric_name: description
+
+### Alerts
+
+- Alert condition: description
+- Alert condition: description
+
+## ⚠️ Trade-offs
+
+- Trade-off 1
+- Trade-off 2
+
+## 🔗 Related
+
+{{#each related}}
+- [[{{this}}]]
+{{/each}}
+
+## 📚 References
+
+- [Source]({{source}})

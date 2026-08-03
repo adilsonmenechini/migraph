@@ -1,67 +1,99 @@
 ---
-title: "{{TITLE}}"
+title: {{title}}
 type: runbook
-created: "{{DATE}}"
-updated: "{{UPDATED}}"
-summary: "{{SUMMARY}}"
-sources: []
-tags: []
-confidence: medium
+category: {{category}}
+domain: {{domain}}
+created: {{date}}
+updated: {{date}}
+tags:
+  - {{tag1}}
 status: active
+id: {{domain}}.runbook.{{slug}}
+version: "1.0.0"
+confidence: high
+source: {{source}}
+inputs: []
+outputs: []
+dependencies: []
+quality_score: 0
+aliases: []
+summary: {{summary}}
 ---
 
-# {{TITLE}}
+# {{title}}
 
-## Context
+## 🚨 Context
 
-[What situation calls for this runbook? What is the expected outcome?]
+{{summary}}
 
-## Prerequisites
+## 🔍 Detection
 
-- [Requirement 1]
-- [Requirement 2]
+### Metrics
 
-## Steps
+- metric_name: description
+- metric_name: description
 
-### 1. [First Step]
+### Alerts
 
-```bash
-[command to execute]
-```
+- Alert name: description
+- Alert name: description
 
-**Expected:** [what you should see]
+### Logs
 
-### 2. [Second Step]
+- Log pattern to search
+- Log pattern to search
 
-```bash
-[command to execute]
-```
+## 🛠️ Steps
 
-**Expected:** [what you should see]
+### 1. Initial Assessment
 
-### 3. [Final Step]
+1. Check current state:
+   ```bash
+   command_to_check
+   ```
+2. Identify impact scope
+3. Gather relevant logs
 
-```bash
-[command to execute]
-```
+### 2. Containment
 
-**Expected:** [what you should see]
+1. First containment step
+   ```bash
+   command
+   ```
+2. Second containment step
 
-## Verification
+### 3. Resolution
 
-```bash
-[command to verify the task completed successfully]
-```
+1. Apply fix
+2. Verify resolution
 
-**Expected:** [healthy state]
+### 4. Post-Incident
 
-## Rollback
+1. Document findings
+2. Update runbook if needed
 
-If something goes wrong:
+## 🔁 Recovery
 
-1. [Step to undo action 1]
-2. [Step to undo action 2]
+Steps to restore full service:
 
-## References
+1. Recovery step 1
+2. Recovery step 2
 
-{{SOURCE_LINKS}}
+## 📊 Validation
+
+How to verify the issue is resolved:
+
+- Check metric: value should be X
+- Run test: command should succeed
+- Verify service: endpoint returns 200
+
+## 🔗 Related
+
+{{#each related}}
+- [[{{this}}]]
+{{/each}}
+
+## 📚 References
+
+- [Source]({{source}})
+- [Incident Post-Mortem Template]()

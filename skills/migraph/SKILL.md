@@ -1,16 +1,16 @@
 ---
 name: migraph
-description: Create, maintain, query, and visualize a local Markdown knowledge base. Initialize a wiki, import files or webpages, collect inbox items, dedupe similar pages, answer from existing knowledge, and generate HTML viewer and graph artifacts. Use when the user mentions knowledge base, wiki, note capture, deduplication, or knowledge graph.
+description: Create, maintain, query, and visualize a local Markdown knowledge base. Initialize a wiki, import files or webpages, collect inbox items, dedupe similar pages, answer from existing knowledge, and generate HTML viewer and graph artifacts. Use when the user mentions knowledge base, wiki, note capture, deduplication, knowledge graph, add note, document this, create knowledge, research, build knowledge, create pattern, build runbook, capture architecture, find duplicates, merge notes, or clean up notes.
 license: "MIT"
 compatibility: "Requires Python 3 with venv support. MiGraph bootstraps its own .venv, installs runtime dependencies from requirements.txt, and supports macOS, Linux, and Windows."
 metadata:
-  version: "0.1.0"
+  version: "1.0.0"
   author: adilsonmenechini
 ---
 
 # MiGraph
 
-MiGraph is a single public skill for working with a local Markdown knowledge base.
+MiGraph is a single public skill for working with a local Markdown knowledge base. It covers the full knowledge lifecycle: creating notes across 13 page types, organizing by category, importing external content, validating schema, deduplicating, cross-linking, querying, and visualizing.
 
 ## Role
 
@@ -35,6 +35,8 @@ MiGraph is a single public skill for working with a local Markdown knowledge bas
 - The user wants to collect content into an inbox before formal ingest.
 - The user wants to ask questions against an existing wiki.
 - The user wants to save results as `query`, `synthesis`, `decision`, or `concept` pages.
+- The user wants to add a new knowledge note (concept, guide, reference, example, pattern, runbook, architecture).
+- The user wants to find, merge, or clean up duplicate notes.
 - The user wants to generate a viewer, a graph, or a governance report.
 - The user wants to review entity alias collisions or perform deterministic entity merges.
 
@@ -78,6 +80,56 @@ Enabled when `MIGRAPH_EMBED_API_KEY` is set. Defaults to SiliconFlow BGE-M3.
 - If the user wants a new workspace, run `init`.
 - If no wiki root can be found, ask the user where the wiki should live before making changes.
 
+## Page Types
+
+MiGraph stores pages in `wiki/<type-plural>/`. Each page has unified frontmatter.
+
+| Type | Directory | Purpose |
+|------|-----------|---------|
+| `source` | `wiki/sources/` | Imported documents (converted, ingested) |
+| `topic` | `wiki/topics/` | Subject-area pages |
+| `concept` | `wiki/concepts/` | Reusable concepts |
+| `decision` | `wiki/decisions/` | Decisions and their rationale |
+| `query` | `wiki/queries/` | Saved Q&A results |
+| `synthesis` | `wiki/syntheses/` | Combined digests |
+| `entity` | `wiki/entities/` | Named entities (people, tools, systems) |
+| `pattern` | `wiki/patterns/` | Reusable patterns |
+| `runbook` | `wiki/runbooks/` | Operational runbooks |
+| `architecture` | `wiki/architectures/` | Architecture documentation |
+| `guide` | `wiki/guides/` | How-to guides |
+| `reference` | `wiki/references/` | Reference material |
+| `example` | `wiki/examples/` | Practical examples |
+
+## Unified Frontmatter Schema (ALL types)
+
+```yaml
+---
+title: <Title>
+type: <type>
+category: <category>          # IaC | DevOps | AI | other
+domain: <domain>              # e.g., sre, kubernetes, terraform
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+tags:                         # list, 2-space indent, min 1
+  - <tag1>
+status: active                # draft | active | deprecated | archived
+summary: <1-2 sentence summary>
+id: <domain>.<type>.<slug>    # for pattern/runbook/architecture
+version: "1.0.0"
+confidence: high              # high | medium | low (for pattern/runbook/architecture)
+source: docs                  # for pattern/runbook/architecture
+---
+```
+
+Validation rules:
+- Boolean values: `true` / `false` (lowercase, no quotes)
+- Dates: ISO 8601 format `YYYY-MM-DD`
+- Wikilinks in frontmatter must be quoted: `project: "[[Project Name]]"`
+- Filename: `slug-case.md`
+- ID: `{domain}.{type}.{slug}` (e.g., `sre.runbook.incident-response`)
+
+The validator lives at `validators/schema.json`. Run it via `update-schema` or validate manually against the rules above.
+
 ## Execution Entry
 
 When you need to invoke MiGraph, use the unified entry:
@@ -90,8 +142,6 @@ Platform note:
 
 - On macOS and Linux, `<python-command>` is usually `python3`.
 - On Windows, `<python-command>` is usually `python`.
-
-The repository also ships an auxiliary skill under `skills/` — `knowledge` (unified knowledge lifecycle: create notes across 7 types with templates and validators, dedupe, organize) — plus an example knowledge base under `examples/knowledge/` that `migrate-skill-kwonledge` can import into a vault.
 
 ## Intent Mapping
 
@@ -113,15 +163,16 @@ The repository also ships an auxiliary skill under `skills/` — `knowledge` (un
 - Check workspace health -> `health`
 - Check a compact workspace snapshot -> `status`
 - Validate environment capabilities -> `doctor`
-- Detect duplicate or similar pages -> `dedupe-pages`
-- Import skill-kwonledge content into a MiGraph vault -> `migrate-skill-kwonledge`
+- Detect duplicate or similar pages in the wiki -> `dedupe-pages`
+- Detect duplicate or similar notes by title/content/tag similarity -> `deduplicate`
+- Backfill schema fields (id, version, confidence, source) -> `update-schema`
 
 ## Gotchas
 
 - `python3` on macOS and Linux, `python` on Windows — never assume `python`.
 - AI features are disabled by default. Without a complete LLM config, `crystallize` and `digest` fall back to local heuristics; without an embed config, semantic scores degrade to lexical only.
 - `serve` serves `output/` over HTTP; agent chat UIs usually cannot render `file://` HTML inline. Prefer `serve` when the user wants to browse.
-- `dedupe-pages` compares pairs across the same type. The original skill-kwonledge deduplicate skipped same-category + same-type pairs (a bug); that skip is fixed here.
+- `dedupe-pages` compares pairs across the same type. `deduplicate` uses fuzzy title (40%), content/Jaccard (40%), and tag (20%) similarity with HIGH ≥70% / MEDIUM 40–69% thresholds.
 - New page types `pattern`, `runbook`, `architecture` live in `wiki/patterns/`, `wiki/runbooks/`, `wiki/architectures/`.
 
 ## Import Workflow
@@ -132,6 +183,92 @@ Progress:
 - [ ] Step 3: Review the inbox (`inbox`)
 - [ ] Step 4: Ingest (`ingest`)
 - [ ] Step 5: Rebuild outputs (`graph`, `viewer`)
+
+## Create Mode
+
+When the user asks to add, document, capture, or research a topic, create a new wiki page.
+
+### Step 1: Identify Topic, Type, and Category
+
+- Extract topic from the request ("add kubernetes" → topic `kubernetes`).
+- If the user provides a category (IaC, DevOps, AI, other), use it.
+- Otherwise infer the category from the topic.
+- Pick the page type: concept (reusable idea), guide (how-to), reference (facts), example (code/sample), pattern (reusable solution), runbook (operations), or architecture (design).
+
+### Step 2: Generate File Path
+
+Format: `wiki/<type-plural>/<slug>.md`
+
+Slug rules:
+- Lowercase
+- Hyphen-separated
+- Remove special characters
+
+### Step 3: Create Note Content
+
+Use the matching template in `templates/pages/` and the unified frontmatter schema above.
+
+Use Obsidian Markdown features:
+- Wikilinks: `[[Note Name]]`, `[[Note Name|Display Text]]`, `[[Note Name#Heading]]`, `[[Note Name#^block-id]]`
+- Callouts: `> [!note]`, `> [!warning]`, `> [!tip]`, `> [!example]`
+- Block IDs: `^my-block-id`
+- Tags: `#tag`, `#nested/tag`
+- Embeds: `![[Other Note]]`
+
+### Step 4: Link Neighbors
+
+After creating a note, link related existing pages:
+- Add `[[backlink]]` entries in the new page's `## Connections` section.
+- Add a link to the new page from related pages' Connections sections.
+- For patterns (cross-category), also link from the category overview page.
+
+### Step 5: Validate
+
+- [ ] `id` is unique and follows `domain.type.slug`
+- [ ] `type` is one of the 13 valid values
+- [ ] `domain` exists or will be created
+- [ ] `tags` array has at least 1 item
+- [ ] `summary` is 1–2 sentences
+- [ ] Category folder exists
+- [ ] Type subfolder exists (`concepts/`, `guides/`, `references/`, `examples/`, `patterns/`, `runbooks/`, `architectures/`, ...)
+
+## Refactor Mode
+
+When the user asks to find duplicates, merge notes, clean up, or organize, run the deduplication script.
+
+### Step 1: Run Duplicate Check
+
+```bash
+<python-command> skills/migraph/scripts/migraph deduplicate <wiki-root> [--output results.json] [--report report.md]
+```
+
+The script uses:
+- **Title similarity**: Fuzzy matching (40% weight)
+- **Content similarity**: Word overlap / Jaccard (40% weight)
+- **Tag similarity**: Jaccard index (20% weight)
+- **Combined score**: Weighted average
+
+### Step 2: Analyze Results
+
+- **HIGH similarity (≥70%)**: Likely duplicates — action required
+- **MEDIUM similarity (40–69%)**: Related notes — consider linking
+- **LOW similarity (<40%)**: Ignore
+
+For HIGH-similarity pairs, propose a merge:
+- Compare both notes' content.
+- Keep the richer, more complete note as canonical.
+- Merge missing sections from the duplicate.
+- Update links pointing to the merged-away note.
+- Delete the duplicate.
+- Run `dedupe-pages` or rebuild outputs afterwards.
+
+### Alternative: Wiki-level Dedupe
+
+For pages already inside a wiki (same-type pairs, entity-aware), use:
+
+```bash
+<python-command> skills/migraph/scripts/migraph dedupe-pages --root <wiki-root>
+```
 
 ## Browsing HTML Outputs
 

@@ -18,7 +18,7 @@ Check for potential backlinks (notes that might reference this new note):
 
 ```bash
 # Search for mentions of title or keywords
-grep -r "title_keyword" examples/knowledge/
+grep -r "title_keyword" wiki/
 ```
 
 ## 3. Check for Duplication
@@ -26,7 +26,7 @@ grep -r "title_keyword" examples/knowledge/
 Run similarity check:
 
 ```bash
-python3 skills/knowledge/scripts/deduplicate.py examples/knowledge/
+python3 skills/migraph/scripts/migraph deduplicate <wiki-root>
 ```
 
 If similarity > 0.85:
@@ -68,7 +68,7 @@ For automation systems:
   "id": "{{note_id}}",
   "type": "{{type}}",
   "domain": "{{domain}}",
-  "source": "knowledge"
+  "source": "migraph"
 }
 ```
 

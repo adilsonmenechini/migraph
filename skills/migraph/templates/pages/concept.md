@@ -1,35 +1,75 @@
 ---
-title: {{TITLE}}
+title: {{title}}
 type: concept
-created: {{DATE}}
-updated: {{UPDATED}}
-summary: {{SUMMARY}}
-sources:
-{{SOURCE_ITEMS}}
+category: {{category}}
+domain: {{domain}}
+created: {{date}}
+updated: {{date}}
 tags:
-  - concept
-confidence: mixed
+  - {{tag1}}
 status: active
+id: {{domain}}.concept.{{slug}}
+version: "1.0.0"
+confidence: medium
+source: {{source}}
+inputs: []
+outputs: []
+dependencies: []
+quality_score: 0
+aliases: []
+summary: {{summary}}
 ---
 
-# {{TITLE}}
+# {{title}}
 
-## Summary
+## 🧠 Definition
 
-{{SUMMARY}}
+{{summary}}
 
-## Key Points
+## 📚 Explanation
 
-{{KEY_POINTS}}
+{{content}}
 
-## Details
+## 🔗 Related
 
-{{DETAILS}}
+{{#each related}}
+- [[{{this}}]]
+{{/each}}
 
-## Connections
+## 🧩 Key Insights
 
-{{RELATED_LINKS}}
+- Key point 1
+- Key point 2
+- Key point 3
 
-## Sources
+## ⚠️ Trade-offs
 
-{{SOURCE_LINKS}}
+- Trade-off 1
+- Trade-off 2
+
+## 📊 Observability
+
+- **SLIs**:
+  - metric_name: description
+
+- **SLOs**:
+  - target: 99.9%
+
+- **Metrics**:
+  - prometheus_metric_name
+
+## 🔐 Security Considerations
+
+- Security consideration 1
+- Security consideration 2
+
+## 🏗️ Usage Context
+
+- When to use this concept
+- When NOT to use this concept
+- Prerequisites
+
+## 📚 References
+
+- [Source]({{source}})
+- [Related Documentation]()

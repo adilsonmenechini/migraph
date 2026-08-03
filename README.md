@@ -56,7 +56,7 @@ Transform loose documents, webpages, notes, and conversations into a durable Mar
 ### 🗂️ Markdown Workspace
 
 - **YAML frontmatter**: title, type, summary, sources, entities, confidence, status
-- **7 page types**: `source`, `topic`, `concept`, `decision`, `synthesis`, `query`, `entity`
+- **13 page types**: `source`, `topic`, `concept`, `decision`, `synthesis`, `query`, `entity`, `pattern`, `runbook`, `architecture`, `guide`, `reference`, `example`
 - **Derived types**: `pattern`, `runbook`, `architecture` live in `wiki/patterns/`, `wiki/runbooks/`, `wiki/architectures/`
 - **Auto-detected root**: `.wiki-schema.md` identifies an existing workspace
 
@@ -171,18 +171,19 @@ clip --url <URL>
 ```
 MiGraph/
 ├── skills/
-│   ├── migraph/               # MiGraph skill: unified CLI + scripts + templates + docs
-│   │   ├── scripts/           # Unified CLI + all command scripts
-│   │   ├── templates/
-│   │   │   ├── pages/         # Page templates (concept, pattern, runbook, ...)
-│   │   │   └── root/          # Workspace scaffolding (index, log, AGENTS)
-│   │   ├── docs/              # Documentation and previews
-│   │   ├── requirements.txt   # Runtime dependencies
-│   │   ├── pyproject.toml     # Ruff + mypy configuration
-│   │   └── SKILL.md           # Installed as the "migraph" skill
-│   └── knowledge/             # Unified knowledge lifecycle (7 note types, create, dedupe, organize)
-├── examples/
-│   └── knowledge/             # Example knowledge base (IaC, DevOps, AI, patterns)
+│   └── migraph/               # MiGraph skill: unified CLI + scripts + templates + docs
+│       ├── scripts/           # Unified CLI + all command scripts
+│       ├── templates/
+│       │   ├── pages/         # Page templates (concept, pattern, runbook, ...)
+│       │   └── root/          # Workspace scaffolding (index, log, AGENTS)
+│       ├── validators/        # Frontmatter schema validation
+│       ├── hooks/             # Post-create hooks
+│       ├── evals/             # Skill evaluation suite
+│       ├── resources/         # Quality rules and templates
+│       ├── docs/              # Documentation and previews
+│       ├── requirements.txt   # Runtime dependencies
+│       ├── pyproject.toml     # Ruff + mypy configuration
+│       └── SKILL.md           # Installed as the "migraph" skill
 └── tests/                     # Test suite
 ```
 
@@ -233,7 +234,7 @@ MiGraph/
 git clone https://github.com/adilsonmenechini/migraph MiGraph
 cd MiGraph
 python3 skills/migraph/scripts/migraph bootstrap
-python3 skills/migraph/scripts/migraph doctor --repo-root .
+python3 skills/migraph/scripts/migraph doctor
 ```
 
 Then install the folder in your agent's skill directory per the host's docs.
@@ -347,8 +348,9 @@ python3 skills/migraph/scripts/migraph <command> [args]
 | `digest` | Generate a synthesis digest from multiple sources |
 | `lint` | Validate wiki structure |
 | `rebuild-index` | Rebuild the workspace index |
-| `dedupe-pages` | Detect duplicate or similar pages |
-| `migrate-skill-kwonledge` | Migrate skill-kwonledge content into a vault (alias `migrate-skill-knowledge` accepted for corrected spelling) |
+| `dedupe-pages` | Detect duplicate or similar pages in the wiki |
+| `deduplicate` | Detect duplicate notes by title/content/tag similarity (fuzzy) |
+| `update-schema` | Backfill schema fields (id, version, confidence, source) |
 
 ### Intent Mapping
 

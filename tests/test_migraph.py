@@ -2679,8 +2679,7 @@ class TestNewPageTypes(unittest.TestCase):
 
 class TestDedupeBugFix(unittest.TestCase):
     def test_same_category_same_type_are_compared(self) -> None:
-        """Regression: original skill-kwonledge deduplicate.py skipped pairs
-        same category AND same type. MiGraph dedupe-pages must compare them."""
+        """Regression: dedupe-pages must compare same-type pairs (no skip)."""
         from dedupe_pages import _combined_score, _content_similarity, _title_similarity
 
         # Two concept pages with identical title but different content
@@ -2693,27 +2692,6 @@ class TestDedupeBugFix(unittest.TestCase):
 
         combined = _combined_score(title_score, content_score, 0.0)
         self.assertLess(combined, 1.0)
-
-
-class TestMigrationMapping(unittest.TestCase):
-    def test_type_resolution(self) -> None:
-        import migrate_skill_kwonledge as msk
-
-        self.assertEqual(msk._resolve_type("concept"), "concept")
-        self.assertEqual(msk._resolve_type("guide"), "source")
-        self.assertEqual(msk._resolve_type("reference"), "source")
-        self.assertEqual(msk._resolve_type("example"), "source")
-        self.assertEqual(msk._resolve_type("pattern"), "pattern")
-        self.assertEqual(msk._resolve_type("runbook"), "runbook")
-        self.assertEqual(msk._resolve_type("architecture"), "architecture")
-        self.assertEqual(msk._resolve_type("unknown"), "topic")
-
-    def test_type_to_dir(self) -> None:
-        import migrate_skill_kwonledge as msk
-
-        self.assertEqual(msk._type_to_dir("pattern"), "patterns")
-        self.assertEqual(msk._type_to_dir("runbook"), "runbooks")
-        self.assertEqual(msk._type_to_dir("architecture"), "architectures")
 
 
 if __name__ == "__main__":

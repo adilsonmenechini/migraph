@@ -50,8 +50,8 @@ COMMAND_TO_SCRIPT = {
     "status": "status.py",
     "doctor": "doctor.py",
     "dedupe-pages": "dedupe_pages.py",
-    "migrate-skill-kwonledge": "migrate_skill_kwonledge.py",
-    "migrate-skill-knowledge": "migrate_skill_kwonledge.py",  # alias for compatibility with corrected spelling
+    "deduplicate": "deduplicate.py",
+    "update-schema": "update_schema.py",
 }
 
 HELP_COMMANDS = {"help", "-h", "--help"}
@@ -89,8 +89,8 @@ Commands:
   status          -> status.py
   doctor          -> doctor.py
   dedupe-pages    -> dedupe_pages.py
-  migrate-skill-kwonledge -> migrate_skill_kwonledge.py
-  migrate-skill-knowledge -> migrate_skill_kwonledge.py (alias for corrected spelling)
+  deduplicate     -> deduplicate.py
+  update-schema   -> update_schema.py
 
 Examples:
   python scripts/migraph bootstrap
@@ -111,7 +111,8 @@ Examples:
   python scripts/migraph correct --root /path/to/my-wiki --mistake "Confused context_length and max_tokens" --fix "Treat them as separate limits"
   python scripts/migraph doctor --repo-root .
   python scripts/migraph dedupe-pages --root /path/to/my-wiki
-  python scripts/migraph migrate-skill-kwonledge --source /path/to/skill-kwonledge/examples/knowledge --target /path/to/my-wiki
+  python scripts/migraph deduplicate --root /path/to/my-wiki
+  python scripts/migraph update-schema --root /path/to/my-wiki
 """
 
 

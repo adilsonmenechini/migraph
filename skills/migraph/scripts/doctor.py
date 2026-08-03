@@ -56,6 +56,8 @@ ROOT_REQUIRED_SCRIPTS = [
     "scripts/llm_client.py",
     "scripts/embed_client.py",
     "scripts/url_safety.py",
+    "scripts/deduplicate.py",
+    "scripts/update_schema.py",
 ]
 ROOT_REQUIRED_TEMPLATES = [
     "templates/root/.wiki-schema.md",
@@ -71,6 +73,12 @@ ROOT_REQUIRED_TEMPLATES = [
     "templates/pages/decision.md",
     "templates/pages/concept.md",
     "templates/pages/entity.md",
+    "templates/pages/pattern.md",
+    "templates/pages/runbook.md",
+    "templates/pages/architecture.md",
+    "templates/pages/guide.md",
+    "templates/pages/reference.md",
+    "templates/pages/example.md",
 ]
 WIKI_REQUIRED_PATHS = [
     ".wiki-schema.md",
@@ -128,7 +136,12 @@ def check_runtime_dependencies(errors: list[str]) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Check that the MiGraph skill package is usable.")
-    parser.add_argument("--repo-root", default=".", help="Repository root path")
+    parser.add_argument(
+        "--repo-root",
+        default=str(Path(__file__).resolve().parent.parent),
+        help="Skill package root (where SKILL.md, scripts/, and templates/ live). "
+        "Defaults to the skill root inferred from this script's location.",
+    )
     parser.add_argument("--wiki-root", default="", help="Optional wiki workspace path to validate")
     args = parser.parse_args()
 
