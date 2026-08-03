@@ -20,13 +20,13 @@ from urllib import error, request
 
 import rebuild_index
 from utils import (
-    REQUIRED_FIELDS,
     append_log,
     collect_wiki_pages,
     extract_summary,
     find_repo_root,
     is_external_link,
     markdown_links,
+    missing_required_fields,
     parse_frontmatter,
     read_text,
     today_str,
@@ -305,7 +305,7 @@ def main() -> int:
 
     for page in pages:
         meta, body = parse_frontmatter(read_text(page))
-        missing = [field for field in REQUIRED_FIELDS if field not in meta]
+        missing = missing_required_fields(meta)
         if missing:
             issues.append(f"[frontmatter] {page.relative_to(root)} missing: {', '.join(missing)}")
 

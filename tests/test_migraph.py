@@ -2751,5 +2751,206 @@ class TestDedupeBugFix(unittest.TestCase):
         self.assertLess(combined, 1.0)
 
 
+class TestCreatePageValidator(unittest.TestCase):
+    def _valid_body(self) -> str:
+        return textwrap.dedent(
+            """\
+            ## Overview
+
+            A validated reference page for the create_page validator tests.
+
+            ## Quick Reference
+
+            | Item | Value |
+            |------|-------|
+            | Scope | validator |
+
+            ## References
+
+            - [Source](https://example.com/)
+            """
+        )
+
+    def _run_create(self, root: Path, *args: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [runtime_python(), str(SCRIPTS_DIR / "create_page.py"), "--root", str(root), *args],
+            cwd=REPO_ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+    def _seed_wiki(self, root: Path) -> None:
+        (root / "wiki" / "references").mkdir(parents=True, exist_ok=True)
+        write_text(
+            root / "wiki" / "references" / "seed.md",
+            """
+            ---
+            title: Seed Reference
+            type: reference
+            created: 2026-08-03
+            updated: 2026-08-03
+            source: https://example.com/seed
+            tags:
+              - seed
+            confidence: high
+            status: active
+            id: sre.reference.seed
+            ---
+
+            # Seed Reference
+
+            ## Overview
+
+            Seed page used as a connection target.
+
+            ## References
+
+            - [Source](https://example.com/seed)
+            """,
+        )
+
+    def test_create_valid_page_writes_file_and_logs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir) / "wiki"
+            self._seed_wiki(root)
+            result = self._run_create(root,
+                "--title",
+                "Validator Test Page",
+                "--type",
+                "reference",
+                "--domain",
+                "sre",
+                "--category",
+                "DevOps",
+                "--summary",
+                "A valid page created through the canonical validator path.",
+                "--tags",
+                "test,validator",
+                "--source",
+                "https://example.com/",
+                "--connections",
+                "../references/seed.md",
+                "--content",
+                self._valid_body(),
+                "--no-rebuild",
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            page = root / "wiki" / "references" / "validator-test-page.md"
+            self.assertTrue(page.exists())
+            text = page.read_text(encoding="utf-8")
+            self.assertIn("id: sre.reference.validator-test-page", text)
+            self.assertIn("## Connections", text)
+            self.assertIn("- [Seed](../references/seed.md)", text)
+            log = (root / "log.md").read_text(encoding="utf-8")
+            self.assertIn("validator-test-page.md", log)
+
+    def test_create_with_broken_connection_is_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir) / "wiki"
+            self._seed_wiki(root)
+            result = self._run_create(root,
+                "--title",
+                "Broken Link",
+                "--type",
+                "reference",
+                "--domain",
+                "sre",
+                "--summary",
+                "A page that must be rejected because its connection link is broken.",
+                "--tags",
+                "test",
+                "--source",
+                "https://example.com/",
+                "--connections",
+                "../references/missing.md",
+                "--content",
+                self._valid_body(),
+                "--no-rebuild",
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("broken connection link", result.stdout + result.stderr)
+            self.assertFalse((root / "wiki" / "references" / "broken-link.md").exists())
+
+    def test_create_without_connections_is_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir) / "wiki"
+            self._seed_wiki(root)
+            result = self._run_create(root,
+                "--title",
+                "No Connections",
+                "--type",
+                "reference",
+                "--domain",
+                "sre",
+                "--summary",
+                "A page that must be rejected because it has no connection links.",
+                "--tags",
+                "test",
+                "--source",
+                "https://example.com/",
+                "--content",
+                self._valid_body(),
+                "--no-rebuild",
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("at least one", result.stdout + result.stderr)
+            self.assertFalse((root / "wiki" / "references" / "no-connections.md").exists())
+
+    def test_create_duplicate_title_is_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir) / "wiki"
+            self._seed_wiki(root)
+            result = self._run_create(root,
+                "--title",
+                "Seed Reference",
+                "--type",
+                "reference",
+                "--domain",
+                "sre",
+                "--summary",
+                "A page with a duplicate title that must be rejected by the validator.",
+                "--tags",
+                "test",
+                "--source",
+                "https://example.com/",
+                "--connections",
+                "../references/seed.md",
+                "--content",
+                self._valid_body(),
+                "--no-rebuild",
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("duplicate title", result.stdout + result.stderr)
+
+    def test_create_with_placeholder_body_is_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir) / "wiki"
+            self._seed_wiki(root)
+            placeholder_body = (
+                self._valid_body()
+                + "\n\n## Connections\n\n- [Seed](../references/seed.md)\n\nTODO: fill this later\n"
+            )
+            result = self._run_create(root,
+                "--title",
+                "Placeholder Page",
+                "--type",
+                "reference",
+                "--domain",
+                "sre",
+                "--summary",
+                "A page containing placeholder text that must be rejected by the validator.",
+                "--tags",
+                "test",
+                "--source",
+                "https://example.com/",
+                "--content",
+                placeholder_body,
+                "--no-rebuild",
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("placeholder", result.stdout + result.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()

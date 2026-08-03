@@ -2,11 +2,11 @@
   "generated_at": "2026-08-03",
   "schemaVersion": "2",
   "view": "knowledge",
-  "summary": "The current key page is AI Native Team. The main pages already have a basic connection structure. There are 1 high-degree thin pages worth strengthening first. There are 1 clusters disconnected from the main graph. There are 8 suggested links ready for review.",
+  "summary": "The current key page is AI Native Team. The main pages already have a basic connection structure. There are 1 high-degree thin pages worth strengthening first. There are 8 suggested links ready for review.",
   "stats": {
     "view": "knowledge",
-    "nodeCount": 21,
-    "edgeCount": 65,
+    "nodeCount": 24,
+    "edgeCount": 74,
     "entityCount": 0,
     "aliasCount": 0,
     "aliasedEntityCount": 0,
@@ -19,13 +19,12 @@
     "suggestedLinkCount": 8,
     "hubStubCount": 1,
     "fragileBridgeCount": 0,
-    "isolatedClusterCount": 1,
-    "componentCount": 2,
-    "averageDegree": 6.19
+    "isolatedClusterCount": 0,
+    "componentCount": 1,
+    "averageDegree": 6.17
   },
   "topActions": [
     "Strengthen high-degree thin pages with better summaries, context, and sources.",
-    "Reconnect isolated clusters back to the main graph.",
     "Review suggested links and convert strong candidates into explicit page links."
   ],
   "topNodes": [
@@ -58,18 +57,18 @@
       "reason": "Degree 8, inbound 6, spanning 3 neighbor types."
     },
     {
+      "id": "wiki/topics/model-platform.md",
+      "title": "Model Platform",
+      "type": "topic",
+      "score": 43,
+      "reason": "Degree 9, inbound 4, spanning 3 neighbor types."
+    },
+    {
       "id": "wiki/sources/platform-spec.md",
       "title": "Platform Spec",
       "type": "source",
       "score": 42,
       "reason": "Degree 8, inbound 5, spanning 3 neighbor types."
-    },
-    {
-      "id": "wiki/topics/eval-loops.md",
-      "title": "Eval Loops",
-      "type": "topic",
-      "score": 38,
-      "reason": "Degree 8, inbound 3, spanning 3 neighbor types."
     }
   ],
   "bridgeNodes": [
@@ -95,16 +94,16 @@
       "reason": "Connects 4 page types and works well as a bridge."
     },
     {
-      "id": "wiki/sources/eval-loops.md",
-      "title": "Eval Loop Notes",
-      "type": "source",
-      "score": 20,
+      "id": "wiki/topics/model-platform.md",
+      "title": "Model Platform",
+      "type": "topic",
+      "score": 21,
       "reason": "Connects 3 page types and works well as a bridge."
     },
     {
-      "id": "wiki/topics/eval-loops.md",
-      "title": "Eval Loops",
-      "type": "topic",
+      "id": "wiki/sources/eval-loops.md",
+      "title": "Eval Loop Notes",
+      "type": "source",
       "score": 20,
       "reason": "Connects 3 page types and works well as a bridge."
     }
@@ -117,36 +116,13 @@
       "id": "wiki/topics/model-platform.md",
       "title": "Model Platform",
       "type": "topic",
-      "degree": 8,
+      "degree": 9,
       "summaryLength": 76,
-      "reason": "Degree is 8, but the summary is only 76 characters long."
+      "reason": "Degree is 9, but the summary is only 76 characters long."
     }
   ],
   "fragileBridges": [],
-  "isolatedClusters": [
-    {
-      "size": 10,
-      "nodeIds": [
-        "wiki/concepts/domain-driven-design.md",
-        "wiki/concepts/gitops.md",
-        "wiki/concepts/loop-engineering.md",
-        "wiki/concepts/system-driver.md",
-        "wiki/references/argocd.md",
-        "wiki/references/graphrag.md",
-        "wiki/references/kubernetes.md",
-        "wiki/references/langchain.md",
-        "wiki/references/langgraph.md",
-        "wiki/topics/ai-agents.md"
-      ],
-      "titles": [
-        "Domain-Driven Design",
-        "GitOps",
-        "Loop Engineering",
-        "System Driver"
-      ],
-      "reason": "This cluster is disconnected from the main graph and contains 10 pages."
-    }
-  ],
+  "isolatedClusters": [],
   "suggestedLinks": [
     {
       "source": "wiki/decisions/context-budget.md",

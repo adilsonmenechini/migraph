@@ -26,6 +26,7 @@ SYSTEM_PYTHON = os.environ.get("PYTHON", "").strip() or sys.executable or "pytho
 
 COMMAND_TO_SCRIPT = {
     "bootstrap": "bootstrap_runtime.py",
+    "create": "create_page.py",
     "init": "init_wiki.py",
     "clip": "clip.py",
     "inbox": "build_inbox.py",
@@ -65,6 +66,7 @@ Usage:
 
 Commands:
   bootstrap       -> bootstrap_runtime.py
+  create          -> create_page.py
   init            -> init_wiki.py
   clip            -> clip.py
   inbox           -> build_inbox.py

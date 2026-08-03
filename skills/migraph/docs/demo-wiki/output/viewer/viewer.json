@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-08-03",
   "rootName": "demo-wiki",
-  "pageCount": 21,
+  "pageCount": 24,
   "counts": {
     "concept": 6,
     "topic": 3,
@@ -9,7 +9,7 @@
     "synthesis": 1,
     "query": 1,
     "decision": 2,
-    "reference": 5
+    "reference": 8
   },
   "pages": [
     {
@@ -869,6 +869,129 @@
       ]
     },
     {
+      "id": "wiki/references/argo-events.md",
+      "title": "Argo Events",
+      "type": "reference",
+      "section": "References",
+      "summary": "Argo Events é o framework event-driven do ecossistema Argo para Kubernetes — EventSource, EventBus e Sensor conectam 20+ fontes de eventos a triggers como Argo Workflows, objetos K8s e funções serverless via CloudEvents.",
+      "excerpt": "Argo Events é um framework de automação de workflows orientado a eventos para Kubernetes — dispara Argo Workflows, objetos K8s, funções serverless e outros destinos a partir de mais de 20 fontes de eventos diferentes. O Argo Events é composto por três componentes principais que f",
+      "updated": "2026-08-03",
+      "confidence": "high",
+      "status": "active",
+      "sources": [],
+      "tags": [
+        "argo",
+        "events",
+        "event-driven",
+        "kubernetes",
+        "serverless"
+      ],
+      "links": [
+        {
+          "label": "argocd.md",
+          "raw": "../references/argocd.md",
+          "targetId": "wiki/references/argocd.md",
+          "href": ""
+        },
+        {
+          "label": "gitops.md",
+          "raw": "../concepts/gitops.md",
+          "targetId": "wiki/concepts/gitops.md",
+          "href": ""
+        },
+        {
+          "label": "kubernetes.md",
+          "raw": "../references/kubernetes.md",
+          "targetId": "wiki/references/kubernetes.md",
+          "href": ""
+        }
+      ],
+      "sections": [
+        {
+          "title": "🧠 Definition",
+          "anchor": "definition",
+          "content": "Argo Events é um framework de automação de workflows orientado a eventos para Kubernetes — dispara Argo Workflows, objetos K8s, funções serverless e outros destinos a partir de mais de 20 fontes de eventos diferentes.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 Explanation",
+          "anchor": "explanation",
+          "content": "O Argo Events é composto por três componentes principais que formam o pipeline de eventos:\n- **EventSource**: conecta-se a fontes de eventos externas (GitHub, GitLab, Kafka, AWS SNS/SQS, GCP PubSub, NATS, MQTT, Redis, Slack, Stripe, Webhooks, calendário, entre outras) e converte cada evento em um CloudEvent padronizado.\n- **EventBus**: transporta os eventos entre EventSources e Sensors usando NATS Streaming (padrão) ou Kafka.\n- **Sensor**: escuta eventos do EventBus, aplica filtros e dependências (and/or), e dispara **triggers** — o componente que executa a ação desejada.\nOs triggers suportados incluem: Argo Workflows, objetos Kubernetes, HTTP/serverless (OpenFaaS, Kubeless, KNative), AWS Lambda, NATS, Kafka, Slack, Azure Event Hubs, Argo Rollouts e OpenWhisk.\nO fluxo pode ser de uma dependência linear simples (um evento → uma ação) até dependências complexas multi-fonte com lógica de constraints personalizada via expressões.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🧩 Key Insights",
+          "anchor": "key-insights",
+          "content": "- **Padrão CloudEvents**: todos os eventos são normalizados para CloudEvents, garantindo interoperabilidade entre fontes e destinos.\n- **Componentes declarativos**: EventSource, EventBus e Sensor são CRDs Kubernetes configurados via YAML — GitOps-friendly.\n- **Dependências e filtros**: o Sensor suporta agregação de múltiplos eventos (and/or) com filtros por payload, headers e contexto.\n- **Reuso do ecossistema Argo**: integra nativamente com Argo Workflows e Argo Rollouts, complementando o ArgoCD no ciclo GitOps.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "⚠️ Trade-offs",
+          "anchor": "trade-offs",
+          "content": "| Aspecto | Prós | Contras |\n|---------|------|---------|\n| Escopo | Framework completo de event-driven | Curva de aprendizado dos 3 CRDs |\n| Transporte | NATS/Kafka embutidos | Operação extra de message broker |\n| Integração | 20+ fontes prontas | Fontes customizadas exigem desenvolvimento |\n| Complexidade | De simples a multi-fonte | Dependências complexas exigem teste cuidadoso |",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📊 Observability",
+          "anchor": "observability",
+          "content": "- Métricas Prometheus expostas pelos controllers (EventSource, EventBus, Sensor).\n- Logs estruturados dos três componentes.\n- Dashboard padrão de health/ready dos pods.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔐 Security Considerations",
+          "anchor": "security-considerations",
+          "content": "- Secrets das fontes (webhook tokens, credenciais Kafka/SQS) devem ser armazenados como Kubernetes Secrets.\n- Webhooks expostos precisam de autenticação e validação de assinatura (ex.: HMAC do GitHub).\n- RBAC mínimo para os controllers e para as ações executadas pelos triggers.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🏗️ Usage Context",
+          "anchor": "usage-context",
+          "content": "- **CI/CD reativo**: disparar pipelines de deploy quando uma imagem for publicada ou um PR for merged.\n- **GitOps**: reagir a eventos do repositório Git em conjunto com ArgoCD.\n- **Integração de dados**: sincronizar dados de fontes externas (S3, Kafka, DB) para dentro do cluster.\n- **Automação de plataforma**: ações em Slack, e-mail ou serverless baseadas em eventos de infraestrutura.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 References",
+          "anchor": "references",
+          "content": "- [Argo Events Documentation](https://argoproj.github.io/argo-events/)\n- [Argo Events Architecture](https://argoproj.github.io/argo-events/concepts/architecture/)\n- [Argo Events Event Sources](https://argoproj.github.io/argo-events/concepts/event_source/)",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [Argocd](../references/argocd.md)\n- [Gitops](../concepts/gitops.md)\n- [Kubernetes](../references/kubernetes.md)",
+          "refs": [],
+          "links": [
+            {
+              "label": "argocd.md",
+              "raw": "../references/argocd.md",
+              "targetId": "wiki/references/argocd.md",
+              "href": ""
+            },
+            {
+              "label": "gitops.md",
+              "raw": "../concepts/gitops.md",
+              "targetId": "wiki/concepts/gitops.md",
+              "href": ""
+            },
+            {
+              "label": "kubernetes.md",
+              "raw": "../references/kubernetes.md",
+              "targetId": "wiki/references/kubernetes.md",
+              "href": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "wiki/references/argocd.md",
       "title": "ArgoCD",
       "type": "reference",
@@ -1017,6 +1140,253 @@
           "content": "- [Argo CD Docs](https://argo-cd.readthedocs.io/)\n- [Sync Phases and Waves](https://argo-cd.readthedocs.io/en/stable/user-guide/sync-waves/)\n- [ApplicationSet](https://argo-cd.readthedocs.io/en/stable/user-guide/application-set/)\n- [Progressive Syncs](https://argo-cd.readthedocs.io/en/stable/operator-manual/applicationset/Progressive-Syncs/)\n- [Application Specification](https://argo-cd.readthedocs.io/en/stable/user-guide/application-specification/)",
           "refs": [],
           "links": []
+        }
+      ]
+    },
+    {
+      "id": "wiki/references/crewai.md",
+      "title": "CrewAI",
+      "type": "reference",
+      "section": "References",
+      "summary": "CrewAI é o framework Python para equipes de agentes de IA — Agents, Crews e Flows com processos Sequencial, Hierárquico e Híbrido, outputs Pydantic e memória integrada para orquestração multi-agente de ponta a ponta.",
+      "excerpt": "CrewAI é um framework Python para orquestrar equipes colaborativas de agentes de IA (\"crews\") — cada agente tem um papel, objetivos e ferramentas próprios, e os crews executam processos Sequencial, Hierárquico ou Híbrido para completar tarefas complexas de ponta a ponta.",
+      "updated": "2026-08-03",
+      "confidence": "high",
+      "status": "active",
+      "sources": [],
+      "tags": [
+        "ai",
+        "agents",
+        "multi-agent",
+        "orchestration",
+        "crewai"
+      ],
+      "links": [
+        {
+          "label": "langchain.md",
+          "raw": "../references/langchain.md",
+          "targetId": "wiki/references/langchain.md",
+          "href": ""
+        },
+        {
+          "label": "langgraph.md",
+          "raw": "../references/langgraph.md",
+          "targetId": "wiki/references/langgraph.md",
+          "href": ""
+        },
+        {
+          "label": "ai-agents.md",
+          "raw": "../topics/ai-agents.md",
+          "targetId": "wiki/topics/ai-agents.md",
+          "href": ""
+        }
+      ],
+      "sections": [
+        {
+          "title": "🧠 Definition",
+          "anchor": "definition",
+          "content": "CrewAI é um framework Python para orquestrar equipes colaborativas de agentes de IA (\"crews\") — cada agente tem um papel, objetivos e ferramentas próprios, e os crews executam processos Sequencial, Hierárquico ou Híbrido para completar tarefas complexas de ponta a ponta.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 Explanation",
+          "anchor": "explanation",
+          "content": "O CrewAI organiza o desenvolvimento multi-agente em três níveis:\n- **Agents**: unidades autônomas com papel (`role`), objetivo (`goal`) e história (`backstory`) — equipados com ferramentas e memória próprias. Suportam guardrails (validação de saída), memória de curto e longo prazo, e knowledge bases (RAG) acopladas.\n- **Crews**: a equipe que coordena os agentes com um processo definido. O processo **Sequential** executa tarefas em ordem; o **Hierarchical** usa um agente manager que delega e valida; o **Hybrid** combina os dois, permitindo agentes delegarem entre si sob supervisão.\n- **Flows**: orquestração de eventos/estados para pipelines longos — com steps `start`, `listen` e `router`, permitindo persistência e retomada de workflows long-running.\nAs saídas podem ser estruturadas via Pydantic (JSON Schema), garantindo contratos entre agentes. A observabilidade é fornecida pelo console do CrewAI Enterprise, com rastreamento de execuções de agentes e tarefas.\nA instalação é simples: `uv add crewai` — e a configuração dos agentes é declarativa em Python, o que o torna amigável a GitOps e versionamento.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🧩 Key Insights",
+          "anchor": "key-insights",
+          "content": "- **Três níveis de abstração**: Agents, Crews e Flows cobrem desde uma única tarefa até pipelines complexos com retomada.\n- **Processos configuráveis**: Sequential, Hierarchical e Hybrid atendem a graus diferentes de autonomia e supervisão.\n- **Estrutura Pydantic**: outputs tipados garantem integração confiável entre agentes e sistemas externos.\n- **Memória e conhecimento**: memória de curto/longo prazo + knowledge bases (RAG) por agente ou crew.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "⚠️ Trade-offs",
+          "anchor": "trade-offs",
+          "content": "| Aspecto | Prós | Contras |\n|---------|------|---------|\n| Abstração | Multi-agente em poucas linhas | Menos controle fino sobre o loop interno |\n| Processos | 3 modos prontos | Hierárquico depende do manager model |\n| Estrutura | Pydantic/Zod nativos | Contratos rígidos exigem design cuidadoso |\n| Observabilidade | Console Enterprise | Recursos avançados são pagos |",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📊 Observability",
+          "anchor": "observability",
+          "content": "- Console CrewAI Enterprise: trace de agentes, tarefas e custos.\n- Logs por agente/tarefa no modo CLI.\n- Métricas de execução exportáveis para pipelines de avaliação.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔐 Security Considerations",
+          "anchor": "security-considerations",
+          "content": "- Credenciais de modelos (API keys) via variáveis de ambiente — nunca hardcoded.\n- Guardrails para validar e filtrar saídas sensíveis dos agentes.\n- Sandbox/controle de ferramentas que acessam sistemas externos.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🏗️ Usage Context",
+          "anchor": "usage-context",
+          "content": "- **Automação de pesquisa**: equipes de researcher + writer + reviewer trabalhando em conjunto.\n- **Pipelines de análise**: extrair, estruturar e sintetizar dados de múltiplas fontes.\n- **Workflows long-running**: Flows com retomada para processos de horas/dias.\n- **Substituição de cadeias encadeadas de prompts**: orquestração declarativa no lugar de pipelines manuais.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 References",
+          "anchor": "references",
+          "content": "- [CrewAI Documentation](https://docs.crewai.com/)\n- [CrewAI Processes](https://docs.crewai.com/edge/en/concepts/processes)",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [Langchain](../references/langchain.md)\n- [Langgraph](../references/langgraph.md)\n- [Ai-Agents](../topics/ai-agents.md)",
+          "refs": [],
+          "links": [
+            {
+              "label": "langchain.md",
+              "raw": "../references/langchain.md",
+              "targetId": "wiki/references/langchain.md",
+              "href": ""
+            },
+            {
+              "label": "langgraph.md",
+              "raw": "../references/langgraph.md",
+              "targetId": "wiki/references/langgraph.md",
+              "href": ""
+            },
+            {
+              "label": "ai-agents.md",
+              "raw": "../topics/ai-agents.md",
+              "targetId": "wiki/topics/ai-agents.md",
+              "href": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wiki/references/datadog.md",
+      "title": "Datadog",
+      "type": "reference",
+      "section": "References",
+      "summary": "Datadog é a plataforma SaaS de observabilidade com APM e distributed tracing end-to-end — Single Step Instrumentation, Trace Explorer, Service Pages e correlação de traces com logs, métricas, DBM e RUM para produção em Kubernetes.",
+      "excerpt": "Datadog é a plataforma de observabilidade e monitoramento SaaS para infraestrutura, aplicações e logs — com APM e distributed tracing de ponta a ponta (browser → backend → banco de dados), métricas de infraestrutura e correlação automática entre traces, logs, métricas e perfis.",
+      "updated": "2026-08-03",
+      "confidence": "high",
+      "status": "active",
+      "sources": [],
+      "tags": [
+        "observability",
+        "monitoring",
+        "apm",
+        "tracing",
+        "kubernetes",
+        "sre"
+      ],
+      "links": [
+        {
+          "label": "kubernetes.md",
+          "raw": "../references/kubernetes.md",
+          "targetId": "wiki/references/kubernetes.md",
+          "href": ""
+        },
+        {
+          "label": "domain-driven-design.md",
+          "raw": "../concepts/domain-driven-design.md",
+          "targetId": "wiki/concepts/domain-driven-design.md",
+          "href": ""
+        },
+        {
+          "label": "model-platform.md",
+          "raw": "../topics/model-platform.md",
+          "targetId": "wiki/topics/model-platform.md",
+          "href": ""
+        }
+      ],
+      "sections": [
+        {
+          "title": "🧠 Definition",
+          "anchor": "definition",
+          "content": "Datadog é a plataforma de observabilidade e monitoramento SaaS para infraestrutura, aplicações e logs — com APM e distributed tracing de ponta a ponta (browser → backend → banco de dados), métricas de infraestrutura e correlação automática entre traces, logs, métricas e perfis.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 Explanation",
+          "anchor": "explanation",
+          "content": "O Datadog APM (Application Performance Monitoring) entrega distributed tracing com foco em produção:\n- **Single Step Instrumentation**: o Agent coleta automaticamente traces das principais linguagens e frameworks (Java, Python, Go, .NET, Node.js, Ruby, PHP, C++) sem exigir mudanças significativas no código — instalação do Agent + instrumentação em um único passo.\n- **Trace Explorer**: consulta e visualização de traces ponta a ponta com filtros por serviço, recurso, erro, latência e tags — permitindo debugar uma requisição inteira do browser até o banco de dados.\n- **Service Pages**: visão consolidada por serviço — health, deployments, latência, throughput, erro e recursos dependentes — com fallback automático para deep dive.\n- **Ingestion Controls**: políticas de amostragem (sampling) por serviço/recurso para controlar custo e volume de spans.\n- **Retention Filters**: os spans são retidos por 15 dias após a ingestão, permitindo análise posterior de erros e rastreios lentos.\n- **Correlação**: integração com DBM (Database Monitoring), RUM (Real User Monitoring), logs, synthetics e profiles — um trace pode abrir o log da exceção, a query SQL lenta ou o profile do processo.\nA plataforma cobre também métricas de infraestrutura (hosts, containers, Kubernetes, clouds), logs, dashboards e alertas — com API e Terraform para tudo como código.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🧩 Key Insights",
+          "anchor": "key-insights",
+          "content": "- **Observabilidade unificada**: traces, logs, métricas e profiles correlacionados no mesmo contexto de requisição.\n- **Single Step Instrumentation**: onboarding de APM em minutos, com auto-detecção de bibliotecas e frameworks.\n- **Controle de custo por amostragem**: Ingestion Controls + Retention Filters separam ingestão de retenção.\n- **Tudo como código**: dashboards, monitors e configuração via Terraform — GitOps-friendly.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "⚠️ Trade-offs",
+          "anchor": "trade-offs",
+          "content": "| Aspecto | Prós | Contras |\n|---------|------|---------|\n| Profundidade | Traces end-to-end + correlação | Custo cresce com volume (spans/logs) |\n| Setup | Single Step Instrumentation | Dependência do Agent em cada host |\n| Escala | SaaS gerenciado, zero manutenção | Dados saem do cluster (compliance) |\n| Governança | RBAC, tag-based policies | Configuração rica exige cuidado |",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📊 Observability",
+          "anchor": "observability",
+          "content": "- Service/resource pages com latência, throughput e erro.\n- Trace Explorer com query de spans e flame graphs.\n- Correlação com DBM, RUM, logs, synthetics e profiles.\n- Dashboards e alerts via UI ou Terraform.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🔐 Security Considerations",
+          "anchor": "security-considerations",
+          "content": "- Dados de traces/logs podem conter PII — usar tag-based filtering e controles de ingestão.\n- Agentes requerem acesso ao Agent socket e rede para o backend — restringir por namespace/network policy.\n- API keys (app keys) com RBAC mínimo para leitura/escrita.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "🏗️ Usage Context",
+          "anchor": "usage-context",
+          "content": "- **SRE/Plataforma**: monitorar serviços Kubernetes com dashboards e alertas por SLO.\n- **APM**: diagnóstico de latência ponta a ponta (frontend → serviço → DB).\n- **Incident response**: correlacionar trace do erro com log, perfil e métrica de infra.\n- **FinOps de observabilidade**: sampling e retention filters para controlar custo.",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "📚 References",
+          "anchor": "references",
+          "content": "- [Datadog Tracing Documentation](https://docs.datadoghq.com/tracing/)\n- [Datadog Trace Explorer](https://docs.datadoghq.com/tracing/trace_explorer/)",
+          "refs": [],
+          "links": []
+        },
+        {
+          "title": "Connections",
+          "anchor": "connections",
+          "content": "- [Kubernetes](../references/kubernetes.md)\n- [Domain-Driven-Design](../concepts/domain-driven-design.md)\n- [Model-Platform](../topics/model-platform.md)",
+          "refs": [],
+          "links": [
+            {
+              "label": "kubernetes.md",
+              "raw": "../references/kubernetes.md",
+              "targetId": "wiki/references/kubernetes.md",
+              "href": ""
+            },
+            {
+              "label": "domain-driven-design.md",
+              "raw": "../concepts/domain-driven-design.md",
+              "targetId": "wiki/concepts/domain-driven-design.md",
+              "href": ""
+            },
+            {
+              "label": "model-platform.md",
+              "raw": "../topics/model-platform.md",
+              "targetId": "wiki/topics/model-platform.md",
+              "href": ""
+            }
+          ]
         }
       ]
     },

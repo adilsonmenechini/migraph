@@ -16,10 +16,10 @@ from datetime import datetime
 from pathlib import Path
 
 from utils import (
-    REQUIRED_FIELDS,
     ambiguous_entity_merge_candidates,
     collect_inbox_items,
     collect_wiki_pages,
+    missing_required_fields,
     parse_frontmatter,
     read_text,
 )
@@ -88,14 +88,7 @@ def _page_snapshot(root: Path) -> dict[str, object]:
         meta, _body = parse_frontmatter(read_text(page))
         page_type = str(meta.get("type", "") or page.parent.name[:-1] or "page")
         counts[page_type] = counts.get(page_type, 0) + 1
-        missing_fields: list[str] = []
-        for field in REQUIRED_FIELDS:
-            if field not in meta:
-                missing_fields.append(field)
-                continue
-            value = meta.get(field)
-            if value is None or isinstance(value, list) and not value or isinstance(value, str) and not value.strip():
-                missing_fields.append(field)
+        missing_fields = missing_required_fields(meta)
         if missing_fields:
             invalid_pages.append(
                 {

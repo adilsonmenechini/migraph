@@ -195,42 +195,61 @@ When the user asks to add, document, capture, or research a topic, create a new 
 - Otherwise infer the category from the topic.
 - Pick the page type: concept (reusable idea), guide (how-to), reference (facts), example (code/sample), pattern (reusable solution), runbook (operations), or architecture (design).
 
-### Step 2: Generate File Path
+### Step 2: Run `migraph create` (MANDATORY)
 
-Format: `wiki/<type-plural>/<slug>.md`
+Every new page MUST be created through the `create` command — never by writing
+the file directly. It generates the unified frontmatter, validates the page
+**before** it lands in the wiki, and rebuilds outputs on success:
 
-Slug rules:
-- Lowercase
-- Hyphen-separated
-- Remove special characters
+```bash
+<python-command> skills/migraph/scripts/migraph create --root <wiki-root> \
+  --title "Page Title" --type reference --domain <domain> \
+  --summary "1-2 sentence summary" --tags "tag1,tag2" \
+  --source "https://..." \
+  --connections "../references/other-page.md,../concepts/other-concept.md"
+```
 
-### Step 3: Create Note Content
+Arguments:
 
-Use the matching template in `templates/pages/` and the unified frontmatter schema above.
+| Argument | Required | Purpose |
+|----------|----------|---------|
+| `--root` | no (default `.`) | Wiki root |
+| `--title` | yes | Page title (also derives the slug) |
+| `--type` | yes | One of the 13 valid page types |
+| `--domain` | yes | Knowledge domain slug (`domain.type.slug` id) |
+| `--summary` | yes | 1–2 sentence summary |
+| `--tags` | yes* | Comma-separated tags (min 1) |
+| `--source` | yes* | Source documentation URL |
+| `--connections` | yes* | Comma-separated markdown links to existing wiki pages |
+| `--content` | no | Body markdown (defaults to the type template) |
+| `--category` / `--status` / `--confidence` / `--version` | no | Metadata overrides |
 
-Use Obsidian Markdown features:
-- Wikilinks: `[[Note Name]]`, `[[Note Name|Display Text]]`, `[[Note Name#Heading]]`, `[[Note Name#^block-id]]`
-- Callouts: `> [!note]`, `> [!warning]`, `> [!tip]`, `> [!example]`
-- Block IDs: `^my-block-id`
-- Tags: `#tag`, `#nested/tag`
-- Embeds: `![[Other Note]]`
+Blocking validation (fail = no file written, exit 1):
 
-### Step 4: Link Neighbors
+- Frontmatter against `validators/schema.json`
+- Required fields (title, type, created, updated, source, tags, confidence, status)
+- Required sections for the page type
+- At least one `## Connections` markdown link resolving to an existing wiki page
+- No placeholder text / weak summary
+- No duplicate title or duplicate id
 
-After creating a note, link related existing pages:
-- Add `[[backlink]]` entries in the new page's `## Connections` section.
+### Step 3: Link Neighbors
+
+After the page is created, link related existing pages:
+- Add `## Connections` markdown links (`[Title](../<type>/<slug>.md)`) in the new page — these drive the knowledge graph edges.
 - Add a link to the new page from related pages' Connections sections.
 - For patterns (cross-category), also link from the category overview page.
 
-### Step 5: Validate
+Note: the graph only follows markdown links under `## Connections` — Obsidian wikilinks (`[[Note]]`) do not create graph edges.
 
+### Step 4: Verify
+
+- [ ] `migraph create` exited 0 and printed `created ... (validated OK)`
 - [ ] `id` is unique and follows `domain.type.slug`
 - [ ] `type` is one of the 13 valid values
-- [ ] `domain` exists or will be created
 - [ ] `tags` array has at least 1 item
 - [ ] `summary` is 1–2 sentences
-- [ ] Category folder exists
-- [ ] Type subfolder exists (`concepts/`, `guides/`, `references/`, `examples/`, `patterns/`, `runbooks/`, `architectures/`, ...)
+- [ ] Connections resolved to real pages (graph edges present in `output/graph/graph.json`)
 
 ## Refactor Mode
 

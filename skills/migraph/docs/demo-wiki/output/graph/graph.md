@@ -1,7 +1,7 @@
 # Knowledge Graph
 
-- Nodes: 21
-- Edges: 65
+- Nodes: 24
+- Edges: 74
 - Summary: The current key page is AI Native Team. The main pages already have a basic connection structure. You can review 8 suggested links next.
 
 ## Key Pages
@@ -9,8 +9,8 @@
 - Execution Spec (concept) | score=50 | Degree 10, inbound 5, spanning 4 neighbor types.
 - Execution Policy (decision) | score=46 | Degree 8, inbound 6, spanning 4 neighbor types.
 - Eval Loop Notes (source) | score=44 | Degree 8, inbound 6, spanning 3 neighbor types.
+- Model Platform (topic) | score=43 | Degree 9, inbound 4, spanning 3 neighbor types.
 - Platform Spec (source) | score=42 | Degree 8, inbound 5, spanning 3 neighbor types.
-- Eval Loops (topic) | score=38 | Degree 8, inbound 3, spanning 3 neighbor types.
 
 ## Suggested Links
 - wiki/decisions/context-budget.md <-> wiki/decisions/execution-policy.md | score=17 | shared sources, shared keywords, shared graph neighbors
@@ -32,7 +32,10 @@
 - decision: Context Budget (wiki/decisions/context-budget.md)
 - decision: Execution Policy (wiki/decisions/execution-policy.md)
 - query: What Makes an AI Native Team (wiki/queries/what-makes-ai-native-team.md)
+- reference: Argo Events (wiki/references/argo-events.md)
 - reference: ArgoCD (wiki/references/argocd.md)
+- reference: CrewAI (wiki/references/crewai.md)
+- reference: Datadog (wiki/references/datadog.md)
 - reference: GraphRAG (wiki/references/graphrag.md)
 - reference: Kubernetes (wiki/references/kubernetes.md)
 - reference: LangChain (wiki/references/langchain.md)
@@ -76,8 +79,17 @@
 - wiki/queries/what-makes-ai-native-team.md --about--> wiki/decisions/execution-policy.md
 - wiki/queries/what-makes-ai-native-team.md --related_to--> wiki/concepts/ai-native-team.md
 - wiki/queries/what-makes-ai-native-team.md --related_to--> wiki/decisions/execution-policy.md
+- wiki/references/argo-events.md --related_to--> wiki/concepts/gitops.md
+- wiki/references/argo-events.md --related_to--> wiki/references/argocd.md
+- wiki/references/argo-events.md --related_to--> wiki/references/kubernetes.md
 - wiki/references/argocd.md --related_to--> wiki/concepts/gitops.md
 - wiki/references/argocd.md --related_to--> wiki/references/kubernetes.md
+- wiki/references/crewai.md --related_to--> wiki/references/langchain.md
+- wiki/references/crewai.md --related_to--> wiki/references/langgraph.md
+- wiki/references/crewai.md --related_to--> wiki/topics/ai-agents.md
+- wiki/references/datadog.md --related_to--> wiki/concepts/domain-driven-design.md
+- wiki/references/datadog.md --related_to--> wiki/references/kubernetes.md
+- wiki/references/datadog.md --related_to--> wiki/topics/model-platform.md
 - wiki/references/graphrag.md --related_to--> wiki/concepts/loop-engineering.md
 - wiki/references/graphrag.md --related_to--> wiki/concepts/system-driver.md
 - wiki/references/kubernetes.md --related_to--> wiki/concepts/gitops.md

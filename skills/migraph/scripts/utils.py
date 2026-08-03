@@ -85,7 +85,18 @@ SECTION_ORDER = [
     ("References", "reference"),
     ("Examples", "example"),
 ]
-REQUIRED_FIELDS = ["title", "type", "created", "updated", "sources", "tags", "confidence", "status"]
+REQUIRED_FIELDS = ["title", "type", "created", "updated", "source", "tags", "confidence", "status"]
+
+
+def missing_required_fields(meta: dict[str, object]) -> list[str]:
+    missing: list[str] = []
+    for field in REQUIRED_FIELDS:
+        if field in meta:
+            continue
+        if field == "source" and "sources" in meta:
+            continue
+        missing.append(field)
+    return missing
 
 
 def today_str() -> str:

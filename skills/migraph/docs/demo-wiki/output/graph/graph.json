@@ -3,10 +3,10 @@
   "schema_version": "2",
   "default_view": "knowledge",
   "catalog": {
-    "pageCount": 21,
+    "pageCount": 24,
     "claimCount": 0,
-    "nodeCount": 21,
-    "edgeCount": 65
+    "nodeCount": 24,
+    "edgeCount": 74
   },
   "nodes": [
     {
@@ -205,6 +205,25 @@
       "canonicalEntity": ""
     },
     {
+      "id": "wiki/references/argo-events.md",
+      "label": "Argo Events",
+      "type": "reference",
+      "summary": "Argo Events é o framework event-driven do ecossistema Argo para Kubernetes — EventSource, EventBus e Sensor conectam 20+ fontes de eventos a triggers como Argo Workflows, objetos K8s e funções serverless via CloudEvents.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/references/argo-events.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "reference",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
       "id": "wiki/references/argocd.md",
       "label": "ArgoCD",
       "type": "reference",
@@ -213,6 +232,44 @@
       "status": "active",
       "updated": "2026-08-03",
       "path": "wiki/references/argocd.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "reference",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/references/crewai.md",
+      "label": "CrewAI",
+      "type": "reference",
+      "summary": "CrewAI é o framework Python para equipes de agentes de IA — Agents, Crews e Flows com processos Sequencial, Hierárquico e Híbrido, outputs Pydantic e memória integrada para orquestração multi-agente de ponta a ponta.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/references/crewai.md",
+      "sources": [],
+      "nodeType": "page",
+      "pageType": "reference",
+      "topics": [],
+      "entities": [],
+      "concepts": [],
+      "aliases": [],
+      "maturity": "",
+      "canonicalEntity": ""
+    },
+    {
+      "id": "wiki/references/datadog.md",
+      "label": "Datadog",
+      "type": "reference",
+      "summary": "Datadog é a plataforma SaaS de observabilidade com APM e distributed tracing end-to-end — Single Step Instrumentation, Trace Explorer, Service Pages e correlação de traces com logs, métricas, DBM e RUM para produção em Kubernetes.",
+      "confidence": "high",
+      "status": "active",
+      "updated": "2026-08-03",
+      "path": "wiki/references/datadog.md",
       "sources": [],
       "nodeType": "page",
       "pageType": "reference",
@@ -640,6 +697,24 @@
       "relation": "related_to"
     },
     {
+      "source": "wiki/references/argo-events.md",
+      "target": "wiki/concepts/gitops.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/argo-events.md",
+      "target": "wiki/references/argocd.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/argo-events.md",
+      "target": "wiki/references/kubernetes.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
       "source": "wiki/references/argocd.md",
       "target": "wiki/concepts/gitops.md",
       "type": "related_to",
@@ -648,6 +723,42 @@
     {
       "source": "wiki/references/argocd.md",
       "target": "wiki/references/kubernetes.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/crewai.md",
+      "target": "wiki/references/langchain.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/crewai.md",
+      "target": "wiki/references/langgraph.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/crewai.md",
+      "target": "wiki/topics/ai-agents.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/datadog.md",
+      "target": "wiki/concepts/domain-driven-design.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/datadog.md",
+      "target": "wiki/references/kubernetes.md",
+      "type": "related_to",
+      "relation": "related_to"
+    },
+    {
+      "source": "wiki/references/datadog.md",
+      "target": "wiki/topics/model-platform.md",
       "type": "related_to",
       "relation": "related_to"
     },
@@ -852,11 +963,11 @@
   ],
   "insights": {
     "stats": {
-      "nodeCount": 21,
-      "edgeCount": 65,
+      "nodeCount": 24,
+      "edgeCount": 74,
       "isolatedCount": 0,
       "weakCount": 0,
-      "averageDegree": 6.19
+      "averageDegree": 6.17
     },
     "topNodes": [
       {
@@ -888,18 +999,18 @@
         "reason": "Degree 8, inbound 6, spanning 3 neighbor types."
       },
       {
+        "id": "wiki/topics/model-platform.md",
+        "title": "Model Platform",
+        "type": "topic",
+        "score": 43,
+        "reason": "Degree 9, inbound 4, spanning 3 neighbor types."
+      },
+      {
         "id": "wiki/sources/platform-spec.md",
         "title": "Platform Spec",
         "type": "source",
         "score": 42,
         "reason": "Degree 8, inbound 5, spanning 3 neighbor types."
-      },
-      {
-        "id": "wiki/topics/eval-loops.md",
-        "title": "Eval Loops",
-        "type": "topic",
-        "score": 38,
-        "reason": "Degree 8, inbound 3, spanning 3 neighbor types."
       }
     ],
     "bridgeNodes": [
@@ -925,16 +1036,16 @@
         "reason": "Connects 4 page types and works well as a bridge."
       },
       {
-        "id": "wiki/sources/eval-loops.md",
-        "title": "Eval Loop Notes",
-        "type": "source",
-        "score": 20,
+        "id": "wiki/topics/model-platform.md",
+        "title": "Model Platform",
+        "type": "topic",
+        "score": 21,
         "reason": "Connects 3 page types and works well as a bridge."
       },
       {
-        "id": "wiki/topics/eval-loops.md",
-        "title": "Eval Loops",
-        "type": "topic",
+        "id": "wiki/sources/eval-loops.md",
+        "title": "Eval Loop Notes",
+        "type": "source",
         "score": 20,
         "reason": "Connects 3 page types and works well as a bridge."
       }
@@ -1331,6 +1442,25 @@
           "canonicalEntity": ""
         },
         {
+          "id": "wiki/references/argo-events.md",
+          "label": "Argo Events",
+          "type": "reference",
+          "summary": "Argo Events é o framework event-driven do ecossistema Argo para Kubernetes — EventSource, EventBus e Sensor conectam 20+ fontes de eventos a triggers como Argo Workflows, objetos K8s e funções serverless via CloudEvents.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/argo-events.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
           "id": "wiki/references/argocd.md",
           "label": "ArgoCD",
           "type": "reference",
@@ -1339,6 +1469,44 @@
           "status": "active",
           "updated": "2026-08-03",
           "path": "wiki/references/argocd.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/crewai.md",
+          "label": "CrewAI",
+          "type": "reference",
+          "summary": "CrewAI é o framework Python para equipes de agentes de IA — Agents, Crews e Flows com processos Sequencial, Hierárquico e Híbrido, outputs Pydantic e memória integrada para orquestração multi-agente de ponta a ponta.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/crewai.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/datadog.md",
+          "label": "Datadog",
+          "type": "reference",
+          "summary": "Datadog é a plataforma SaaS de observabilidade com APM e distributed tracing end-to-end — Single Step Instrumentation, Trace Explorer, Service Pages e correlação de traces com logs, métricas, DBM e RUM para produção em Kubernetes.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/datadog.md",
           "sources": [],
           "nodeType": "page",
           "pageType": "reference",
@@ -1756,6 +1924,24 @@
           "relation": "references"
         },
         {
+          "source": "wiki/references/argo-events.md",
+          "target": "wiki/concepts/gitops.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/argo-events.md",
+          "target": "wiki/references/argocd.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/argo-events.md",
+          "target": "wiki/references/kubernetes.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
           "source": "wiki/references/argocd.md",
           "target": "wiki/concepts/gitops.md",
           "type": "links_to",
@@ -1764,6 +1950,42 @@
         {
           "source": "wiki/references/argocd.md",
           "target": "wiki/references/kubernetes.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/crewai.md",
+          "target": "wiki/references/langchain.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/crewai.md",
+          "target": "wiki/references/langgraph.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/crewai.md",
+          "target": "wiki/topics/ai-agents.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/datadog.md",
+          "target": "wiki/concepts/domain-driven-design.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/datadog.md",
+          "target": "wiki/references/kubernetes.md",
+          "type": "links_to",
+          "relation": "links_to"
+        },
+        {
+          "source": "wiki/references/datadog.md",
+          "target": "wiki/topics/model-platform.md",
           "type": "links_to",
           "relation": "links_to"
         },
@@ -1986,11 +2208,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 21,
-          "edgeCount": 65,
+          "nodeCount": 24,
+          "edgeCount": 74,
           "isolatedCount": 0,
           "weakCount": 0,
-          "averageDegree": 6.19
+          "averageDegree": 6.17
         },
         "topNodes": [
           {
@@ -2022,18 +2244,18 @@
             "reason": "Degree 8, inbound 6, spanning 3 neighbor types."
           },
           {
+            "id": "wiki/topics/model-platform.md",
+            "title": "Model Platform",
+            "type": "topic",
+            "score": 44,
+            "reason": "Degree 9, inbound 4, spanning 3 neighbor types."
+          },
+          {
             "id": "wiki/sources/platform-spec.md",
             "title": "Platform Spec",
             "type": "source",
             "score": 43,
             "reason": "Degree 8, inbound 5, spanning 3 neighbor types."
-          },
-          {
-            "id": "wiki/topics/eval-loops.md",
-            "title": "Eval Loops",
-            "type": "topic",
-            "score": 39,
-            "reason": "Degree 8, inbound 3, spanning 3 neighbor types."
           }
         ],
         "bridgeNodes": [
@@ -2059,16 +2281,16 @@
             "reason": "Connects 4 page types and works well as a bridge."
           },
           {
-            "id": "wiki/sources/eval-loops.md",
-            "title": "Eval Loop Notes",
-            "type": "source",
-            "score": 22,
+            "id": "wiki/topics/model-platform.md",
+            "title": "Model Platform",
+            "type": "topic",
+            "score": 23,
             "reason": "Connects 3 page types and works well as a bridge."
           },
           {
-            "id": "wiki/topics/eval-loops.md",
-            "title": "Eval Loops",
-            "type": "topic",
+            "id": "wiki/sources/eval-loops.md",
+            "title": "Eval Loop Notes",
+            "type": "source",
             "score": 22,
             "reason": "Connects 3 page types and works well as a bridge."
           }
@@ -2434,6 +2656,25 @@
           "canonicalEntity": ""
         },
         {
+          "id": "wiki/references/argo-events.md",
+          "label": "Argo Events",
+          "type": "reference",
+          "summary": "Argo Events é o framework event-driven do ecossistema Argo para Kubernetes — EventSource, EventBus e Sensor conectam 20+ fontes de eventos a triggers como Argo Workflows, objetos K8s e funções serverless via CloudEvents.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/argo-events.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
           "id": "wiki/references/argocd.md",
           "label": "ArgoCD",
           "type": "reference",
@@ -2442,6 +2683,44 @@
           "status": "active",
           "updated": "2026-08-03",
           "path": "wiki/references/argocd.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/crewai.md",
+          "label": "CrewAI",
+          "type": "reference",
+          "summary": "CrewAI é o framework Python para equipes de agentes de IA — Agents, Crews e Flows com processos Sequencial, Hierárquico e Híbrido, outputs Pydantic e memória integrada para orquestração multi-agente de ponta a ponta.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/crewai.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/datadog.md",
+          "label": "Datadog",
+          "type": "reference",
+          "summary": "Datadog é a plataforma SaaS de observabilidade com APM e distributed tracing end-to-end — Single Step Instrumentation, Trace Explorer, Service Pages e correlação de traces com logs, métricas, DBM e RUM para produção em Kubernetes.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/datadog.md",
           "sources": [],
           "nodeType": "page",
           "pageType": "reference",
@@ -2869,6 +3148,24 @@
           "relation": "related_to"
         },
         {
+          "source": "wiki/references/argo-events.md",
+          "target": "wiki/concepts/gitops.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/argo-events.md",
+          "target": "wiki/references/argocd.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/argo-events.md",
+          "target": "wiki/references/kubernetes.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
           "source": "wiki/references/argocd.md",
           "target": "wiki/concepts/gitops.md",
           "type": "related_to",
@@ -2877,6 +3174,42 @@
         {
           "source": "wiki/references/argocd.md",
           "target": "wiki/references/kubernetes.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/crewai.md",
+          "target": "wiki/references/langchain.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/crewai.md",
+          "target": "wiki/references/langgraph.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/crewai.md",
+          "target": "wiki/topics/ai-agents.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/datadog.md",
+          "target": "wiki/concepts/domain-driven-design.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/datadog.md",
+          "target": "wiki/references/kubernetes.md",
+          "type": "related_to",
+          "relation": "related_to"
+        },
+        {
+          "source": "wiki/references/datadog.md",
+          "target": "wiki/topics/model-platform.md",
           "type": "related_to",
           "relation": "related_to"
         },
@@ -3081,11 +3414,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 21,
-          "edgeCount": 65,
+          "nodeCount": 24,
+          "edgeCount": 74,
           "isolatedCount": 0,
           "weakCount": 0,
-          "averageDegree": 6.19
+          "averageDegree": 6.17
         },
         "topNodes": [
           {
@@ -3117,18 +3450,18 @@
             "reason": "Degree 8, inbound 6, spanning 3 neighbor types."
           },
           {
+            "id": "wiki/topics/model-platform.md",
+            "title": "Model Platform",
+            "type": "topic",
+            "score": 43,
+            "reason": "Degree 9, inbound 4, spanning 3 neighbor types."
+          },
+          {
             "id": "wiki/sources/platform-spec.md",
             "title": "Platform Spec",
             "type": "source",
             "score": 42,
             "reason": "Degree 8, inbound 5, spanning 3 neighbor types."
-          },
-          {
-            "id": "wiki/topics/eval-loops.md",
-            "title": "Eval Loops",
-            "type": "topic",
-            "score": 38,
-            "reason": "Degree 8, inbound 3, spanning 3 neighbor types."
           }
         ],
         "bridgeNodes": [
@@ -3154,16 +3487,16 @@
             "reason": "Connects 4 page types and works well as a bridge."
           },
           {
-            "id": "wiki/sources/eval-loops.md",
-            "title": "Eval Loop Notes",
-            "type": "source",
-            "score": 20,
+            "id": "wiki/topics/model-platform.md",
+            "title": "Model Platform",
+            "type": "topic",
+            "score": 21,
             "reason": "Connects 3 page types and works well as a bridge."
           },
           {
-            "id": "wiki/topics/eval-loops.md",
-            "title": "Eval Loops",
-            "type": "topic",
+            "id": "wiki/sources/eval-loops.md",
+            "title": "Eval Loop Notes",
+            "type": "source",
             "score": 20,
             "reason": "Connects 3 page types and works well as a bridge."
           }
@@ -3529,6 +3862,25 @@
           "canonicalEntity": ""
         },
         {
+          "id": "wiki/references/argo-events.md",
+          "label": "Argo Events",
+          "type": "reference",
+          "summary": "Argo Events é o framework event-driven do ecossistema Argo para Kubernetes — EventSource, EventBus e Sensor conectam 20+ fontes de eventos a triggers como Argo Workflows, objetos K8s e funções serverless via CloudEvents.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/argo-events.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
           "id": "wiki/references/argocd.md",
           "label": "ArgoCD",
           "type": "reference",
@@ -3537,6 +3889,44 @@
           "status": "active",
           "updated": "2026-08-03",
           "path": "wiki/references/argocd.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/crewai.md",
+          "label": "CrewAI",
+          "type": "reference",
+          "summary": "CrewAI é o framework Python para equipes de agentes de IA — Agents, Crews e Flows com processos Sequencial, Hierárquico e Híbrido, outputs Pydantic e memória integrada para orquestração multi-agente de ponta a ponta.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/crewai.md",
+          "sources": [],
+          "nodeType": "page",
+          "pageType": "reference",
+          "topics": [],
+          "entities": [],
+          "concepts": [],
+          "aliases": [],
+          "maturity": "",
+          "canonicalEntity": ""
+        },
+        {
+          "id": "wiki/references/datadog.md",
+          "label": "Datadog",
+          "type": "reference",
+          "summary": "Datadog é a plataforma SaaS de observabilidade com APM e distributed tracing end-to-end — Single Step Instrumentation, Trace Explorer, Service Pages e correlação de traces com logs, métricas, DBM e RUM para produção em Kubernetes.",
+          "confidence": "high",
+          "status": "active",
+          "updated": "2026-08-03",
+          "path": "wiki/references/datadog.md",
           "sources": [],
           "nodeType": "page",
           "pageType": "reference",
@@ -3842,11 +4232,11 @@
       ],
       "insights": {
         "stats": {
-          "nodeCount": 21,
-          "edgeCount": 65,
+          "nodeCount": 24,
+          "edgeCount": 74,
           "isolatedCount": 0,
           "weakCount": 0,
-          "averageDegree": 6.19
+          "averageDegree": 6.17
         },
         "topNodes": [
           {
@@ -3878,18 +4268,18 @@
             "reason": "Degree 8, inbound 6, spanning 3 neighbor types."
           },
           {
+            "id": "wiki/topics/model-platform.md",
+            "title": "Model Platform",
+            "type": "topic",
+            "score": 43,
+            "reason": "Degree 9, inbound 4, spanning 3 neighbor types."
+          },
+          {
             "id": "wiki/sources/platform-spec.md",
             "title": "Platform Spec",
             "type": "source",
             "score": 42,
             "reason": "Degree 8, inbound 5, spanning 3 neighbor types."
-          },
-          {
-            "id": "wiki/topics/eval-loops.md",
-            "title": "Eval Loops",
-            "type": "topic",
-            "score": 38,
-            "reason": "Degree 8, inbound 3, spanning 3 neighbor types."
           }
         ],
         "bridgeNodes": [
@@ -3915,16 +4305,16 @@
             "reason": "Connects 4 page types and works well as a bridge."
           },
           {
-            "id": "wiki/sources/eval-loops.md",
-            "title": "Eval Loop Notes",
-            "type": "source",
-            "score": 20,
+            "id": "wiki/topics/model-platform.md",
+            "title": "Model Platform",
+            "type": "topic",
+            "score": 21,
             "reason": "Connects 3 page types and works well as a bridge."
           },
           {
-            "id": "wiki/topics/eval-loops.md",
-            "title": "Eval Loops",
-            "type": "topic",
+            "id": "wiki/sources/eval-loops.md",
+            "title": "Eval Loop Notes",
+            "type": "source",
             "score": 20,
             "reason": "Connects 3 page types and works well as a bridge."
           }

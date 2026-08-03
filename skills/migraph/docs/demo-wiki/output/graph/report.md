@@ -1,31 +1,30 @@
 # MiGraph Graph Report
 
 - Generated: 2026-08-03
-- Summary: The current key page is AI Native Team. The main pages already have a basic connection structure. There are 1 high-degree thin pages worth strengthening first. There are 1 clusters disconnected from the main graph. There are 8 suggested links ready for review.
+- Summary: The current key page is AI Native Team. The main pages already have a basic connection structure. There are 1 high-degree thin pages worth strengthening first. There are 8 suggested links ready for review.
 
 ## Health Summary
 
-- Pages: 21
-- Relations: 65
+- Pages: 24
+- Relations: 74
 - Entities: 0
 - Aliased Entities: 0
 - Aliases: 0
 - Ambiguous Alias Groups: 0
 - Ambiguous Entities: 0
 - Isolated Entities: 0
-- Average Degree: 6.19
+- Average Degree: 6.17
 - Isolated Pages: 0
 - Weak Pages: 0
 - Bridge Pages: 5
 - Suggested Links: 8
 - Hub Stubs: 1
 - Fragile Bridges: 0
-- Isolated Clusters: 1
+- Isolated Clusters: 0
 
 ## Top Actions
 
 - Strengthen high-degree thin pages with better summaries, context, and sources.
-- Reconnect isolated clusters back to the main graph.
 - Review suggested links and convert strong candidates into explicit page links.
 
 ## Entities That Need Links
@@ -38,7 +37,7 @@
 
 ## Hub Stubs
 
-- Model Platform (topic) | degree=8 | Degree is 8, but the summary is only 76 characters long.
+- Model Platform (topic) | degree=9 | Degree is 9, but the summary is only 76 characters long.
 
 ## Fragile Bridges
 
@@ -46,7 +45,7 @@
 
 ## Isolated Clusters
 
-- size=10 | Domain-Driven Design, GitOps, Loop Engineering, System Driver | This cluster is disconnected from the main graph and contains 10 pages.
+- No isolated clusters
 
 ## Suggested Links
 
