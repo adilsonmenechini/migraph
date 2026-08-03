@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-MiGraph Script: migrate_skill_knowledge
+MiGraph Script: migrate_skill_kwonledge
 
 Purpose:
 - One-shot migration of skill-kwonledge content into a MiGraph vault.
 - Maps: category -> tags, types -> MiGraph types, related -> text + review note.
 
 Usage:
-- python scripts/migrate_skill_knowledge.py \\
+- python scripts/migrate_skill_kwonledge.py \\
     --source /path/to/skill-kwonledge/examples/knowledge \\
     --target /path/to/migraph-vault
 """
@@ -18,7 +18,7 @@ import argparse
 import re
 from pathlib import Path
 
-from utils import parse_frontmatter, read_text, write_text, today_str
+from utils import parse_frontmatter, read_text, today_str, write_text
 
 # --- Type mapping ---
 
@@ -133,12 +133,14 @@ def migrate(source_dir: Path, target_dir: Path, dry_run: bool = False) -> dict:
             write_text(target_path, page_content)
 
         report["migrated"] += 1
-        report["pages"].append({
-            "source": md_path.relative_to(source_root).as_posix(),
-            "target": target_path.relative_to(target_wiki).as_posix(),
-            "type": mapped_type,
-            "related_unresolved": len(related),
-        })
+        report["pages"].append(
+            {
+                "source": md_path.relative_to(source_root).as_posix(),
+                "target": target_path.relative_to(target_wiki).as_posix(),
+                "type": mapped_type,
+                "related_unresolved": len(related),
+            }
+        )
 
     return report
 
